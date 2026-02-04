@@ -1,0 +1,11 @@
+image: python:3.13
+
+stages:
+  - lint
+
+flake8:
+  stage: lint
+  image: registry.gitlab.com/pipeline-components/flake8:latest
+  script:
+    - pip install pep8-naming
+    - flake8 --verbose
