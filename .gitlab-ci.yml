@@ -3,9 +3,14 @@ image: python:3.11
 stages:
   - lint
 
-lint:
+flake8:
   stage: lint
+  image: registry.gitlab.com/pipeline-components/flake8:7.1.0
   script:
-    - pip install flake8 black==24.10.0
     - flake8 lyceum
+
+black:
+  stage: lint
+  image: registry.gitlab.com/pipeline-components/black:24.10.0
+  script:
     - black --check lyceum
