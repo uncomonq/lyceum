@@ -14,7 +14,6 @@ from pathlib import Path
 
 from decouple import config
 
-
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -30,8 +29,7 @@ SECRET_KEY = config("SECRET_KEY", default="secret")
 
 ALLOWED_HOSTS = [
     host.strip()
-    for host in config("ALLOWED_HOSTS",
-                       default="localhost,127.0.0.1").split(",")
+    for host in config("ALLOWED_HOSTS", default="localhost,127.0.0.1").split(",")
     if host.strip()
 ]
 
@@ -100,19 +98,16 @@ DATABASES = {
 AUTH_PASSWORD_VALIDATORS = [
     {
         "NAME": "django.contrib.auth.password_validation."
-                "UserAttributeSimilarityValidator",
+        "UserAttributeSimilarityValidator",
     },
     {
-        "NAME": "django.contrib.auth.password_validation."
-                "MinimumLengthValidator",
+        "NAME": "django.contrib.auth.password_validation." "MinimumLengthValidator",
     },
     {
-        "NAME": "django.contrib.auth.password_validation."
-                "CommonPasswordValidator",
+        "NAME": "django.contrib.auth.password_validation." "CommonPasswordValidator",
     },
     {
-        "NAME": "django.contrib.auth.password_validation."
-                "NumericPasswordValidator",
+        "NAME": "django.contrib.auth.password_validation." "NumericPasswordValidator",
     },
 ]
 
