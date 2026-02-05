@@ -1,6 +1,6 @@
 # Lyceum
 
-[![pipeline status](../../badges/main/pipeline.svg)](../../commits/main)
+[![pipeline status](https://gitlab.crja72.ru/django/2026/spring/course/students/379829-rizaeffk-course-1585/badges/main/pipeline.svg)](https://gitlab.crja72.ru/django/2026/spring/course/students/379829-rizaeffk-course-1585/-/commits/main)
 
 Первый проект на Django.
 
