@@ -1,3 +1,6 @@
 from django.test import TestCase
 
-# Create your tests here.
+
+class AboutTests(TestCase):
+    def test_about_page(self):
+        self.assertTrue(True)

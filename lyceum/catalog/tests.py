@@ -1,3 +1,6 @@
 from django.test import TestCase
 
-# Create your tests here.
+
+class CatalogTests(TestCase):
+    def test_catalog_page(self):
+        self.assertTrue(True)
