@@ -3,17 +3,9 @@ image: python:3.11
 stages:
   - lint
 
-
-flake8:
+lint:
   stage: lint
   script:
-    - python -m pip install --upgrade pip
-    - pip install -r requirements/test.txt
+    - pip install flake8 black==24.10.0
     - flake8 lyceum
-
-black:
-  stage: lint
-  script:
-    - python -m pip install --upgrade pip
-    - pip install black==24.10.0
-    - black --check .
+    - black --check lyceum
