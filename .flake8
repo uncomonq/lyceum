@@ -1,0 +1,6 @@
+[flake8]
+
+quotes = double
+inline-quotes = double
+multiline-quotes = double
+docstring-quotes = double
