@@ -1,16 +1,14 @@
-image: python:3.11
-
 stages:
   - lint
 
 flake8:
   stage: lint
-  image: registry.gitlab.com/pipeline-components/flake8:7.1.0
+  image: pycqa/flake8:7.1.0
   script:
     - flake8 lyceum
 
 black:
   stage: lint
-  image: registry.gitlab.com/pipeline-components/black:24.10.0
+  image: ghcr.io/psf/black:24.10.0
   script:
     - black --check lyceum
