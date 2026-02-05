@@ -31,15 +31,29 @@
    ```bash
    pip install -r requirements/prod.txt
    ```
-4. Перейти в директорию проекта с `manage.py`:
+4. Создать `lyceum/.env` файл для конфигурации (пример):
+   ```bash
+   cat > lyceum/.env << 'EOF_ENV'
+   SECRET_KEY=django-insecure-dev-key
+   DEBUG=False
+   ALLOWED_HOSTS=localhost,127.0.0.1
+   DB_ENGINE=django.db.backends.sqlite3
+   DB_NAME=db.sqlite3
+   DB_USER=
+   DB_PASSWORD=
+   DB_HOST=
+   DB_PORT=
+   EOF_ENV
+   ```
+5. Перейти в директорию проекта с `manage.py`:
    ```bash
    cd lyceum
    ```
-5. Применить миграции базы данных:
+6. Применить миграции базы данных:
    ```bash
    python manage.py migrate
    ```
-6. Запустить сервер разработки:
+7. Запустить сервер разработки:
    ```bash
    python manage.py runserver
    ```
