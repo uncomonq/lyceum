@@ -30,7 +30,8 @@ SECRET_KEY = config("SECRET_KEY", default="django-insecure-dev-key")
 
 ALLOWED_HOSTS = [
     host.strip()
-    for host in config("ALLOWED_HOSTS", default="localhost,127.0.0.1").split(",")
+    for host in config("ALLOWED_HOSTS",
+                       default="localhost,127.0.0.1").split(",")
     if host.strip()
 ]
 
