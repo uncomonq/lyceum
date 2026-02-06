@@ -36,7 +36,7 @@
 
 1. Клонировать репозиторий:
    ```bash
-   git clone https://gitlab.crja72.ru/django/2026/spring/course/students/379829-rizaeffk-course-1585/-/issues/1
+   git clone https://gitlab.crja72.ru/django/2026/spring/course/students/379829-rizaeffk-course-1585
    cd lyceum
    ```
 2. Создать и активировать виртуальное окружение:
