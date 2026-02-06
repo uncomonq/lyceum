@@ -5,7 +5,7 @@ flake8:
   stage: lint
   image: registry.gitlab.com/pipeline-components/flake8:latest
   script:
-    - flake8 lyceum
+    - flake8 --verbose lyceum
 
 black:
   stage: lint
