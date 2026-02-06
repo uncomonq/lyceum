@@ -5,7 +5,12 @@
 Первый проект на Django.
 
 Проект запускается в dev-режиме, который предназначен только для разработки и
-отличается повышенной отладочной информацией и пониженной безопасностью.
+отличается повышенной отладочной информацией и пониженной безопасностью. 
+Чтобы запусть проект в prod-режиме нужно создать .env с DEBUG=False, 
+или же указать при запуске:
+   ```
+   DEBUG=False python manage.py runserver
+   ```
 
 При запуске значения настроек подтягиваются из файла `.env` (если он есть).
 
@@ -13,7 +18,7 @@
 
 Зависимости разделены по назначению:
 
-- `requirements/prod.txt` — зависимости для запуска проекта (включая `python-decouple` для чтения `.env`);
+- `requirements/prod.txt` — зависимости для запуска проекта;
 - `requirements/test.txt` — зависимости для запуска тестов (включает `prod.txt`);
 - `requirements/dev.txt` — зависимости для разработки (включает `test.txt`).
 
@@ -31,7 +36,7 @@
 
 1. Клонировать репозиторий:
    ```bash
-   git clone <repo_url>
+   git clone https://lms.yandex.ru/courses/1585/groups/53010/lessons/12185
    cd lyceum
    ```
 2. Создать и активировать виртуальное окружение:
@@ -43,29 +48,11 @@
    ```bash
    pip install -r requirements/prod.txt
    ```
-4. Создать `lyceum/.env` файл для конфигурации (пример):
-   ```bash
-   cat > lyceum/.env << 'EOF_ENV'
-   SECRET_KEY=django-insecure-dev-key
-   DEBUG=False
-   ALLOWED_HOSTS=localhost,127.0.0.1
-   DB_ENGINE=django.db.backends.sqlite3
-   DB_NAME=db.sqlite3
-   DB_USER=
-   DB_PASSWORD=
-   DB_HOST=
-   DB_PORT=
-   EOF_ENV
-   ```
-5. Перейти в директорию проекта с `manage.py`:
+4. Перейти в директорию проекта с `manage.py`:
    ```bash
    cd lyceum
    ```
-6. Применить миграции базы данных:
-   ```bash
-   python manage.py migrate
-   ```
-7. Запустить сервер разработки:
+5. Запустить сервер разработки:
    ```bash
    python manage.py runserver
    ```
