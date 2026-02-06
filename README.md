@@ -9,7 +9,7 @@
 Чтобы запусть проект в prod-режиме нужно создать .env с DEBUG=False, 
 или же указать при запуске:
    ```
-   DEBUG=False python manage.py runserver
+   DEBUG=False python3 manage.py runserver
    ```
 
 При запуске значения настроек подтягиваются из файла `.env` (если он есть).
@@ -36,7 +36,7 @@
 
 1. Клонировать репозиторий:
    ```bash
-   git clone https://lms.yandex.ru/courses/1585/groups/53010/lessons/12185
+   git clone https://gitlab.crja72.ru/django/2026/spring/course/students/379829-rizaeffk-course-1585/-/issues/1
    cd lyceum
    ```
 2. Создать и активировать виртуальное окружение:
@@ -52,9 +52,13 @@
    ```bash
    cd lyceum
    ```
-5. Запустить сервер разработки:
+5. Выполните миграцию:
+   ```
+   python3 manage.py migrate
+   ```
+6. Запустить сервер разработки:
    ```bash
-   python manage.py runserver
+   python3 manage.py runserver
    ```
 
 После запуска приложение будет доступно по адресу:
