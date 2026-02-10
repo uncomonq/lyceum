@@ -21,4 +21,5 @@ test:
   before_script:
     - python manage.py migrate
   script:
+    - cd lyceum
     - python manage.py test
