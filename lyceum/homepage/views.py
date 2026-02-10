@@ -1,5 +1,5 @@
-import django.http
+from django.http import HttpResponse
 
 
 def home(request):
-    return django.http.HttpResponse("<body>Главная</body>")
+    return HttpResponse("<body>Главная</body>")
