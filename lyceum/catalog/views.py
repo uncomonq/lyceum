@@ -11,4 +11,6 @@ def item_detail(request, item_id):
 
 def return_value_view(request, number):
     number_int = int(number)
-    return HttpResponse(str(number_int), content_type="text/plain; charset=utf-8")
+    return HttpResponse(
+        str(number_int), content_type="text/plain; charset=utf-8"
+    )
