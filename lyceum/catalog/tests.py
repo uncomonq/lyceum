@@ -3,7 +3,7 @@ from django.test import TestCase
 
 class CatalogViewsTests(TestCase):
     def test_number_endpoint_positive_numbers(self):
-        for num in ["1", "42", "123", "5", "20"]:
+        for num in ["1", "42", "123", "001", "01"]:
             response = self.client.get(f"/catalog/re/{num}/")
             self.assertEqual(response.status_code, 200)
             self.assertEqual(response.content.decode("utf-8"), str(int(num)))
