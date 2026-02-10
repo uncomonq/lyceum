@@ -4,13 +4,13 @@ from decouple import config
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-DEBUG = config("DEBUG", default=False, cast=bool)
+DEBUG = config("DJANGO_DEBUG", default=False, cast=bool)
 
-SECRET_KEY = config("SECRET_KEY", default="secret")
+SECRET_KEY = config("DJANGO_SECRET_KEY", default="secret")
 
 ALLOWED_HOSTS = [
     host.strip()
-    for host in config("ALLOWED_HOSTS", default="localhost,127.0.0.1").split(
+    for host in config("DJANGO_ALLOWED_HOSTS", default="localhost,127.0.0.1").split(
         ","
     )
     if host.strip()
@@ -26,6 +26,7 @@ INSTALLED_APPS = [
     "catalog.apps.CatalogConfig",
     "homepage.apps.HomepageConfig",
     "about.apps.AboutConfig",
+    "debug_toolbar",
 ]
 
 MIDDLEWARE = [
@@ -36,6 +37,11 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "debug_toolbar.middleware.DebugToolbarMiddleware",
+]
+
+INTERNAL_IPS = [
+    "127.0.0.1",
 ]
 
 ROOT_URLCONF = "lyceum.urls"

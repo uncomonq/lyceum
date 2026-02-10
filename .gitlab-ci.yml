@@ -1,10 +1,12 @@
 stages:
   - lint
+  - test
 
 flake8:
   stage: lint
   image: registry.gitlab.com/pipeline-components/flake8:latest
   script:
+    - pip install flake8 flake8-import-order flake8-quotes pep8-naming
     - flake8 --verbose lyceum
 
 black:
@@ -12,3 +14,11 @@ black:
   image: registry.gitlab.com/pipeline-components/black:latest
   script:
     - black --check lyceum
+
+test:
+  stage: test
+  image: python:3.11
+  before_script:
+    - python manage.py migrate
+  script:
+    - python manage.py test
