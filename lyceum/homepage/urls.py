@@ -5,4 +5,4 @@ import homepage.views
 urlpatterns = [
     path("", homepage.views.home),
     path("coffee/", homepage.views.coffee),
-    ]
+]
