@@ -1,5 +1,6 @@
-from django.urls import path, include
 from django.conf import settings
+from django.urls import path, include
+
 
 urlpatterns = [
     path("", include("homepage.urls")),
