@@ -1,6 +1,4 @@
-from django.http import Http404, HttpResponse
-
-from catalog.converters import positive_int_converter
+from django.http import HttpResponse
 
 
 def item_list(request):
@@ -11,12 +9,5 @@ def item_detail(request, item_id):
     return HttpResponse("<body>Подробно элемент</body>")
 
 
-def re(request, number):
-    return HttpResponse(number)
-
-
-def converter_view(request, number: str):
-    result = positive_int_converter(number)
-    if result is None:
-        raise Http404("Invalid number")
-    return HttpResponse(str(result))
+def return_value_view(request, number):
+    return HttpResponse(str(number))

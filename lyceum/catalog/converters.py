@@ -1,4 +1,8 @@
-def positive_int_converter(value: str) -> int | None:
-    if value.isdigit() and int(value) > 0:
+class PositiveIntWithLeadingZerosConverter:
+    regex = r"0*[1-9][0-9]*"
+
+    def to_python(self, value: str) -> int:
         return int(value)
-    return None
+
+    def to_url(self, value: int) -> str:
+        return str(value)
