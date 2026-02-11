@@ -70,8 +70,10 @@ http://127.0.0.1:8000/
 - Для запуска тестов установите также:
   ```bash
   pip install -r requirements/test.txt
+  cd lyceum
+  python3 manage.py test
   ```
-- Для разработки (линтеры и прочие dev-инструменты):
+- Для разработки (dev-инструменты):
   ```bash
   pip install -r requirements/dev.txt
   ```
