@@ -17,6 +17,8 @@ ALLOWED_HOSTS = [
     if host.strip()
 ]
 
+ALLOW_REVERSE = config("DJANGO_ALLOW_REVERSE", default=True, cast=bool)
+
 INSTALLED_APPS = [
     "django.contrib.admin",
     "django.contrib.auth",
@@ -37,6 +39,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "lyceum.middleware.ReverseRussianWordsMiddleware",
 ]
 
 if DEBUG and importlib.util.find_spec("debug_toolbar") is not None:
