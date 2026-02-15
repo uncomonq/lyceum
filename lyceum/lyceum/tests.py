@@ -1,8 +1,9 @@
 from django.conf import settings
-from django.test import TestCase, override_settings
+from django.test import override_settings, TestCase
 
-from lyceum.middleware import ReverseRussianWordsMiddleware
 from lyceum.middleware import reverse_russian_words
+from lyceum.middleware import ReverseRussianWordsMiddleware
+
 
 # Тест функции переворота
 
