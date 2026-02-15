@@ -1,20 +1,74 @@
+from http import HTTPStatus
+from urllib.parse import quote
+
 from django.test import TestCase
 
 
 class CatalogViewsTests(TestCase):
-    def test_number_endpoint_positive_numbers(self):
-        for num in ["1", "42", "123", "001", "01"]:
-            response = self.client.get(f"/catalog/re/{num}/")
-            self.assertEqual(response.status_code, 200)
-            self.assertEqual(response.content.decode("utf-8"), str(int(num)))
+    VALID_INPUTS = [
+        "1",
+        "01",
+        "001",
+        "010",
+        "10",
+        "100",
+        "42",
+        "123",
+    ]
 
-    def test_converter_endpoint_positive_numbers(self):
-        for num in ["1", "42", "123", "3", "2"]:
-            response = self.client.get(f"/catalog/converter/{num}/")
-            self.assertEqual(response.status_code, 200)
-            self.assertEqual(response.content.decode("utf-8"), str(int(num)))
+    INVALID_INPUTS = [
+        "0",
+        "-0",
+        "-1",
+        "-42",
+        "1.0",
+        "1.5",
+        "0.1",
+        "",
+        "00",
+        "1a",
+        "a1",
+        "1a2",
+        "a12",
+        "12a",
+        "a1b2",
+        "$",
+        "%",
+        "^",
+        "@",
+        "1$",
+        "$1",
+        "1%2",
+        "abc",
+    ]
 
-    def test_invalid_numbers(self):
-        for invalid in ["0", "-1", "1.5", "abc", ""]:
-            response = self.client.get(f"/catalog/re/{invalid}/")
-            self.assertEqual(response.status_code, 404)
+    def test_re_positive_numbers(self):
+        for num in self.VALID_INPUTS:
+            with self.subTest(num=num):
+                response = self.client.get(f"/catalog/re/{num}/")
+                self.assertEqual(response.status_code, HTTPStatus.OK)
+                self.assertEqual(
+                    response.content.decode(),
+                    str(int(num)),
+                )
+
+    def test_converter_positive_numbers(self):
+        for num in self.VALID_INPUTS:
+            with self.subTest(num=num):
+                response = self.client.get(f"/catalog/converter/{num}/")
+                self.assertEqual(response.status_code, HTTPStatus.OK)
+                self.assertEqual(
+                    response.content.decode(),
+                    str(int(num)),
+                )
+
+    def test_re_and_converter_invalid_inputs(self):
+        for inval in self.INVALID_INPUTS:
+            with self.subTest(inval=inval):
+                seg = quote(inval, safe="")
+
+                resp_re = self.client.get(f"/catalog/re/{seg}/")
+                self.assertEqual(resp_re.status_code, HTTPStatus.NOT_FOUND)
+
+                resp_conv = self.client.get(f"/catalog/converter/{seg}/")
+                self.assertEqual(resp_conv.status_code, HTTPStatus.NOT_FOUND)
