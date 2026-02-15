@@ -1,4 +1,3 @@
-import importlib
 from pathlib import Path
 
 from decouple import config
@@ -26,9 +25,10 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    # Apps
+    "about.apps.AboutConfig",
     "catalog.apps.CatalogConfig",
     "homepage.apps.HomepageConfig",
-    "about.apps.AboutConfig",
 ]
 
 MIDDLEWARE = [
@@ -42,13 +42,13 @@ MIDDLEWARE = [
     "lyceum.middleware.ReverseRussianWordsMiddleware",
 ]
 
-if DEBUG and importlib.util.find_spec("debug_toolbar") is not None:
+if DEBUG:
     INSTALLED_APPS += ["debug_toolbar"]
     MIDDLEWARE.insert(0, "debug_toolbar.middleware.DebugToolbarMiddleware")
 
-INTERNAL_IPS = [
-    "127.0.0.1",
-]
+    INTERNAL_IPS = [
+        "127.0.0.1",
+    ]
 
 ROOT_URLCONF = "lyceum.urls"
 
@@ -85,7 +85,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
     {
         "NAME": (
-            "django.contrib.auth.password_validation." "MinimumLengthValidator"
+            "django.contrib.auth.password_validation.MinimumLengthValidator"
         ),
     },
     {
