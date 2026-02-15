@@ -1,6 +1,11 @@
 # Учебный проект «Lyceum»
 
-[![pipeline status](https://gitlab.crja72.ru/django/2026/spring/course/students/379829-rizaeffk-course-1585/badges/main/pipeline.svg)](https://gitlab.crja72.ru/django/2026/spring/course/students/379829-rizaeffk-course-1585/-/commits/main)
+[![CI: flake8 & black](https://gitlab.crja72.ru/django/2026/spring/course/students/379829-rizaeffk-course-1585/badges/main/pipeline.svg)](https://gitlab.crja72.ru/django/2026/spring/course/students/379829-rizaeffk-course-1585/-/commits/main)
+
+
+Это учебный проект для Специализации Яндекс Лицея «Веб-разработка на Django.
+
+
 ## CI/CD
 
 В пайплайне настроены проверки:
@@ -11,13 +16,15 @@
   - `flake8-quotes` (проверка кавычек).
 - `black --check` (проверка форматирования без изменения файлов).
 
-Это учебный проект для Специализации Яндекс Лицея «Веб-разработка на Django
+
+
 
 ## Требования
 
-- [Python](https://www.python.org/downloads/) (3.10, 3.11, 3.12, 3.13, 3.14)
-- [Venv](https://pandac.in/blogs/venv-python/#:~:text=Install%20Python%203%20and%20venv,package%20you%20want%20to%20install.) (для создания виртульного окружения на Linux)
+- [Python](https://www.python.org/downloads/) (3.10-3.14)
+- [Venv](https://pandac.in/blogs/venv-python/#:~:text=Install%20Python%203%20and%20venv,package%20you%20want%20to%20install.) (для создания виртуального окружения на Linux)
 - [Git](https://git-scm.com/install/) (для клонирования репозитория)
+
 
 ## Зависимости
 
@@ -29,7 +36,7 @@
 
 
 
-## Устновка и запуск в dev-режиме (Linux)
+## Устнаовка и запуск в dev-режиме (Linux/macOS)
 
 1. Клонировать репозиторий:
    ```bash
@@ -62,7 +69,7 @@
    python3 manage.py runserver
    ```
 
-## Устновка и запуск в dev-режиме (Windows)
+## Установка и запуск в dev-режиме (Windows)
 
 1. Клонировать репозиторий:
    ```powershell
@@ -88,16 +95,33 @@
    ```
 6. Выполните миграцию:
    ```powershell
-   python3 manage.py migrate
+   python manage.py migrate
    ```
 7. Запустить сервер разработки:
    ```powershell
-   python3 manage.py runserver
+   python manage.py runserver
    ```
 
 После запуска приложение будет доступно по адресу:
 
 http://127.0.0.1:8000/
+
+## Переменные окружения (.env)
+
+В проекте есть .env.example с комментариями. Основные переменные (пример):
+```env
+# Режим отладки: True для разработки, False для продакшена
+DJANGO_DEBUG=True 
+
+# Секретный ключ для криптографических подписей (в продакшене должен быть уникальным!)
+DJANGO_SECRET_KEY=secret
+
+# Список разрешенных хостов/доменов, через которые можно обращаться к приложению
+DJANGO_ALLOWED_HOSTS="127.0.0.1,localhost"
+
+# Включение middleware для реверса русского текста
+DJANGO_ALLOW_REVERSE=False
+```
 
 ## Дополнительно
 
@@ -105,11 +129,11 @@ http://127.0.0.1:8000/
   ```bash
   pip install -r requirements/test.txt
   cd lyceum
-  python3 manage.py test
+  python manage.py test
   ```
 - Для запуска в prod-режиме так же перейдите в корневую директорию:
   ```bash
   pip install -r requirements/prod.txt
   cd lyceum
-  python3 manage.py runserver
+  python manage.py runserver
   ```
