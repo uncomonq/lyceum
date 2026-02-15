@@ -6,7 +6,7 @@ flake8:
   stage: lint
   image: registry.gitlab.com/pipeline-components/flake8:latest
   script:
-    - pip install flake8 flake8-import-order flake8-quotes pep8-naming
+    - pip install -r requirements/test.txt
     - flake8 --verbose lyceum
 
 black:
@@ -20,7 +20,7 @@ test:
   image: python:3.11
   before_script:
     - pip install --upgrade pip
-    - pip install -r requirements/dev.txt
+    - pip install -r requirements/test.txt
     - cd lyceum
     - python manage.py migrate
   script:
