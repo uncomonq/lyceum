@@ -37,7 +37,7 @@
 1. Клонировать репозиторий:
    ```bash
    git clone https://gitlab.crja72.ru/django/2026/spring/course/students/379829-rizaeffk-course-1585
-   cd lyceum
+   cd 379829-rizaeffk-course-1585
    ```
 2. Создать и активировать виртуальное окружение:
    ```bash
@@ -67,7 +67,7 @@ http://127.0.0.1:8000/
 
 ## Дополнительно
 
-- Для запуска тестов установите также:
+- Для запуска тестов перейдите в корневую директорию и установите также:
   ```bash
   pip install -r requirements/test.txt
   cd lyceum
