@@ -5,8 +5,10 @@ stages:
 flake8:
   stage: lint
   image: registry.gitlab.com/pipeline-components/flake8:latest
-  script:
+  before_script:
+    - pip install --upgrade pip  
     - pip install -r requirements/test.txt
+  script:
     - flake8 --verbose lyceum
 
 black:
