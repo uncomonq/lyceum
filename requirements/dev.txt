@@ -1,2 +1,2 @@
 -r test.txt
-django-debug-toolbar==6.2.0
+black==24.10.0

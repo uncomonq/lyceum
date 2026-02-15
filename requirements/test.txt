@@ -1,5 +1,4 @@
 -r prod.txt
-black==24.10.0
 django-debug-toolbar==6.2.0
 flake8==7.1.1
 flake8-import-order==0.19.2
