@@ -4,7 +4,7 @@ from decouple import config
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-DEBUG = config("DJANGO_DEBUG", default=True, cast=bool)
+DEBUG = config("DJANGO_DEBUG", default=False, cast=bool)
 
 SECRET_KEY = config("DJANGO_SECRET_KEY", default="secret")
 
@@ -16,7 +16,7 @@ ALLOWED_HOSTS = [
     if host.strip()
 ]
 
-ALLOW_REVERSE = config("DJANGO_ALLOW_REVERSE", default=True, cast=bool)
+ALLOW_REVERSE = config("DJANGO_ALLOW_REVERSE", default=False, cast=bool)
 
 INSTALLED_APPS = [
     "django.contrib.admin",
@@ -26,6 +26,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     # Apps
+    "core.apps.CoreConfig",
     "about.apps.AboutConfig",
     "catalog.apps.CatalogConfig",
     "homepage.apps.HomepageConfig",
@@ -102,7 +103,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-LANGUAGE_CODE = "en-us"
+LANGUAGE_CODE = "ru-ru"
 
 TIME_ZONE = "UTC"
 
