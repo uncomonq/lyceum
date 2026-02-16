@@ -1,10 +1,11 @@
-import django.db.models
-from core.models import CommonModel
 from django.core.validators import (
     MaxValueValidator,
     MinValueValidator,
     validate_slug,
 )
+import django.db.models
+
+from core.models import CommonModel
 from .validators import validate_keywords
 
 

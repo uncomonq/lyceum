@@ -2,7 +2,7 @@ from django.core.exceptions import ValidationError
 from django.test import TestCase
 from parameterized import parameterized
 
-from catalog.models import CatalogItem, CatalogCategory
+from catalog.models import CatalogCategory, CatalogItem
 from catalog.validators import validate_keywords
 
 
@@ -31,20 +31,24 @@ class CatalogItemModelTest(TestCase):
 
 class ValidateKeywordsTest(TestCase):
 
-    @parameterized.expand([
-        ("good_text_1", "Роскошно выглядит"),
-        ("good_text_2", "Превосходно выполняет свою работу"),
-        ("good_text_3", "Он просто роскошно — превосходен"),
-    ])
+    @parameterized.expand(
+        [
+            ("good_text_1", "Роскошно выглядит"),
+            ("good_text_2", "Превосходно выполняет свою работу"),
+            ("good_text_3", "Он просто роскошно — превосходен"),
+        ]
+    )
     def test_validate_keywords_positive(self, name, text):
         validate_keywords(text)
 
-    @parameterized.expand([
-        ("bad_text_1", "Купить бесплатно"),
-        ("bad_text_2", "роскошнопривет"),
-        ("bad_text_3", "лучшийпревосходно"),
-        ("bad_text_4", "роскшонопревосходный"),
-    ])
+    @parameterized.expand(
+        [
+            ("bad_text_1", "Купить бесплатно"),
+            ("bad_text_2", "роскошнопривет"),
+            ("bad_text_3", "лучшийпревосходно"),
+            ("bad_text_4", "роскшонопревосходный"),
+        ]
+    )
     def test_validate_keywords_negative(self, name, text):
         with self.assertRaises(ValidationError):
             validate_keywords(text)

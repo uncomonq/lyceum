@@ -4,7 +4,6 @@ from django.test import override_settings, TestCase
 from lyceum.middleware import reverse_russian_words
 from lyceum.middleware import ReverseRussianWordsMiddleware
 
-
 # Тест функции переворота
 
 
