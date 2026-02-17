@@ -3,7 +3,8 @@ import re
 from django.core.exceptions import ValidationError
 
 KEYWORD_RE = re.compile(
-    r"\b(превосходно|роскошно)\b", flags=re.IGNORECASE | re.UNICODE,
+    r"\b(превосходно|роскошно)\b",
+    flags=re.IGNORECASE | re.UNICODE,
 )
 
 

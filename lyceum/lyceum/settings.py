@@ -14,7 +14,8 @@ SECRET_KEY = config("DJANGO_SECRET_KEY", default="secret")
 ALLOWED_HOSTS = [
     host.strip()
     for host in config(
-        "DJANGO_ALLOWED_HOSTS", default="localhost,127.0.0.1",
+        "DJANGO_ALLOWED_HOSTS",
+        default="localhost,127.0.0.1",
     ).split(",")
     if host.strip()
 ]
