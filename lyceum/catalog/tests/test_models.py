@@ -12,7 +12,7 @@ class CatalogItemModelTest(TestCase):
             name="Тестовая категория",
             slug="test-category",
             is_published=True,
-            weight=100
+            weight=100,
         )
 
     def test_create_item_positive(self):
@@ -36,7 +36,7 @@ class ValidateKeywordsTest(TestCase):
             ("good_text_1", "Роскошно выглядит"),
             ("good_text_2", "Превосходно выполняет свою работу"),
             ("good_text_3", "Он просто роскошно — превосходен"),
-        ]
+        ],
     )
     def test_validate_keywords_positive(self, name, text):
         validate_keywords(text)
@@ -47,7 +47,7 @@ class ValidateKeywordsTest(TestCase):
             ("bad_text_2", "роскошнопривет"),
             ("bad_text_3", "лучшийпревосходно"),
             ("bad_text_4", "роскшонопревосходный"),
-        ]
+        ],
     )
     def test_validate_keywords_negative(self, name, text):
         with self.assertRaises(ValidationError):
