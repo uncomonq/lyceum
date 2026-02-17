@@ -4,8 +4,6 @@ from django.test import override_settings, TestCase
 from lyceum.middleware import reverse_russian_words
 from lyceum.middleware import ReverseRussianWordsMiddleware
 
-# Тест функции переворота
-
 
 class ReverseFunctionTests(TestCase):
     def test_reverse_russian_words_complex_cases(self):
@@ -23,9 +21,6 @@ class ReverseFunctionTests(TestCase):
         for original, expected in cases.items():
             with self.subTest(original=original):
                 self.assertEqual(reverse_russian_words(original), expected)
-
-
-# Включен
 
 
 @override_settings(ALLOW_REVERSE=True)
@@ -46,9 +41,6 @@ class MiddlewareEnabledTests(TestCase):
                     self.assertNotIn("кинйач", content)
 
 
-# Выключен
-
-
 @override_settings(ALLOW_REVERSE=False)
 class MiddlewareDisabledTests(TestCase):
 
@@ -60,9 +52,6 @@ class MiddlewareDisabledTests(TestCase):
             with self.subTest(request_number=i):
                 response = self.client.get("/coffee/")
                 self.assertNotIn("кинйач", response.content.decode())
-
-
-# По умолчанию
 
 
 class MiddlewareDefaultSettingTests(TestCase):
