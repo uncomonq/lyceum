@@ -75,7 +75,6 @@
   "pk": 2,
   "fields": {
     "name": "Электроника",
-    "normalized_name": "электроника",
     "is_published": true,
     "slug": "electronics",
     "weight": 100
@@ -86,7 +85,6 @@
   "pk": 1,
   "fields": {
     "name": "Одежда",
-    "normalized_name": "одежда",
     "is_published": true,
     "slug": "clothing",
     "weight": 200
@@ -97,7 +95,6 @@
   "pk": 1,
   "fields": {
     "name": "Новинка",
-    "normalized_name": "новинка",
     "is_published": true,
     "slug": "new"
   }
@@ -107,7 +104,6 @@
   "pk": 2,
   "fields": {
     "name": "Распродажа",
-    "normalized_name": "распродажа",
     "is_published": true,
     "slug": "sale"
   }
@@ -117,7 +113,6 @@
   "pk": 3,
   "fields": {
     "name": "Премиум",
-    "normalized_name": "премиум",
     "is_published": true,
     "slug": "premium"
   }
@@ -127,7 +122,6 @@
   "pk": 4,
   "fields": {
     "name": "Лимитированная серия",
-    "normalized_name": "лимитированная серия",
     "is_published": true,
     "slug": "limited"
   }
@@ -137,7 +131,6 @@
   "pk": 5,
   "fields": {
     "name": "Популярное",
-    "normalized_name": "популярное",
     "is_published": true,
     "slug": "popular"
   }
