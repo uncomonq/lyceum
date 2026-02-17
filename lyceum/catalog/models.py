@@ -30,6 +30,10 @@ class CatalogTag(CommonModel):
         error_messages={"unique": "Объект с похожим именем уже существует."},
     )
 
+    def save(self, *args, **kwargs):
+        self.normalized_name = normalize_name(self.name or "")
+        super().save(*args, **kwargs)
+
     def clean(self):
         super().clean()
         norm = normalize_name(self.name)
@@ -79,6 +83,10 @@ class CatalogCategory(CommonModel):
         unique=True,
         error_messages={"unique": "Объект с похожим именем уже существует."},
     )
+
+    def save(self, *args, **kwargs):
+        self.normalized_name = normalize_name(self.name or "")
+        super().save(*args, **kwargs)
 
     def clean(self):
         super().clean()

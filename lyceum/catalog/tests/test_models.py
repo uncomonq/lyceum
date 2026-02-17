@@ -3,6 +3,7 @@ from django.test import TestCase
 from parameterized import parameterized
 
 from catalog.models import CatalogCategory, CatalogItem
+from catalog.utils import normalize_name
 from catalog.validators import ValidateMustContain
 
 
@@ -58,3 +59,39 @@ class ValidateKeywordsTest(TestCase):
     def test_validate_keywords_negative(self, name, text):
         with self.assertRaises(ValidationError):
             self.validator(text)
+
+
+class NormalizeTests(TestCase):
+    def test_normalize_basic(self):
+        cases = {
+            "  ПреВосХодно!  ": "превосходно",
+            "роскошно!!!": "роскошно",
+            "RosKошно": "роскошно",  # лат/кир mix
+            "нов-инка": "новинка",
+            "aA": "аа",  # лат a -> кир а
+        }
+        for inp, want in cases.items():
+            self.assertEqual(normalize_name(inp), want)
+
+
+class CategoryNormalizeUniqueTests(TestCase):
+    def setUp(self):
+        CatalogCategory.objects.create(
+            name="Новая",
+            slug="one",
+            is_published=True,
+            weight=10,
+        )
+
+    @parameterized.expand(
+        [
+            ("Новая",),
+            (" новая ",),
+            ("нОвая!",),
+            ("Nовая",),
+        ],
+    )
+    def test_canonical_conflicts(self, name):
+        c = CatalogCategory(name=name, slug="x", is_published=True, weight=1)
+        with self.assertRaises(ValidationError):
+            c.full_clean()
