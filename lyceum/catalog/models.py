@@ -1,3 +1,4 @@
+from django.core.exceptions import ValidationError
 from django.core.validators import (
     MaxValueValidator,
     MinValueValidator,
@@ -5,6 +6,7 @@ from django.core.validators import (
 )
 import django.db.models
 
+from catalog.utils import normalize_name
 from catalog.validators import ValidateMustContain
 from core.models import CommonModel
 
@@ -19,18 +21,27 @@ class CatalogTag(CommonModel):
         " дефисы и знаки подчёркивания",
     )
     normalized_name = django.db.models.CharField(
-        "нормализованное имя",
+        "normalized_name",
         max_length=200,
-        null=True,
-        blank=True,
+        null=False,
+        blank=False,
         editable=False,
-        unique=False,
-        help_text="Нормализованное имя для уникальности "
-        "(генерируется автоматически).",
+        unique=True,
+        error_messages={"unique": "Объект с похожим именем уже существует."},
     )
 
     def clean(self):
         super().clean()
+        norm = normalize_name(self.name)
+        self.normalized_name = norm
+
+        qs = self.__class__.objects.filter(normalized_name=norm)
+        if self.pk:
+            qs = qs.exclude(pk=self.pk)
+        if qs.exists():
+            raise ValidationError(
+                {"name": "Категория с похожим именем уже существует."},
+            )
 
     class Meta:
         db_table = "catalog_tag"
@@ -60,18 +71,27 @@ class CatalogCategory(CommonModel):
         help_text="От 1 до 32767",
     )
     normalized_name = django.db.models.CharField(
-        "нормализованное имя",
+        "normalized_name",
         max_length=200,
-        null=True,
-        blank=True,
+        null=False,
+        blank=False,
         editable=False,
-        unique=False,
-        help_text="Нормализованное имя для уникальности "
-        "(генерируется автоматически).",
+        unique=True,
+        error_messages={"unique": "Объект с похожим именем уже существует."},
     )
 
     def clean(self):
         super().clean()
+        norm = normalize_name(self.name)
+        self.normalized_name = norm
+
+        qs = self.__class__.objects.filter(normalized_name=norm)
+        if self.pk:
+            qs = qs.exclude(pk=self.pk)
+        if qs.exists():
+            raise ValidationError(
+                {"name": "Категория с похожим именем уже существует."},
+            )
 
     class Meta:
         db_table = "catalog_category"
