@@ -31,6 +31,12 @@ class CatalogItemModelTest(TestCase):
 
 class ValidateKeywordsTest(TestCase):
 
+    def setUp(self):
+        self.validator = ValidateMustContain(
+            "превосходно",
+            "роскошно",
+        )
+
     @parameterized.expand(
         [
             ("good_text_1", "Роскошно выглядит"),
@@ -39,7 +45,7 @@ class ValidateKeywordsTest(TestCase):
         ],
     )
     def test_validate_keywords_positive(self, name, text):
-        ValidateMustContain(text)
+        self.validator(text)
 
     @parameterized.expand(
         [
@@ -51,4 +57,4 @@ class ValidateKeywordsTest(TestCase):
     )
     def test_validate_keywords_negative(self, name, text):
         with self.assertRaises(ValidationError):
-            ValidateMustContain(text)
+            self.validator(text)
