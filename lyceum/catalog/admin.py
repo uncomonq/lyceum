@@ -5,16 +5,28 @@ import catalog.models
 
 @admin.register(catalog.models.CatalogItem)
 class ItemAdmin(admin.ModelAdmin):
-    list_display = ("name", "is_published")
-    list_editable = ("is_published",)
+    list_display = (
+        catalog.models.CatalogItem._meta.get_field("name").name,
+        catalog.models.CatalogItem._meta.get_field("is_published").name,
+    )
+    list_editable = (
+        catalog.models.CatalogItem._meta.get_field("is_published").name,
+    )
     list_display_links = ("name",)
     filter_horizontal = ("tags",)
 
 
 @admin.register(catalog.models.CatalogCategory)
 class CategoryAdmin(admin.ModelAdmin):
-    list_display = ("name", "weight", "is_published")
-    list_editable = ("weight", "is_published")
+    list_display = (
+        catalog.models.CatalogCategory._meta.get_field("name").name,
+        catalog.models.CatalogCategory._meta.get_field("weight").name,
+        catalog.models.CatalogCategory._meta.get_field("is_published").name,
+    )
+    list_editable = (
+        catalog.models.CatalogCategory._meta.get_field("weight").name,
+        catalog.models.CatalogCategory._meta.get_field("is_published").name,
+    )
     search_fields = ("name",)
 
 
@@ -24,6 +36,11 @@ class TagAdmin(admin.ModelAdmin):
     def get_name(self, obj):
         return obj.name
 
-    list_display = ("get_name", "is_published")
-    list_editable = ("is_published",)
+    list_display = (
+        catalog.models.CatalogTag._meta.get_field("name").name,
+        catalog.models.CatalogTag._meta.get_field("is_published").name,
+    )
+    list_editable = (
+        catalog.models.CatalogTag._meta.get_field("is_published").name,
+    )
     search_fields = ("name",)
