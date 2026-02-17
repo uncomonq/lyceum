@@ -1,0 +1,145 @@
+[
+{
+  "model": "catalog.catalogcategory",
+  "pk": 1,
+  "fields": {
+    "name": "Электроника",
+    "is_published": true,
+    "slug": "electronics",
+    "weight": 100,
+    "normalized_name": "электроника"
+  }
+},
+{
+  "model": "catalog.catalogcategory",
+  "pk": 2,
+  "fields": {
+    "name": "Одежда",
+    "is_published": true,
+    "slug": "clothing",
+    "weight": 100,
+    "normalized_name": "одежда"
+  }
+},
+{
+  "model": "catalog.catalogtag",
+  "pk": 1,
+  "fields": {
+    "name": "Новинка",
+    "is_published": true,
+    "slug": "new",
+    "normalized_name": "новинка"
+  }
+},
+{
+  "model": "catalog.catalogtag",
+  "pk": 2,
+  "fields": {
+    "name": "Популярное",
+    "is_published": true,
+    "slug": "popular",
+    "normalized_name": "популярное"
+  }
+},
+{
+  "model": "catalog.catalogtag",
+  "pk": 3,
+  "fields": {
+    "name": "Премиум",
+    "is_published": true,
+    "slug": "premium",
+    "normalized_name": "премиум"
+  }
+},
+{
+  "model": "catalog.catalogtag",
+  "pk": 4,
+  "fields": {
+    "name": "Лимитированная серия",
+    "is_published": true,
+    "slug": "limited",
+    "normalized_name": "лимитированнаясерия"
+  }
+},
+{
+  "model": "catalog.catalogtag",
+  "pk": 5,
+  "fields": {
+    "name": "Распродажа",
+    "is_published": true,
+    "slug": "sale",
+    "normalized_name": "распродажа"
+  }
+},
+{
+  "model": "catalog.catalogitem",
+  "pk": 1,
+  "fields": {
+    "name": "Phone Ultra6000",
+    "is_published": true,
+    "text": "Телефон превосходно тянущий сапера",
+    "category": 1,
+    "tags": [
+      1,
+      2
+    ]
+  }
+},
+{
+  "model": "catalog.catalogitem",
+  "pk": 2,
+  "fields": {
+    "name": "Пиджак \"90-тые\"",
+    "is_published": true,
+    "text": "Роскошно сшитый пиджак",
+    "category": 2,
+    "tags": [
+      3,
+      4
+    ]
+  }
+},
+{
+  "model": "catalog.catalogitem",
+  "pk": 3,
+  "fields": {
+    "name": "Электровыжигатель \"Каприз\"",
+    "is_published": true,
+    "text": "Превосходно выжигает на любом материале",
+    "category": 1,
+    "tags": [
+      2,
+      5
+    ]
+  }
+},
+{
+  "model": "catalog.catalogitem",
+  "pk": 4,
+  "fields": {
+    "name": "Тапочки \"Тапатульки\"",
+    "is_published": true,
+    "text": "Роскошно сидящие тапочки",
+    "category": 2,
+    "tags": [
+      1,
+      3,
+      4
+    ]
+  }
+},
+{
+  "model": "catalog.catalogitem",
+  "pk": 5,
+  "fields": {
+    "name": "Видеокарта RTX6090 TI",
+    "is_published": true,
+    "text": "Видеокарта превосходно тянущая касынку",
+    "category": 1,
+    "tags": [
+      3,
+      4
+    ]
+  }
+}
+]
