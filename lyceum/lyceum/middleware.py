@@ -8,6 +8,7 @@ _CYRILLIC_WORD_RE = re.compile(r"\b[А-Яа-яЁё]+\b", flags=re.UNICODE)
 def reverse_russian_words(text):
     def _rev(m):
         return m.group(0)[::-1]
+
     return _CYRILLIC_WORD_RE.sub(_rev, text)
 
 
