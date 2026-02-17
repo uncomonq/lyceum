@@ -1,46 +1,38 @@
 from django.contrib import admin
 
-import catalog.models
+from catalog.models import CatalogCategory, CatalogItem, CatalogTag
 
 
-@admin.register(catalog.models.CatalogItem)
+@admin.register(CatalogItem)
 class ItemAdmin(admin.ModelAdmin):
     list_display = (
-        catalog.models.CatalogItem._meta.get_field("name").name,
-        catalog.models.CatalogItem._meta.get_field("is_published").name,
+        CatalogItem.name.field.name,
+        CatalogItem.is_published.field.name,
     )
-    list_editable = (
-        catalog.models.CatalogItem._meta.get_field("is_published").name,
-    )
-    list_display_links = ("name",)
-    filter_horizontal = ("tags",)
+    list_editable = (CatalogItem.is_published.field.name,)
+    list_display_links = (CatalogItem.name.field.name,)
+    filter_horizontal = (CatalogItem.tags.field.name,)
 
 
-@admin.register(catalog.models.CatalogCategory)
+@admin.register(CatalogCategory)
 class CategoryAdmin(admin.ModelAdmin):
     list_display = (
-        catalog.models.CatalogCategory._meta.get_field("name").name,
-        catalog.models.CatalogCategory._meta.get_field("weight").name,
-        catalog.models.CatalogCategory._meta.get_field("is_published").name,
+        CatalogCategory.name.field.name,
+        CatalogCategory.weight.field.name,
+        CatalogCategory.is_published.field.name,
     )
     list_editable = (
-        catalog.models.CatalogCategory._meta.get_field("weight").name,
-        catalog.models.CatalogCategory._meta.get_field("is_published").name,
+        CatalogCategory.weight.field.name,
+        CatalogCategory.is_published.field.name,
     )
-    search_fields = ("name",)
+    search_fields = (CatalogCategory.name.field.name,)
 
 
-@admin.register(catalog.models.CatalogTag)
+@admin.register(CatalogTag)
 class TagAdmin(admin.ModelAdmin):
-    @admin.display(description="Название тега")
-    def get_name(self, obj):
-        return obj.name
-
     list_display = (
-        catalog.models.CatalogTag._meta.get_field("name").name,
-        catalog.models.CatalogTag._meta.get_field("is_published").name,
+        CatalogTag.name.field.name,
+        CatalogTag.is_published.field.name,
     )
-    list_editable = (
-        catalog.models.CatalogTag._meta.get_field("is_published").name,
-    )
-    search_fields = ("name",)
+    list_editable = (CatalogTag.is_published.field.name,)
+    search_fields = (CatalogTag.name.field.name,)
