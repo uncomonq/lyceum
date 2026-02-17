@@ -12,7 +12,7 @@ class CatalogItemModelTest(TestCase):
             name="Тестовая категория",
             slug="test-category",
             is_published=True,
-            weight=100,
+            weight=100
         )
 
     def test_create_item_positive(self):

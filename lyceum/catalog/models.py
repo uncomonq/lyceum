@@ -5,8 +5,8 @@ from django.core.validators import (
 )
 import django.db.models
 
+from catalog.validators import validate_keywords
 from core.models import CommonModel
-from .validators import validate_keywords
 
 
 class CatalogTag(CommonModel):
@@ -84,3 +84,8 @@ class CatalogItem(CommonModel):
 
     def __str__(self):
         return self.name
+
+
+Category = CatalogCategory
+Tag = CatalogTag
+Item = CatalogItem
