@@ -3,7 +3,7 @@ from django.test import TestCase
 from parameterized import parameterized
 
 from catalog.models import CatalogCategory, CatalogItem
-from catalog.validators import validate_keywords
+from catalog.validators import ValidateMustContain
 
 
 class CatalogItemModelTest(TestCase):
@@ -39,7 +39,7 @@ class ValidateKeywordsTest(TestCase):
         ],
     )
     def test_validate_keywords_positive(self, name, text):
-        validate_keywords(text)
+        ValidateMustContain(text)
 
     @parameterized.expand(
         [
@@ -51,4 +51,4 @@ class ValidateKeywordsTest(TestCase):
     )
     def test_validate_keywords_negative(self, name, text):
         with self.assertRaises(ValidationError):
-            validate_keywords(text)
+            ValidateMustContain(text)

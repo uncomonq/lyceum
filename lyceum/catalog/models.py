@@ -5,7 +5,7 @@ from django.core.validators import (
 )
 import django.db.models
 
-from catalog.validators import validate_keywords
+from catalog.validators import ValidateMustContain
 from core.models import CommonModel
 
 
@@ -60,7 +60,7 @@ class CatalogCategory(CommonModel):
 class CatalogItem(CommonModel):
     text = django.db.models.TextField(
         "текст",
-        validators=[validate_keywords],
+        validators=[ValidateMustContain("превосходно", "роскошно")],
         help_text="Должно содержать слова «превосходно» или «роскошно»",
     )
     category = django.db.models.ForeignKey(
