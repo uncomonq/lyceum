@@ -25,7 +25,7 @@ class CatalogTag(CommonModel):
         verbose_name_plural = "теги"
 
     def __str__(self):
-        return self.name
+        return self.name[:15]
 
 
 class CatalogCategory(CommonModel):
@@ -54,7 +54,7 @@ class CatalogCategory(CommonModel):
         ordering = ["weight"]
 
     def __str__(self):
-        return self.name
+        return self.name[:15]
 
 
 class CatalogItem(CommonModel):
@@ -83,7 +83,7 @@ class CatalogItem(CommonModel):
         verbose_name_plural = "товары"
 
     def __str__(self):
-        return self.name
+        return self.name[:15]
 
 
 Category = CatalogCategory
