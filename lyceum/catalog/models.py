@@ -18,6 +18,19 @@ class CatalogTag(CommonModel):
         help_text="Должен содержать только латинские буквы, цифры,"
         " дефисы и знаки подчёркивания",
     )
+    normalized_name = django.db.models.CharField(
+        "нормализованное имя",
+        max_length=200,
+        null=True,
+        blank=True,
+        editable=False,
+        unique=False,
+        help_text="Нормализованное имя для уникальности "
+        "(генерируется автоматически).",
+    )
+
+    def clean(self):
+        super().clean()
 
     class Meta:
         db_table = "catalog_tag"
@@ -46,6 +59,19 @@ class CatalogCategory(CommonModel):
         ],
         help_text="От 1 до 32767",
     )
+    normalized_name = django.db.models.CharField(
+        "нормализованное имя",
+        max_length=200,
+        null=True,
+        blank=True,
+        editable=False,
+        unique=False,
+        help_text="Нормализованное имя для уникальности "
+        "(генерируется автоматически).",
+    )
+
+    def clean(self):
+        super().clean()
 
     class Meta:
         db_table = "catalog_category"
