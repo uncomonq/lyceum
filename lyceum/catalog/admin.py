@@ -2,7 +2,6 @@ import django.contrib.admin
 
 import catalog.models
 
-
 DEFAULT_DISPLAY = ("name", "is_published")
 DEFAULT_EDITABLE = ("is_published",)
 
