@@ -5,6 +5,7 @@ from django.core.validators import (
 )
 import django.db.models
 
+from catalog.utils import normalize_name
 from catalog.validators import ValidateMustContain
 from core.models import CommonModel
 
@@ -18,6 +19,14 @@ class CatalogTag(CommonModel):
         help_text="Должен содержать только латинские буквы, цифры,"
         " дефисы и знаки подчёркивания",
     )
+    normalized_name = django.db.models.CharField(
+        max_length=200,
+        unique=True,
+        editable=False,
+        error_messages={
+            "unique": "Тег с таким именем уже существует.",
+        },
+    )
 
     class Meta:
         db_table = "catalog_tag"
@@ -26,6 +35,10 @@ class CatalogTag(CommonModel):
 
     def __str__(self):
         return self.name[:15]
+
+    def save(self, *args, **kwargs):
+        self.normalized_name = normalize_name(self.name)
+        super().save(*args, **kwargs)
 
 
 class CatalogCategory(CommonModel):
@@ -46,6 +59,14 @@ class CatalogCategory(CommonModel):
         ],
         help_text="От 1 до 32767",
     )
+    normalized_name = django.db.models.CharField(
+        max_length=200,
+        unique=True,
+        editable=False,
+        error_messages={
+            "unique": "Категория с таким именем уже существует.",
+        },
+    )
 
     class Meta:
         db_table = "catalog_category"
@@ -55,6 +76,10 @@ class CatalogCategory(CommonModel):
 
     def __str__(self):
         return self.name[:15]
+
+    def save(self, *args, **kwargs):
+        self.normalized_name = normalize_name(self.name)
+        super().save(*args, **kwargs)
 
 
 class CatalogItem(CommonModel):

@@ -1,4 +1,5 @@
 from django.core.exceptions import ValidationError
+from django.db import IntegrityError
 from django.test import TestCase
 from parameterized import parameterized
 
@@ -58,3 +59,35 @@ class ValidateKeywordsTest(TestCase):
     def test_validate_keywords_negative(self, name, text):
         with self.assertRaises(ValidationError):
             self.validator(text)
+
+
+class NormalizedNameTest(TestCase):
+
+    def test_similar_category_names_not_allowed(self):
+        CatalogCategory.objects.create(
+            name="Тест",
+            slug="test1",
+            weight=100,
+        )
+
+        with self.assertRaises(IntegrityError):
+            CatalogCategory.objects.create(
+                name="  тЕсТ!!! ",
+                slug="test2",
+                weight=200,
+            )
+
+
+def test_similar_letters_not_allowed(self):
+    CatalogCategory.objects.create(
+        name="Тест",
+        slug="test1",
+        weight=100,
+    )
+
+    with self.assertRaises(IntegrityError):
+        CatalogCategory.objects.create(
+            name="Teст",  # T латиница
+            slug="test2",
+            weight=200,
+        )
