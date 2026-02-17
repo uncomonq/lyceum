@@ -1,28 +1,34 @@
-import django.contrib.admin
+from django.contrib import admin
 
 import catalog.models
 
-DEFAULT_DISPLAY = ("name", "is_published")
-DEFAULT_EDITABLE = ("is_published",)
+COMMON_DISPLAY = ("name", "is_published")
+COMMON_EDITABLE = ("is_published",)
+CATEGORY_DISPLAY = ("name", "weight", "is_published")
+CATEGORY_EDITABLE = ("weight", "is_published")
 
 
-@django.contrib.admin.register(catalog.models.CatalogItem)
-class ItemAdmin(django.contrib.admin.ModelAdmin):
-    list_display = DEFAULT_DISPLAY
-    list_editable = DEFAULT_EDITABLE
+@admin.register(catalog.models.CatalogItem)
+class ItemAdmin(admin.ModelAdmin):
+    list_display = COMMON_DISPLAY
+    list_editable = COMMON_EDITABLE
     list_display_links = ("name",)
     filter_horizontal = ("tags",)
 
 
-@django.contrib.admin.register(catalog.models.CatalogCategory)
-class CategoryAdmin(django.contrib.admin.ModelAdmin):
-    list_display = ("name", "weight", "is_published")
-    list_editable = ("is_published", "weight")
+@admin.register(catalog.models.CatalogCategory)
+class CategoryAdmin(admin.ModelAdmin):
+    list_display = CATEGORY_DISPLAY
+    list_editable = CATEGORY_EDITABLE
     search_fields = ("name",)
 
 
-@django.contrib.admin.register(catalog.models.CatalogTag)
-class TagAdmin(django.contrib.admin.ModelAdmin):
-    list_display = DEFAULT_DISPLAY
-    list_editable = DEFAULT_EDITABLE
+@admin.register(catalog.models.CatalogTag)
+class TagAdmin(admin.ModelAdmin):
+    @admin.display(description="Название тега")
+    def get_name(self, obj):
+        return obj.name
+
+    list_display = ("get_name", "is_published")
+    list_editable = COMMON_EDITABLE
     search_fields = ("name",)
