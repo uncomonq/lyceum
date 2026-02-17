@@ -25,13 +25,20 @@ class CategoryAdmin(admin.ModelAdmin):
         CatalogCategory.weight.field.name,
         CatalogCategory.is_published.field.name,
     )
+    prepopulated_fields = {
+        CatalogCategory.slug.field.name: (CatalogCategory.name.field.name,),
+    }
     search_fields = (CatalogCategory.name.field.name,)
 
 
 @admin.register(CatalogTag)
 class TagAdmin(admin.ModelAdmin):
+    @admin.display(description="Название тега")
+    def get_name(self, obj):
+        return obj.name
+
     list_display = (
-        CatalogTag.name.field.name,
+        "get_name",
         CatalogTag.is_published.field.name,
     )
     list_editable = (CatalogTag.is_published.field.name,)
