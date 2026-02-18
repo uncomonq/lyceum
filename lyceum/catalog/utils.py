@@ -4,8 +4,8 @@ _SIMILAR = str.maketrans(
     {
         "a": "а",
         "A": "а",
-        "b": "б",
-        "B": "б",
+        "b": "в",
+        "B": "в",
         "c": "с",
         "C": "с",
         "d": "д",
@@ -36,7 +36,7 @@ _SIMILAR = str.maketrans(
         "P": "р",
         "q": "я",
         "Q": "я",
-        "r": "р",
+        "r": "г",
         "R": "р",
         "s": "с",
         "S": "с",
@@ -46,8 +46,8 @@ _SIMILAR = str.maketrans(
         "U": "у",
         "v": "в",
         "V": "в",
-        "w": "в",
-        "W": "в",
+        "w": "ш",
+        "W": "ш",
         "x": "х",
         "X": "х",
         "y": "у",
@@ -60,10 +60,11 @@ _SIMILAR = str.maketrans(
 _NON_ALNUM_RE = re.compile(r"[^0-9a-zа-яё]", flags=re.IGNORECASE)
 
 
-def normalize_name(value: str) -> str:
+def normalize_name(value: str):
     if value is None:
         value = ""
     s = str(value).strip().lower()
     s = s.translate(_SIMILAR)
     s = _NON_ALNUM_RE.sub("", s)
+    s = s.replace("ё", "е")
     return s
