@@ -30,6 +30,11 @@ class Tag(core.models.CommonModel):
         error_messages={"unique": "Объект с похожим именем уже существует."},
     )
 
+    class Meta:
+        db_table = "catalog_tag"
+        verbose_name = "тег"
+        verbose_name_plural = "теги"
+
     def save(self, *args, **kwargs):
         self.normalized_name = catalog.utils.normalize_name(self.name or "")
         super().save(*args, **kwargs)
@@ -46,14 +51,6 @@ class Tag(core.models.CommonModel):
             raise ValidationError(
                 {"name": "Категория с похожим именем уже существует."},
             )
-
-    class Meta:
-        db_table = "catalog_tag"
-        verbose_name = "тег"
-        verbose_name_plural = "теги"
-
-    def __str__(self):
-        return self.name[:15]
 
 
 class Category(core.models.CommonModel):
@@ -84,6 +81,12 @@ class Category(core.models.CommonModel):
         error_messages={"unique": "Объект с похожим именем уже существует."},
     )
 
+    class Meta:
+        db_table = "catalog_category"
+        verbose_name = "категория"
+        verbose_name_plural = "категории"
+        ordering = ["weight"]
+
     def save(self, *args, **kwargs):
         self.normalized_name = catalog.utils.normalize_name(self.name or "")
         super().save(*args, **kwargs)
@@ -100,15 +103,6 @@ class Category(core.models.CommonModel):
             raise ValidationError(
                 {"name": "Категория с похожим именем уже существует."},
             )
-
-    class Meta:
-        db_table = "catalog_category"
-        verbose_name = "категория"
-        verbose_name_plural = "категории"
-        ordering = ["weight"]
-
-    def __str__(self):
-        return self.name[:15]
 
 
 class Item(core.models.CommonModel):
@@ -137,11 +131,3 @@ class Item(core.models.CommonModel):
         db_table = "catalog_item"
         verbose_name = "товар"
         verbose_name_plural = "товары"
-
-    def __str__(self):
-        return self.name[:15]
-
-
-Category = Category
-Tag = Tag
-Item = Item
