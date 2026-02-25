@@ -16,6 +16,7 @@ _SIMILAR = str.maketrans(
         "t": "т",
         "h": "н",
         "r": "г",
+        "n": "н",
     },
 )
 

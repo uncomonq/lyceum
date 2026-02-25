@@ -1,6 +1,6 @@
 [
 {
-  "model": "catalog.catalogcategory",
+  "model": "catalog.Category",
   "pk": 1,
   "fields": {
     "name": "Электроника",
@@ -11,7 +11,7 @@
   }
 },
 {
-  "model": "catalog.catalogcategory",
+  "model": "catalog.Category",
   "pk": 2,
   "fields": {
     "name": "Одежда",
@@ -22,7 +22,7 @@
   }
 },
 {
-  "model": "catalog.catalogtag",
+  "model": "catalog.Tag",
   "pk": 1,
   "fields": {
     "name": "Новинка",
@@ -32,7 +32,7 @@
   }
 },
 {
-  "model": "catalog.catalogtag",
+  "model": "catalog.Tag",
   "pk": 2,
   "fields": {
     "name": "Популярное",
@@ -42,7 +42,7 @@
   }
 },
 {
-  "model": "catalog.catalogtag",
+  "model": "catalog.Tag",
   "pk": 3,
   "fields": {
     "name": "Премиум",
@@ -52,7 +52,7 @@
   }
 },
 {
-  "model": "catalog.catalogtag",
+  "model": "catalog.Tag",
   "pk": 4,
   "fields": {
     "name": "Лимитированная серия",
@@ -62,7 +62,7 @@
   }
 },
 {
-  "model": "catalog.catalogtag",
+  "model": "catalog.Tag",
   "pk": 5,
   "fields": {
     "name": "Распродажа",
@@ -72,7 +72,7 @@
   }
 },
 {
-  "model": "catalog.catalogitem",
+  "model": "catalog.Item",
   "pk": 1,
   "fields": {
     "name": "Phone Ultra6000",
@@ -86,7 +86,7 @@
   }
 },
 {
-  "model": "catalog.catalogitem",
+  "model": "catalog.Item",
   "pk": 2,
   "fields": {
     "name": "Пиджак \"90-тые\"",
@@ -100,7 +100,7 @@
   }
 },
 {
-  "model": "catalog.catalogitem",
+  "model": "catalog.Item",
   "pk": 3,
   "fields": {
     "name": "Электровыжигатель \"Каприз\"",
@@ -114,7 +114,7 @@
   }
 },
 {
-  "model": "catalog.catalogitem",
+  "model": "catalog.Item",
   "pk": 4,
   "fields": {
     "name": "Тапочки \"Тапатульки\"",
@@ -129,7 +129,7 @@
   }
 },
 {
-  "model": "catalog.catalogitem",
+  "model": "catalog.Item",
   "pk": 5,
   "fields": {
     "name": "Видеокарта RTX6090 TI",

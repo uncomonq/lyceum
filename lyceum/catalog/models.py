@@ -11,7 +11,7 @@ import catalog.validators
 import core.models
 
 
-class CatalogTag(core.models.CommonModel):
+class Tag(core.models.CommonModel):
     slug = django.db.models.SlugField(
         "слаг",
         max_length=200,
@@ -56,7 +56,7 @@ class CatalogTag(core.models.CommonModel):
         return self.name[:15]
 
 
-class CatalogCategory(core.models.CommonModel):
+class Category(core.models.CommonModel):
     slug = django.db.models.SlugField(
         "слаг",
         max_length=200,
@@ -111,23 +111,23 @@ class CatalogCategory(core.models.CommonModel):
         return self.name[:15]
 
 
-class CatalogItem(core.models.CommonModel):
+class Item(core.models.CommonModel):
     text = django.db.models.TextField(
         "текст",
         validators=[
-            catalog.validators.ValidateMustContain("превосходно", "роскошно")
+            catalog.validators.ValidateMustContain("превосходно", "роскошно"),
         ],
         help_text="Должно содержать слова «превосходно» или «роскошно»",
     )
     category = django.db.models.ForeignKey(
-        CatalogCategory,
+        Category,
         on_delete=django.db.models.CASCADE,
         related_name="items",
         verbose_name="категория",
     )
 
     tags = django.db.models.ManyToManyField(
-        CatalogTag,
+        Tag,
         related_name="items",
         blank=True,
         verbose_name="теги",
@@ -142,6 +142,6 @@ class CatalogItem(core.models.CommonModel):
         return self.name[:15]
 
 
-Category = CatalogCategory
-Tag = CatalogTag
-Item = CatalogItem
+Category = Category
+Tag = Tag
+Item = Item

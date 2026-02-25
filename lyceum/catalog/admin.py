@@ -1,37 +1,37 @@
 from django.contrib import admin
 
-from catalog.models import CatalogCategory, CatalogItem, CatalogTag
+from catalog.models import Category, Item, Tag
 
 
-@admin.register(CatalogItem)
+@admin.register(Item)
 class ItemAdmin(admin.ModelAdmin):
     list_display = (
-        CatalogItem.name.field.name,
-        CatalogItem.is_published.field.name,
+        Item.name.field.name,
+        Item.is_published.field.name,
     )
-    list_editable = (CatalogItem.is_published.field.name,)
-    list_display_links = (CatalogItem.name.field.name,)
-    filter_horizontal = (CatalogItem.tags.field.name,)
+    list_editable = (Item.is_published.field.name,)
+    list_display_links = (Item.name.field.name,)
+    filter_horizontal = (Item.tags.field.name,)
 
 
-@admin.register(CatalogCategory)
+@admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
     list_display = (
-        CatalogCategory.name.field.name,
-        CatalogCategory.weight.field.name,
-        CatalogCategory.is_published.field.name,
+        Category.name.field.name,
+        Category.weight.field.name,
+        Category.is_published.field.name,
     )
     list_editable = (
-        CatalogCategory.weight.field.name,
-        CatalogCategory.is_published.field.name,
+        Category.weight.field.name,
+        Category.is_published.field.name,
     )
     prepopulated_fields = {
-        CatalogCategory.slug.field.name: (CatalogCategory.name.field.name,),
+        Category.slug.field.name: (Category.name.field.name,),
     }
-    search_fields = (CatalogCategory.name.field.name,)
+    search_fields = (Category.name.field.name,)
 
 
-@admin.register(CatalogTag)
+@admin.register(Tag)
 class TagAdmin(admin.ModelAdmin):
     @admin.display(description="Название тега")
     def get_name(self, obj):
@@ -39,7 +39,7 @@ class TagAdmin(admin.ModelAdmin):
 
     list_display = (
         "get_name",
-        CatalogTag.is_published.field.name,
+        Tag.is_published.field.name,
     )
-    list_editable = (CatalogTag.is_published.field.name,)
-    search_fields = (CatalogTag.name.field.name,)
+    list_editable = (Tag.is_published.field.name,)
+    search_fields = (Tag.name.field.name,)

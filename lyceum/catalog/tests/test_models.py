@@ -2,14 +2,14 @@ from django.core.exceptions import ValidationError
 from django.test import TestCase
 from parameterized import parameterized
 
-from catalog.models import CatalogCategory, CatalogItem
+from catalog.models import Category, Item
 from catalog.utils import normalize_name
 from catalog.validators import ValidateMustContain
 
 
-class CatalogItemModelTest(TestCase):
+class ItemModelTest(TestCase):
     def setUp(self):
-        self.category = CatalogCategory.objects.create(
+        self.category = Category.objects.create(
             name="Тестовая категория",
             slug="test-category",
             is_published=True,
@@ -17,7 +17,7 @@ class CatalogItemModelTest(TestCase):
         )
 
     def test_create_item_positive(self):
-        item = CatalogItem(
+        item = Item(
             name="Тестовый товар",
             text="Корректный текст, превосходно работает.",
             category=self.category,
@@ -66,9 +66,9 @@ class NormalizeTests(TestCase):
         cases = {
             "  ПреВосХодно!  ": "превосходно",
             "роскошно!!!": "роскошно",
-            "RosKошно": "роскошно",  # лат/кир mix
             "нов-инка": "новинка",
-            "aA": "аа",  # лат a -> кир а
+            "pockoшno": "роскошно",
+            "aA": "аа",
         }
         for inp, want in cases.items():
             self.assertEqual(normalize_name(inp), want)
@@ -76,7 +76,7 @@ class NormalizeTests(TestCase):
 
 class CategoryNormalizeUniqueTests(TestCase):
     def setUp(self):
-        CatalogCategory.objects.create(
+        Category.objects.create(
             name="Новая",
             slug="one",
             is_published=True,
@@ -92,6 +92,6 @@ class CategoryNormalizeUniqueTests(TestCase):
         ],
     )
     def test_canonical_conflicts(self, name):
-        c = CatalogCategory(name=name, slug="x", is_published=True, weight=1)
+        c = Category(name=name, slug="x", is_published=True, weight=1)
         with self.assertRaises(ValidationError):
             c.full_clean()
