@@ -1,15 +1,12 @@
 import re
 
-from django.core.exceptions import ValidationError
+import django.utils.deconstruct
+
+WORDS_REGEX = re.compile(r"\w+|\W+")
 
 
+@django.utils.deconstruct.deconstructible
 class ValidateMustContain:
-    def deconstruct(self):
-        path = "catalog.validators.ValidateMustContain"
-        args = self.words
-        kwargs = {}
-        return path, args, kwargs
-
     message = "Текст должен содержать хотя бы одно из слов: {words}."
     code = "must_contain"
 
@@ -17,23 +14,12 @@ class ValidateMustContain:
         if not words:
             raise ValueError("Необходимо передать хотя бы одно слово.")
 
-        self.words = words
-
-        pattern = r"\b(" + "|".join(map(re.escape, words)) + r")\b"
-        self.regex = re.compile(
-            pattern,
-            flags=re.IGNORECASE | re.UNICODE,
-        )
+        self.validate_wods = {word.lower() for word in words}
+        self.joined_words = ", ".join(self.validate_wods)
 
     def __call__(self, value):
-        if not self.regex.search(value):
-            raise ValidationError(
-                self.message.format(words=", ".join(self.words)),
-                code=self.code,
+        words = set(WORDS_REGEX.findall(value.lower()))
+        if not self.validate_wods & words:
+            raise django.core.exceptions.ValidationError(
+                f"В тексте `{value}` нет слов: {self.joined_words}",
             )
-
-    def __eq__(self, other):
-        return (
-            isinstance(other, ValidateMustContain)
-            and self.words == other.words
-        )

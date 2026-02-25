@@ -6,12 +6,12 @@ from django.core.validators import (
 )
 import django.db.models
 
-from catalog.utils import normalize_name
-from catalog.validators import ValidateMustContain
-from core.models import CommonModel
+import catalog.utils
+import catalog.validators
+import core.models
 
 
-class CatalogTag(CommonModel):
+class CatalogTag(core.models.CommonModel):
     slug = django.db.models.SlugField(
         "слаг",
         max_length=200,
@@ -31,12 +31,12 @@ class CatalogTag(CommonModel):
     )
 
     def save(self, *args, **kwargs):
-        self.normalized_name = normalize_name(self.name or "")
+        self.normalized_name = catalog.utils.normalize_name(self.name or "")
         super().save(*args, **kwargs)
 
     def clean(self):
         super().clean()
-        norm = normalize_name(self.name)
+        norm = catalog.utils.normalize_name(self.name)
         self.normalized_name = norm
 
         qs = self.__class__.objects.filter(normalized_name=norm)
@@ -56,7 +56,7 @@ class CatalogTag(CommonModel):
         return self.name[:15]
 
 
-class CatalogCategory(CommonModel):
+class CatalogCategory(core.models.CommonModel):
     slug = django.db.models.SlugField(
         "слаг",
         max_length=200,
@@ -85,12 +85,12 @@ class CatalogCategory(CommonModel):
     )
 
     def save(self, *args, **kwargs):
-        self.normalized_name = normalize_name(self.name or "")
+        self.normalized_name = catalog.utils.normalize_name(self.name or "")
         super().save(*args, **kwargs)
 
     def clean(self):
         super().clean()
-        norm = normalize_name(self.name)
+        norm = catalog.utils.normalize_name(self.name)
         self.normalized_name = norm
 
         qs = self.__class__.objects.filter(normalized_name=norm)
@@ -111,10 +111,12 @@ class CatalogCategory(CommonModel):
         return self.name[:15]
 
 
-class CatalogItem(CommonModel):
+class CatalogItem(core.models.CommonModel):
     text = django.db.models.TextField(
         "текст",
-        validators=[ValidateMustContain("превосходно", "роскошно")],
+        validators=[
+            catalog.validators.ValidateMustContain("превосходно", "роскошно")
+        ],
         help_text="Должно содержать слова «превосходно» или «роскошно»",
     )
     category = django.db.models.ForeignKey(
