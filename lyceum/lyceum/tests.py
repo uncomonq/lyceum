@@ -1,8 +1,7 @@
 from django.conf import settings
 from django.test import override_settings, TestCase
 
-from lyceum.middleware import reverse_russian_words
-from lyceum.middleware import ReverseRussianWordsMiddleware
+import lyceum.middleware
 
 
 class ReverseFunctionTests(TestCase):
@@ -20,14 +19,17 @@ class ReverseFunctionTests(TestCase):
 
         for original, expected in cases.items():
             with self.subTest(original=original):
-                self.assertEqual(reverse_russian_words(original), expected)
+                self.assertEqual(
+                    lyceum.middleware._reverse_russian_words(original),
+                    expected,
+                )
 
 
 @override_settings(ALLOW_REVERSE=True)
 class MiddlewareEnabledTests(TestCase):
 
     def setUp(self):
-        ReverseRussianWordsMiddleware.counter = 0
+        lyceum.middleware.ReverseRussianWordsMiddleware.counter = 0
 
     def test_10th_and_20th_are_reversed(self):
         for i in range(1, 21):
@@ -45,7 +47,7 @@ class MiddlewareEnabledTests(TestCase):
 class MiddlewareDisabledTests(TestCase):
 
     def setUp(self):
-        ReverseRussianWordsMiddleware.counter = 0
+        lyceum.middleware.ReverseRussianWordsMiddleware.counter = 0
 
     def test_never_reverses_when_disabled(self):
         for i in range(1, 21):
@@ -57,7 +59,7 @@ class MiddlewareDisabledTests(TestCase):
 class MiddlewareDefaultSettingTests(TestCase):
 
     def setUp(self):
-        ReverseRussianWordsMiddleware.counter = 0
+        lyceum.middleware.ReverseRussianWordsMiddleware.counter = 0
 
     def test_behavior_matches_settings_default(self):
         for i in range(1, 11):
