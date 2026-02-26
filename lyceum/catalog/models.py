@@ -127,7 +127,46 @@ class Item(core.models.CommonModel):
         verbose_name="теги",
     )
 
+    main_image = django.db.models.ImageField(
+        upload_to="items/main/",
+        null=True,
+        blank=True,
+        help_text="Основная картинка товара",
+        verbose_name="главное изображение",
+    )
+
     class Meta:
         db_table = "catalog_item"
         verbose_name = "товар"
         verbose_name_plural = "товары"
+
+
+class ItemImage(django.db.models.Model):
+    item = django.db.models.ForeignKey(
+        Item,
+        on_delete=django.db.models.CASCADE,
+        related_name="images",
+        verbose_name="товар",
+    )
+    image = django.db.models.ImageField(
+        upload_to="items/gallery/",
+        verbose_name="изображение",
+    )
+    alt = django.db.models.CharField(
+        max_length=200,
+        blank=True,
+        default="",
+        verbose_name="alt",
+    )
+    ordering = django.db.models.PositiveIntegerField(
+        "порядок",
+        default=0,
+    )
+
+    class Meta:
+        ordering = ["ordering"]
+        verbose_name = "изображение товара"
+        verbose_name_plural = "изображения товара"
+
+    def __str__(self):
+        return f"{self.item.name} — image #{self.pk}"

@@ -29,6 +29,8 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "sorl.thumbnail",
+    "django_cleanup.apps.CleanupConfig",
     "core.apps.CoreConfig",
     "about.apps.AboutConfig",
     "catalog.apps.CatalogConfig",
@@ -59,7 +61,7 @@ ROOT_URLCONF = "lyceum.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        "DIRS": [BASE_DIR / "templates"],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -106,6 +108,10 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+MEDIA_URL = "/media/"
+
+MEDIA_ROOT = BASE_DIR / "media"
+
 LANGUAGE_CODE = "ru-ru"
 
 TIME_ZONE = "UTC"
@@ -115,5 +121,9 @@ USE_I18N = True
 USE_TZ = True
 
 STATIC_URL = "static/"
+
+STATICFILES_DIRS = [
+    BASE_DIR / "static_dev",
+]
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"

@@ -1,45 +1,65 @@
 from django.contrib import admin
+from django.utils.html import format_html
+from sorl.thumbnail import get_thumbnail
 
-from catalog.models import Category, Item, Tag
+import catalog.models
 
 
-@admin.register(Item)
+class ItemImageInline(admin.TabularInline):
+    model = catalog.models.ItemImage
+    extra = 1
+
+
+@admin.register(catalog.models.Item)
 class ItemAdmin(admin.ModelAdmin):
     list_display = (
-        Item.name.field.name,
-        Item.is_published.field.name,
+        catalog.models.Item.name.field.name,
+        "main_image_preview",
+        catalog.models.Item.is_published.field.name,
     )
-    list_editable = (Item.is_published.field.name,)
-    list_display_links = (Item.name.field.name,)
-    filter_horizontal = (Item.tags.field.name,)
+    list_editable = (catalog.models.Item.is_published.field.name,)
+    list_display_links = (catalog.models.Item.name.field.name,)
+    filter_horizontal = (catalog.models.Item.tags.field.name,)
+    inlines = (ItemImageInline,)
+
+    def main_image_preview(self, obj):
+        if not obj.main_image:
+            return ""
+        thumb = get_thumbnail(
+            obj.main_image,
+            "100x100",
+            crop="center",
+            quality=80,
+        )
+        return format_html('<img src="{}" width="60" />', thumb.url)
+
+    main_image_preview.short_description = "Главное изображение"
 
 
-@admin.register(Category)
+@admin.register(catalog.models.Category)
 class CategoryAdmin(admin.ModelAdmin):
     list_display = (
-        Category.name.field.name,
-        Category.weight.field.name,
-        Category.is_published.field.name,
+        catalog.models.Category.name.field.name,
+        catalog.models.Category.weight.field.name,
+        catalog.models.Category.is_published.field.name,
     )
     list_editable = (
-        Category.weight.field.name,
-        Category.is_published.field.name,
+        catalog.models.Category.weight.field.name,
+        catalog.models.Category.is_published.field.name,
     )
     prepopulated_fields = {
-        Category.slug.field.name: (Category.name.field.name,),
+        catalog.models.Category.slug.field.name: (
+            catalog.models.Category.name.field.name,
+        ),
     }
-    search_fields = (Category.name.field.name,)
+    search_fields = (catalog.models.Category.name.field.name,)
 
 
-@admin.register(Tag)
+@admin.register(catalog.models.Tag)
 class TagAdmin(admin.ModelAdmin):
-    @admin.display(description="Название тега")
-    def get_name(self, obj):
-        return obj.name
-
     list_display = (
-        "get_name",
-        Tag.is_published.field.name,
+        catalog.models.Tag.name.field.name,
+        catalog.models.Tag.is_published.field.name,
     )
-    list_editable = (Tag.is_published.field.name,)
-    search_fields = (Tag.name.field.name,)
+    list_editable = (catalog.models.Tag.is_published.field.name,)
+    search_fields = (catalog.models.Tag.name.field.name,)

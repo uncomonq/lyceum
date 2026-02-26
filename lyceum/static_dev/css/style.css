@@ -1,0 +1,25 @@
+body {
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  background: #f7f8fb;
+  color: #222;
+}
+
+.navbar-brand span {
+  font-weight: 600;
+  font-size: 1.05rem;
+}
+
+.item-card .card-img-top {
+  height: 180px;
+  object-fit: cover;
+}
+
+.container > .p-4 {
+  background: #fff;
+}
+
+@media (max-width: 576px) {
+  .item-card .card-img-top {
+    height: 220px;
+  }
+}

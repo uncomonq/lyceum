@@ -1,0 +1,26 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+
+  <link rel="icon" href="{% static 'favicon/favicon.ico' %}" type="image/x-icon">
+  <link href="{% static 'bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+  <link href="{% static 'css/style.css' %}" rel="stylesheet">
+  <title>{% block title %}{% endblock %}</title>
+</head>
+<body>
+
+  {% include 'includes/header.html' %}
+
+  <main class="container mt-4">
+    <div class="min-vh-100">
+      {% block content %}{% endblock %}
+    </div>
+  </main>
+
+  {% include 'includes/footer.html' %}
+
+  <script src="{% static 'bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+</body>
+</html>

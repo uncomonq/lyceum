@@ -1,0 +1,13 @@
+{% load static %}
+<div class="col-md-4 mb-4">
+  <div class="card shadow-sm">
+    <img src="{% static item.image %}" class="card-img-top img-fluid">
+    <div class="card-body">
+      <h5 class="card-title">{{ item.name }}</h5>
+      <p class="card-text">{{ item.desc|truncatechars:100 }}</p>
+      <a href="{% url 'catalog:item_detail' item.slug %}" class="btn btn-primary">
+        Подробнее
+      </a>
+    </div>
+  </div>
+</div>

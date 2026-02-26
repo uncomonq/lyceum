@@ -5,9 +5,11 @@ import catalog.views
 
 register_converter(PositiveIntWithLeadingZerosConverter, "posint")
 
+app_name = "catalog"
 
 urlpatterns = [
-    path("", catalog.views.item_list, name="item-list"),
+    path("", catalog.views.item_list, name="item_list"),
+    path("<slug:slug>/", catalog.views.item_detail, name="item_detail"),
     path(
         "converter/<posint:number>/",
         catalog.views.return_value_view,

@@ -1,0 +1,40 @@
+{% load static %}
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <div class="container">
+    <a class="navbar-brand" href="{% url 'homepage:main' %}">
+        <img src="{% static 'img/logo.png' %}" width="40" class="me-2">
+        Lyceum
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ms-auto">
+
+        <li class="nav-item">
+          <a class="nav-link {% if request.resolver_match.url_name == 'main' %}active disabled{% endif %}"
+             href="{% url 'homepage:main' %}">
+             На главную
+          </a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link {% if request.resolver_match.url_name == 'about' %}active disabled{% endif %}"
+             href="{% url 'about:about' %}">
+             О проекте
+          </a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link {% if request.resolver_match.url_name == 'item_list' %}active disabled{% endif %}"
+             href="{% url 'catalog:item_list' %}">
+             Список товаров
+          </a>
+        </li>
+
+      </ul>
+      <img src="{% static 'img/cat.jpg' %}" width="100" type="image/jpg">
+    </div>
+
+  </div>
+</nav>
