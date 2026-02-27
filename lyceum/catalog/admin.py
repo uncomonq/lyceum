@@ -1,3 +1,5 @@
+from ckeditor.widgets import CKEditorWidget
+from django import forms
 from django.contrib import admin
 from django.utils.html import format_html
 from sorl.thumbnail import get_thumbnail
@@ -18,8 +20,18 @@ class ItemImageInline(admin.TabularInline):
     extra = 1
 
 
+class ItemAdminForm(forms.ModelForm):
+    class Meta:
+        model = catalog.models.Item
+        fields = "__all__"
+        widgets = {
+            catalog.models.Item.text.field.name: CKEditorWidget(),
+        }
+
+
 @admin.register(catalog.models.Item)
 class ItemAdmin(admin.ModelAdmin):
+    form = ItemAdminForm
     list_display = (
         catalog.models.Item.name.field.name,
         "main_image_preview",
@@ -31,18 +43,20 @@ class ItemAdmin(admin.ModelAdmin):
     inlines = (MainImageInline, ItemImageInline)
 
     def main_image_preview(self, obj):
+        if not hasattr(obj, "main_image"):
+            return "—"
+
         thumb = get_thumbnail(
             obj.main_image.image,
             "300x300",
             crop="center",
             quality=80,
         )
-        url = thumb.url
 
         return format_html(
             '<img src="{}" width="60" height="60"'
             ' style="object-fit:cover;" />',
-            url,
+            thumb.url,
         )
 
     main_image_preview.short_description = "Главное изображение"

@@ -1,8 +1,10 @@
 import re
 
+import django.core.exceptions
 import django.utils.deconstruct
+from django.utils.html import strip_tags
 
-WORDS_REGEX = re.compile(r"\w+|\W+")
+WORDS_REGEX = re.compile(r"\b[\w']+\b", flags=re.UNICODE)
 
 __all__ = ("ValidateMustContain",)
 
@@ -16,12 +18,15 @@ class ValidateMustContain:
         if not words:
             raise ValueError("Необходимо передать хотя бы одно слово.")
 
-        self.validate_wods = {word.lower() for word in words}
-        self.joined_words = ", ".join(self.validate_wods)
+        self.required_words = {word.lower() for word in words}
+        self.joined_words = ", ".join(self.required_words)
 
     def __call__(self, value):
-        words = set(WORDS_REGEX.findall(value.lower()))
-        if not self.validate_wods & words:
+        plain_value = strip_tags(value)
+        words = set(WORDS_REGEX.findall(plain_value.lower()))
+
+        if not self.required_words & words:
             raise django.core.exceptions.ValidationError(
                 f"В тексте `{value}` нет слов: {self.joined_words}",
             )
+    

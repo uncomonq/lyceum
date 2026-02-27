@@ -55,6 +55,9 @@ class ValidateKeywordsTest(TestCase):
     def test_validate_keywords_positive(self, name, text):
         self.validator(text)
 
+    def test_validate_keywords_with_html_tags(self):
+        self.validator("<p><strong>Превосходно</strong> выглядит</p>")
+
     @parameterized.expand(
         [
             ("bad_text_1", "Купить бесплатно"),
