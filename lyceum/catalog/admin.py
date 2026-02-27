@@ -1,5 +1,3 @@
-from ckeditor.widgets import CKEditorWidget
-from django import forms
 from django.contrib import admin
 from django.utils.html import format_html
 from sorl.thumbnail import get_thumbnail
@@ -20,18 +18,8 @@ class ItemImageInline(admin.TabularInline):
     extra = 1
 
 
-class ItemAdminForm(forms.ModelForm):
-    class Meta:
-        model = catalog.models.Item
-        fields = "__all__"
-        widgets = {
-            catalog.models.Item.text.field.name: CKEditorWidget(),
-        }
-
-
 @admin.register(catalog.models.Item)
 class ItemAdmin(admin.ModelAdmin):
-    form = ItemAdminForm
     list_display = (
         catalog.models.Item.name.field.name,
         "main_image_preview",

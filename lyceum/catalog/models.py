@@ -1,3 +1,4 @@
+import ckeditor.fields
 from django.core.exceptions import ValidationError
 from django.core.validators import (
     MaxValueValidator,
@@ -110,7 +111,7 @@ class Category(core.models.CommonModel):
 
 
 class Item(core.models.CommonModel):
-    text = django.db.models.TextField(
+    text = ckeditor.fields.RichTextField(
         "текст",
         validators=[
             catalog.validators.ValidateMustContain("превосходно", "роскошно"),
