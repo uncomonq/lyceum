@@ -3,6 +3,13 @@ from django.test import override_settings, TestCase
 
 import lyceum.middleware
 
+__all__ = (
+    "ReverseFunctionTests",
+    "MiddlewareEnabledTests",
+    "MiddlewareDisabledTests",
+    "MiddlewareDefaultSettingTests",
+)
+
 
 class ReverseFunctionTests(TestCase):
     def test_reverse_russian_words_complex_cases(self):

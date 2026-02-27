@@ -45,7 +45,7 @@ def item_list(request):
 
 def item_detail(request, pk):
     templates = "catalog/item.html"
-    item = next((item for item in items if item["pk"] == pk), None)
+    item = next((item for item in items if item["pk"] == int(pk)), None)
     if item is None:
         raise django.http.Http404
     return django.shortcuts.render(request, templates, {"item": item})
