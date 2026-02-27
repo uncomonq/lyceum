@@ -5,6 +5,8 @@ from django.core.validators import (
     validate_slug,
 )
 import django.db.models
+import django.utils.safestring
+import sorl.thumbnail
 
 import catalog.utils
 import catalog.validators
@@ -131,7 +133,6 @@ class Item(core.models.CommonModel):
         upload_to="items/main/",
         null=True,
         blank=True,
-        help_text="Основная картинка товара",
         verbose_name="главное изображение",
     )
 
@@ -139,6 +140,20 @@ class Item(core.models.CommonModel):
         db_table = "catalog_item"
         verbose_name = "товар"
         verbose_name_plural = "товары"
+
+    def main_image_tag(self):
+        if not self.main_image:
+            return ""
+        thumb = sorl.thumbnail.get_thumbnail(
+            self.main_image,
+            "300x300",
+            crop="center",
+            quality=80,
+        )
+        return django.utils.safestring.mark_safe(
+            f'<img src="{thumb.url}" width="80" height="80"'
+            ' style="object-fit:cover" />',
+        )
 
 
 class ItemImage(django.db.models.Model):

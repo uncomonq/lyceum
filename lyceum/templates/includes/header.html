@@ -12,21 +12,21 @@
       <ul class="navbar-nav ms-auto">
 
         <li class="nav-item">
-          <a class="nav-link {% if request.resolver_match.url_name == 'main' %}active disabled{% endif %}"
+          <a class="nav-link {% if request.resolver_match.view_name == 'homepage:main' %}active disabled{% endif %}"
              href="{% url 'homepage:main' %}">
              На главную
           </a>
         </li>
 
         <li class="nav-item">
-          <a class="nav-link {% if request.resolver_match.url_name == 'about' %}active disabled{% endif %}"
+          <a class="nav-link {% if request.resolver_match.view_name == 'about:about' %}active disabled{% endif %}"
              href="{% url 'about:about' %}">
              О проекте
           </a>
         </li>
 
         <li class="nav-item">
-          <a class="nav-link {% if request.resolver_match.url_name == 'item_list' %}active disabled{% endif %}"
+          <a class="nav-link {% if request.resolver_match.view_name == 'catalog:item_list' %}active disabled{% endif %}"
              href="{% url 'catalog:item_list' %}">
              Список товаров
           </a>
