@@ -29,7 +29,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    "ckeditor",
+    "tinymce",
     "sorl.thumbnail",
     "django_cleanup.apps.CleanupConfig",
     "core.apps.CoreConfig",
