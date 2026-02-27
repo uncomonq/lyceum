@@ -1,9 +1,12 @@
-from django.http import HttpResponse
+import django.http
 import django.shortcuts
+
+__all__ = ("item_list", "item_detail", "return_value_view")
+
 
 items = [
     {
-        "id": 1,
+        "pk": 1,
         "name": "Роскошная лампа",
         "slug": "roskoshnaya-lampa",
         "image": "img/lamp.jpeg",
@@ -14,7 +17,7 @@ items = [
         " в гостиной или спальне.",
     },
     {
-        "id": 2,
+        "pk": 2,
         "name": "Стильная подушка",
         "slug": "stilnaya-podushka",
         "image": "img/pillow.jpeg",
@@ -23,7 +26,7 @@ items = [
         " стильный дизайн, идеально подходит для отдыха и сна.",
     },
     {
-        "id": 3,
+        "pk": 3,
         "name": "Классический ковер",
         "slug": "klassicheskiy-kover",
         "image": "img/carpet.jpg",
@@ -40,15 +43,17 @@ def item_list(request):
     return django.shortcuts.render(request, templates, {"items": items})
 
 
-def item_detail(request, slug):
+def item_detail(request, pk):
     templates = "catalog/item.html"
-    item = next((i for i in items if i["slug"] == slug), None)
+    item = next((item for item in items if item["pk"] == pk), None)
+    if item is None:
+        raise django.http.Http404
     return django.shortcuts.render(request, templates, {"item": item})
 
 
 def return_value_view(request, number):
     number_int = int(number)
-    return HttpResponse(
+    return django.http.HttpResponse(
         str(number_int),
         content_type="text/plain; charset=utf-8",
     )

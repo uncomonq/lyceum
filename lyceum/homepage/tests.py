@@ -2,6 +2,8 @@ from http import HTTPStatus
 
 from django.test import TestCase
 
+__all__ = ("HomepageURLTests", "CoffeeEndpointTests")
+
 
 class HomepageURLTests(TestCase):
     def test_homepage_url_exists(self):

@@ -1,5 +1,7 @@
 from django.db import models
 
+__all__ = ("CommonModel",)
+
 
 class CommonModel(models.Model):
     name = models.CharField(

@@ -3,9 +3,11 @@ import http
 from django.http import HttpResponse
 import django.shortcuts
 
+__all__ = ("home", "coffee")
+
 items = [
     {
-        "id": 1,
+        "pk": 1,
         "name": "Роскошная лампа",
         "slug": "roskoshnaya-lampa",
         "image": "img/lamp.jpeg",
@@ -16,7 +18,7 @@ items = [
         " в гостиной или спальне.",
     },
     {
-        "id": 2,
+        "pk": 2,
         "name": "Стильная подушка",
         "slug": "stilnaya-podushka",
         "image": "img/pillow.jpeg",
@@ -25,7 +27,7 @@ items = [
         " стильный дизайн, идеально подходит для отдыха и сна.",
     },
     {
-        "id": 3,
+        "pk": 3,
         "name": "Классический ковер",
         "slug": "klassicheskiy-kover",
         "image": "img/carpet.jpg",

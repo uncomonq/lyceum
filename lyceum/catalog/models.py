@@ -12,6 +12,8 @@ import catalog.utils
 import catalog.validators
 import core.models
 
+__all__ = ("Tag", "Category", "Item", "MainImage", "ItemImage")
+
 
 class Tag(core.models.CommonModel):
     slug = django.db.models.SlugField(
@@ -129,31 +131,55 @@ class Item(core.models.CommonModel):
         verbose_name="теги",
     )
 
-    main_image = django.db.models.ImageField(
-        upload_to="items/main/",
-        null=True,
-        blank=True,
-        verbose_name="главное изображение",
-    )
-
     class Meta:
         db_table = "catalog_item"
         verbose_name = "товар"
         verbose_name_plural = "товары"
 
-    def main_image_tag(self):
-        if not self.main_image:
+    def main_image_preview(self):
+        if not hasattr(self, "main_image"):
             return ""
         thumb = sorl.thumbnail.get_thumbnail(
-            self.main_image,
+            self.main_image.image,
             "300x300",
             crop="center",
-            quality=80,
+            quality=70,
         )
+
         return django.utils.safestring.mark_safe(
-            f'<img src="{thumb.url}" width="80" height="80"'
-            ' style="object-fit:cover" />',
+            f'<img src="{thumb.url}" width="50" height="50" '
+            f'style="object-fit:cover;" />',
         )
+
+    main_image_preview.short_description = "Изображение"
+
+
+class MainImage(django.db.models.Model):
+    item = django.db.models.OneToOneField(
+        Item,
+        on_delete=django.db.models.CASCADE,
+        related_name="main_image",
+        verbose_name="товар",
+    )
+
+    image = django.db.models.ImageField(
+        upload_to="items/main/",
+        verbose_name="главное изображение",
+    )
+
+    alt = django.db.models.CharField(
+        max_length=200,
+        blank=True,
+        default="",
+        verbose_name="alt",
+    )
+
+    class Meta:
+        verbose_name = "главное изображение"
+        verbose_name_plural = "главные изображения"
+
+    def __str__(self):
+        return f"Главное изображение: {self.item.name}"
 
 
 class ItemImage(django.db.models.Model):

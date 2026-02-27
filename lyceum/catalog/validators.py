@@ -4,6 +4,8 @@ import django.utils.deconstruct
 
 WORDS_REGEX = re.compile(r"\w+|\W+")
 
+__all__ = ("ValidateMustContain",)
+
 
 @django.utils.deconstruct.deconstructible
 class ValidateMustContain:

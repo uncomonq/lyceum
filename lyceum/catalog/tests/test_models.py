@@ -6,6 +6,13 @@ from catalog.models import Category, Item
 from catalog.utils import normalize_name
 from catalog.validators import ValidateMustContain
 
+__all__ = (
+    "ItemModelTest",
+    "ValidateKeywordsTest",
+    "NormalizeTests",
+    "CategoryNormalizeUniqueTests",
+)
+
 
 class ItemModelTest(TestCase):
     def setUp(self):

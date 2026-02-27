@@ -5,7 +5,7 @@
     <div class="card-body">
       <h5 class="card-title">{{ item.name }}</h5>
       <p class="card-text">{{ item.desc|truncatechars:100 }}</p>
-      <a href="{% url 'catalog:item_detail' item.slug %}" class="btn btn-primary">
+      <a href="{% url 'catalog:item_detail' item.pk %}" class="btn btn-primary">
         Подробнее
       </a>
     </div>

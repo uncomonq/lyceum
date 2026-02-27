@@ -4,6 +4,14 @@ from sorl.thumbnail import get_thumbnail
 
 import catalog.models
 
+__all__ = ("ItemAdmin", "CategoryAdmin", "TagAdmin")
+
+
+class MainImageInline(admin.StackedInline):
+    model = catalog.models.MainImage
+    extra = 0
+    max_num = 1
+
 
 class ItemImageInline(admin.TabularInline):
     model = catalog.models.ItemImage
@@ -20,18 +28,22 @@ class ItemAdmin(admin.ModelAdmin):
     list_editable = (catalog.models.Item.is_published.field.name,)
     list_display_links = (catalog.models.Item.name.field.name,)
     filter_horizontal = (catalog.models.Item.tags.field.name,)
-    inlines = (ItemImageInline,)
+    inlines = (MainImageInline, ItemImageInline)
 
     def main_image_preview(self, obj):
-        if not obj.main_image:
-            return ""
         thumb = get_thumbnail(
-            obj.main_image,
-            "100x100",
+            obj.main_image.image,
+            "300x300",
             crop="center",
             quality=80,
         )
-        return format_html('<img src="{}" width="60" />', thumb.url)
+        url = thumb.url
+
+        return format_html(
+            '<img src="{}" width="60" height="60"'
+            ' style="object-fit:cover;" />',
+            url,
+        )
 
     main_image_preview.short_description = "Главное изображение"
 
