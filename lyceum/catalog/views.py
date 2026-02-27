@@ -19,8 +19,15 @@ def item_detail(request, pk):
 
 
 def return_value_view(request, number):
-    number_int = int(number)
+    try:
+        n = int(number)
+    except (TypeError, ValueError):
+        raise django.http.Http404
+
+    if n <= 0:
+        raise django.http.Http404
+
     return django.http.HttpResponse(
-        str(number_int),
+        str(n),
         content_type="text/plain; charset=utf-8",
     )
