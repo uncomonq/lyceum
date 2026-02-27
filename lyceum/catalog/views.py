@@ -1,28 +1,37 @@
 import django.http
 import django.shortcuts
 
-import catalog.models
+from catalog.static_data import get_catalog_items, get_item_by_pk
 
 __all__ = ("item_list", "item_detail", "return_value_view")
 
 
 def item_list(request):
     templates = "catalog/item_list.html"
-    items = catalog.models.Item.objects.all()
-    return django.shortcuts.render(request, templates, {"items": items})
+    return django.shortcuts.render(
+        request,
+        templates,
+        {"items": get_catalog_items()},
+    )
 
 
 def item_detail(request, pk):
     templates = "catalog/item.html"
-    item = django.shortcuts.get_object_or_404(catalog.models.Item, pk=pk)
+    item = get_item_by_pk(pk)
     return django.shortcuts.render(request, templates, {"item": item})
 
 
+def item_db_detail(request, pk):
+    item = get_item_by_pk(pk)
+    return django.shortcuts.render(
+        request,
+        "catalog/item.html",
+        {"item": item},
+    )
+
+
 def return_value_view(request, number):
-    try:
-        n = int(number)
-    except (TypeError, ValueError):
-        raise django.http.Http404
+    n = int(number)
 
     if n <= 0:
         raise django.http.Http404

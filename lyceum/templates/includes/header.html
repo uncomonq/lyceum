@@ -2,7 +2,7 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
   <div class="container">
     <a class="navbar-brand" href="{% url 'homepage:main' %}">
-        <img src="{% static 'img/logo.png' %}" width="40" class="me-2">
+        <img src="{% static 'img/logo.png' %}" width="40" class="me-2" alt="Логотип сайта">
         Lyceum
     </a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
@@ -10,31 +10,32 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav ms-auto">
-
         <li class="nav-item">
-          <a class="nav-link {% if request.resolver_match.view_name == 'homepage:main' %}active disabled{% endif %}"
-             href="{% url 'homepage:main' %}">
-             На главную
-          </a>
+          {% if request.resolver_match.view_name == 'homepage:main' %}
+            <span class="nav-link active disabled" aria-current="page">На главную</span>
+          {% else %}
+            <a class="nav-link" href="{% url 'homepage:main' %}">На главную</a>
+          {% endif %}
         </li>
 
         <li class="nav-item">
-          <a class="nav-link {% if request.resolver_match.view_name == 'about:about' %}active disabled{% endif %}"
-             href="{% url 'about:about' %}">
-             О проекте
-          </a>
+          {% if request.resolver_match.view_name == 'about:about' %}
+            <span class="nav-link active disabled" aria-current="page">О проекте</span>
+          {% else %}
+            <a class="nav-link" href="{% url 'about:about' %}">О проекте</a>
+          {% endif %}
         </li>
 
         <li class="nav-item">
-          <a class="nav-link {% if request.resolver_match.view_name == 'catalog:item_list' %}active disabled{% endif %}"
-             href="{% url 'catalog:item_list' %}">
-             Список товаров
-          </a>
+          {% if request.resolver_match.view_name == 'catalog:item_list' %}
+            <span class="nav-link active disabled" aria-current="page">Список товаров</span>
+          {% else %}
+            <a class="nav-link" href="{% url 'catalog:item_list' %}">Список товаров</a>
+          {% endif %}
         </li>
 
       </ul>
-      <img src="{% static 'img/cat.jpg' %}" width="100" type="image/jpg">
+      <img src="{% static 'img/cat.jpg' %}" width="100" alt="Фото котика">
     </div>
-
   </div>
 </nav>

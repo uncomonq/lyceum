@@ -5,8 +5,8 @@
 
 {% block content %}
 <div class="card shadow">
-  <img src="{{ item.main_image.image.url }}"
-     alt="{{ item.main_image.alt }}"
+  <img src="{% static item.image_url %}"
+     alt="{{ item.image_alt }}"
      class="card-img-top img-fluid">
   <div class="card-body">
     <h2>{{ item.name }}</h2>

@@ -3,15 +3,18 @@ import http
 from django.http import HttpResponse
 import django.shortcuts
 
-import catalog.models
+from catalog.static_data import get_catalog_items
 
 __all__ = ("home", "coffee")
 
 
 def home(request):
     templates = "homepage/main.html"
-    items = catalog.models.Item.objects.filter(is_published=True)[:3]
-    return django.shortcuts.render(request, templates, {"items": items})
+    return django.shortcuts.render(
+        request,
+        templates,
+        {"items": get_catalog_items()[:3]},
+    )
 
 
 def coffee(request):
