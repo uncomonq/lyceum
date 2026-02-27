@@ -10,6 +10,6 @@ urlpatterns = [
     re_path(
         r"^re/(?P<number>0*[1-9][0-9]*)/$",
         catalog.views.return_value_view,
-        name="item-re-check",
+        name="re",
     ),
 ]

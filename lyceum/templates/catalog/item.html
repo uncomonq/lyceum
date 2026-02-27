@@ -5,10 +5,12 @@
 
 {% block content %}
 <div class="card shadow">
-  <img src="{% static item.image %}" class="card-img-top img-fluid">
+  <img src="{{ item.main_image.image.url }}"
+     alt="{{ item.main_image.alt }}"
+     class="card-img-top img-fluid">
   <div class="card-body">
     <h2>{{ item.name }}</h2>
-    <p>{{ item.desc }}</p>
+    <p>{{ item.text }}</p>
   </div>
 </div>
 {% endblock %}
