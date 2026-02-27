@@ -33,20 +33,7 @@ class ItemAdmin(admin.ModelAdmin):
     inlines = (MainImageInline, ItemImageInline)
 
     formfield_overrides = {
-        django.db.models.TextField: {
-            "widget": TinyMCE(
-                attrs={"cols": 80, "rows": 20},
-                mce_attrs={
-                    "menubar": False,
-                    "plugins": "lists link table code",
-                    "toolbar": (
-                        "undo redo | formatselect | bold italic | "
-                        "alignleft aligncenter alignright | "
-                        "bullist numlist | link table | removeformat"
-                    ),
-                },
-            ),
-        },
+        django.db.models.TextField: {"widget": TinyMCE()},
     }
 
     def main_image_preview(self, obj):

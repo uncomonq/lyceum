@@ -5,6 +5,8 @@ from tinymce.widgets import TinyMCE
 from catalog.admin import ItemAdmin
 from catalog.models import Item
 
+__all__ = ("ItemAdminFormWidgetTest",)
+
 
 class ItemAdminFormWidgetTest(TestCase):
     def test_item_text_uses_tinymce_widget(self):
