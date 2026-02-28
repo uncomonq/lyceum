@@ -1,8 +1,6 @@
 from django.contrib import admin
-import django.db.models
 from django.utils.html import format_html
 from sorl.thumbnail import get_thumbnail
-from tinymce.widgets import TinyMCE
 
 import catalog.models
 
@@ -31,10 +29,6 @@ class ItemAdmin(admin.ModelAdmin):
     list_display_links = (catalog.models.Item.name.field.name,)
     filter_horizontal = (catalog.models.Item.tags.field.name,)
     inlines = (MainImageInline, ItemImageInline)
-
-    formfield_overrides = {
-        django.db.models.TextField: {"widget": TinyMCE()},
-    }
 
     def main_image_preview(self, obj):
         if not hasattr(obj, "main_image"):

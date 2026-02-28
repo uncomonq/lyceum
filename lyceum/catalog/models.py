@@ -7,6 +7,7 @@ from django.core.validators import (
 import django.db.models
 import django.utils.safestring
 import sorl.thumbnail
+import tinymce.models
 
 import catalog.utils
 import catalog.validators
@@ -110,7 +111,7 @@ class Category(core.models.CommonModel):
 
 
 class Item(core.models.CommonModel):
-    text = django.db.models.TextField(
+    text = tinymce.models.HTMLField(
         "текст",
         validators=[
             catalog.validators.ValidateMustContain("превосходно", "роскошно"),
