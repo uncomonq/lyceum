@@ -24,8 +24,6 @@ test:
     - pip install --upgrade pip
     - pip install -r requirements/test.txt
     - cd lyceum
-    - python manage.py makemessages -l ru
-    - python mahage.py compilemessages
     - python manage.py migrate
   script:
     - python manage.py test
