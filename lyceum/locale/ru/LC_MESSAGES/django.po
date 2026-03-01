@@ -10,14 +10,6 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
-#: .\lyceum\settings.py:121
-msgid "Russian"
-msgstr ""
-
-#: .\lyceum\settings.py:122
-msgid "English"
-msgstr ""
-
 #: .\templates\about\about.html:3 .\templates\about\about.html:6
 #: .\templates\includes\header.html:23 .\templates\includes\header.html:25
 msgid "О проекте"
@@ -54,3 +46,15 @@ msgstr ""
 #: .\templates\includes\header.html:48
 msgid "Фото котика"
 msgstr ""
+
+msgid "Russian"
+msgstr "Russian"
+
+msgid "English"
+msgstr "English"
+
+msgid "Русский"
+msgstr "Russian"
+
+msgid "Английский"
+msgstr "English"
