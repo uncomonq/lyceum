@@ -1,6 +1,5 @@
-from django.apps import AppConfig
-
 __all__ = ("HomepageConfig",)
+from django.apps import AppConfig
 
 
 class HomepageConfig(AppConfig):

@@ -1,9 +1,8 @@
+__all__ = ("ReverseRussianWordsMiddleware",)
 import re
 import threading
 
 from django.conf import settings
-
-__all__ = ("ReverseRussianWordsMiddleware",)
 
 _CYRILLIC_WORD_RE = re.compile(r"\b[А-Яа-яЁё]+\b", flags=re.UNICODE)
 

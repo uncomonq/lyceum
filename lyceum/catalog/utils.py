@@ -1,7 +1,6 @@
+__all__ = ("normalize_name",)
 import re
 import unicodedata
-
-__all__ = ("normalize_name",)
 
 _SIMILAR = str.maketrans(
     {

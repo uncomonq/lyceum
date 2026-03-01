@@ -1,11 +1,10 @@
+__all__ = ("ItemAdminFormWidgetTest",)
 from django.contrib.admin.sites import AdminSite
 from django.test import TestCase
 from tinymce.widgets import TinyMCE
 
 from catalog.admin import ItemAdmin
 from catalog.models import Item
-
-__all__ = ("ItemAdminFormWidgetTest",)
 
 
 class ItemAdminFormWidgetTest(TestCase):

@@ -1,6 +1,5 @@
-from copy import deepcopy
-
 __all__ = ("get_catalog_items", "get_item_by_pk")
+from copy import deepcopy
 
 _STATIC_ITEMS = [
     {

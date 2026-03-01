@@ -1,3 +1,4 @@
+__all__ = ("Tag", "Category", "Item", "MainImage", "ItemImage")
 from django.core.exceptions import ValidationError
 from django.core.validators import (
     MaxValueValidator,
@@ -12,8 +13,6 @@ import tinymce.models
 import catalog.utils
 import catalog.validators
 import core.models
-
-__all__ = ("Tag", "Category", "Item", "MainImage", "ItemImage")
 
 
 class Tag(core.models.CommonModel):

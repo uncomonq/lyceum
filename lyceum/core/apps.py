@@ -1,6 +1,5 @@
-from django.apps import AppConfig
-
 __all__ = ("CoreConfig",)
+from django.apps import AppConfig
 
 
 class CoreConfig(AppConfig):

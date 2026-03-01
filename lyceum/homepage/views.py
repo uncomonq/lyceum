@@ -1,11 +1,10 @@
+__all__ = ("home", "coffee")
 import http
 
 from django.http import HttpResponse
 import django.shortcuts
 
 from catalog.static_data import get_catalog_items
-
-__all__ = ("home", "coffee")
 
 
 def home(request):

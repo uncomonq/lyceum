@@ -31,10 +31,10 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "tinymce",
     "sorl.thumbnail",
-    "django_cleanup.apps.CleanupConfig",
     "core.apps.CoreConfig",
     "about.apps.AboutConfig",
     "catalog.apps.CatalogConfig",
+    "django_cleanup.apps.CleanupConfig",
     "homepage.apps.HomepageConfig",
 ]
 

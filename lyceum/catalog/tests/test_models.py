@@ -1,3 +1,9 @@
+__all__ = (
+    "ItemModelTest",
+    "ValidateKeywordsTest",
+    "NormalizeTests",
+    "CategoryNormalizeUniqueTests",
+)
 from django.core.exceptions import ValidationError
 from django.test import TestCase
 from parameterized import parameterized
@@ -5,13 +11,6 @@ from parameterized import parameterized
 from catalog.models import Category, Item
 from catalog.utils import normalize_name
 from catalog.validators import ValidateMustContain
-
-__all__ = (
-    "ItemModelTest",
-    "ValidateKeywordsTest",
-    "NormalizeTests",
-    "CategoryNormalizeUniqueTests",
-)
 
 
 class ItemModelTest(TestCase):

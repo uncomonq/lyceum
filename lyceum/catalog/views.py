@@ -1,9 +1,8 @@
+__all__ = ("item_list", "item_detail", "return_value_view")
 import django.http
 import django.shortcuts
 
 from catalog.static_data import get_catalog_items, get_item_by_pk
-
-__all__ = ("item_list", "item_detail", "return_value_view")
 
 
 def item_list(request):

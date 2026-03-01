@@ -1,8 +1,7 @@
+__all__ = ("ItemAdmin", "CategoryAdmin", "TagAdmin")
 from django.contrib import admin
 
 import catalog.models
-
-__all__ = ("ItemAdmin", "CategoryAdmin", "TagAdmin")
 
 
 class MainImageInline(admin.StackedInline):

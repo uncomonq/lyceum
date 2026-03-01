@@ -1,15 +1,14 @@
-from django.conf import settings
-from django.test import override_settings, TestCase
-from django.urls import reverse
-
-import lyceum.middleware
-
 __all__ = (
     "ReverseFunctionTests",
     "MiddlewareEnabledTests",
     "MiddlewareDisabledTests",
     "MiddlewareDefaultSettingTests",
 )
+from django.conf import settings
+from django.test import override_settings, TestCase
+from django.urls import reverse
+
+import lyceum.middleware
 
 
 class ReverseFunctionTests(TestCase):

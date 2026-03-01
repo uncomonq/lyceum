@@ -1,3 +1,4 @@
+__all__ = ("ValidateMustContain",)
 import re
 
 import django.core.exceptions
@@ -5,8 +6,6 @@ import django.utils.deconstruct
 from django.utils.html import strip_tags
 
 WORDS_REGEX = re.compile(r"\b[\w']+\b", flags=re.UNICODE)
-
-__all__ = ("ValidateMustContain",)
 
 
 @django.utils.deconstruct.deconstructible

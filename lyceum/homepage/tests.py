@@ -1,13 +1,12 @@
-from http import HTTPStatus
-
-from django.test import TestCase
-from django.urls import reverse
-
 __all__ = (
     "HomepageURLTests",
     "CoffeeEndpointTests",
     "NavigationLabelsTests",
 )
+from http import HTTPStatus
+
+from django.test import TestCase
+from django.urls import reverse
 
 
 class HomepageURLTests(TestCase):

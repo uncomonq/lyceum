@@ -1,6 +1,5 @@
-from django.db import models
-
 __all__ = ("CommonModel",)
+from django.db import models
 
 
 class CommonModel(models.Model):
