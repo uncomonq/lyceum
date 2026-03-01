@@ -183,7 +183,7 @@ DJANGO_ALLOW_REVERSE=False
 2. Перед запуском создать файлы для переводов:
 
    ```bash
-   django-admin manage.py compilemessages
+   django-admin compilemessages
    python3 manage.py runserver
    ```
 
