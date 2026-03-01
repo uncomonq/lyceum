@@ -1,145 +1,190 @@
 [
 {
-  "model": "catalog.Category",
-  "pk": 1,
-  "fields": {
-    "name": "Электроника",
-    "is_published": true,
-    "slug": "electronics",
-    "weight": 100,
-    "normalized_name": "электроника"
-  }
+    "model": "catalog.tag",
+    "pk": 1,
+    "fields": {
+        "name": "Новинка",
+        "is_published": true,
+        "slug": "new",
+        "normalized_name": "новинка"
+    }
 },
 {
-  "model": "catalog.Category",
-  "pk": 2,
-  "fields": {
-    "name": "Одежда",
-    "is_published": true,
-    "slug": "clothing",
-    "weight": 100,
-    "normalized_name": "одежда"
-  }
+    "model": "catalog.tag",
+    "pk": 2,
+    "fields": {
+        "name": "Популярное",
+        "is_published": true,
+        "slug": "popular",
+        "normalized_name": "популярное"
+    }
 },
 {
-  "model": "catalog.Tag",
-  "pk": 1,
-  "fields": {
-    "name": "Новинка",
-    "is_published": true,
-    "slug": "new",
-    "normalized_name": "новинка"
-  }
+    "model": "catalog.tag",
+    "pk": 3,
+    "fields": {
+        "name": "Премиум",
+        "is_published": true,
+        "slug": "premium",
+        "normalized_name": "премиум"
+    }
 },
 {
-  "model": "catalog.Tag",
-  "pk": 2,
-  "fields": {
-    "name": "Популярное",
-    "is_published": true,
-    "slug": "popular",
-    "normalized_name": "популярное"
-  }
+    "model": "catalog.tag",
+    "pk": 4,
+    "fields": {
+        "name": "Лимитированная серия",
+        "is_published": true,
+        "slug": "limited",
+        "normalized_name": "лимитированнаясерия"
+    }
 },
 {
-  "model": "catalog.Tag",
-  "pk": 3,
-  "fields": {
-    "name": "Премиум",
-    "is_published": true,
-    "slug": "premium",
-    "normalized_name": "премиум"
-  }
+    "model": "catalog.tag",
+    "pk": 5,
+    "fields": {
+        "name": "Распродажа",
+        "is_published": true,
+        "slug": "sale",
+        "normalized_name": "распродажа"
+    }
 },
 {
-  "model": "catalog.Tag",
-  "pk": 4,
-  "fields": {
-    "name": "Лимитированная серия",
-    "is_published": true,
-    "slug": "limited",
-    "normalized_name": "лимитированнаясерия"
-  }
+    "model": "catalog.category",
+    "pk": 1,
+    "fields": {
+        "name": "Электроника",
+        "is_published": true,
+        "slug": "electronics",
+        "weight": 100,
+        "normalized_name": "электроника"
+    }
 },
 {
-  "model": "catalog.Tag",
-  "pk": 5,
-  "fields": {
-    "name": "Распродажа",
-    "is_published": true,
-    "slug": "sale",
-    "normalized_name": "распродажа"
-  }
+    "model": "catalog.category",
+    "pk": 2,
+    "fields": {
+        "name": "Одежда",
+        "is_published": true,
+        "slug": "clothing",
+        "weight": 100,
+        "normalized_name": "одежда"
+    }
 },
 {
-  "model": "catalog.Item",
-  "pk": 1,
-  "fields": {
-    "name": "Phone Ultra6000",
-    "is_published": true,
-    "text": "Телефон превосходно тянущий сапера",
-    "category": 1,
-    "tags": [
-      1,
-      2
-    ]
-  }
+    "model": "catalog.item",
+    "pk": 1,
+    "fields": {
+        "name": "Phone Ultra6000",
+        "is_published": true,
+        "text": "<p>Телефон превосходно тянущий сапера</p>",
+        "category": 1,
+        "tags": [
+            1,
+            2
+        ]
+    }
 },
 {
-  "model": "catalog.Item",
-  "pk": 2,
-  "fields": {
-    "name": "Пиджак \"90-тые\"",
-    "is_published": true,
-    "text": "Роскошно сшитый пиджак",
-    "category": 2,
-    "tags": [
-      3,
-      4
-    ]
-  }
+    "model": "catalog.item",
+    "pk": 2,
+    "fields": {
+        "name": "Пиджак \"90-тые\"",
+        "is_published": true,
+        "text": "<p>Роскошно сшитый пиджак</p>",
+        "category": 2,
+        "tags": [
+            3,
+            4
+        ]
+    }
 },
 {
-  "model": "catalog.Item",
-  "pk": 3,
-  "fields": {
-    "name": "Электровыжигатель \"Каприз\"",
-    "is_published": true,
-    "text": "Превосходно выжигает на любом материале",
-    "category": 1,
-    "tags": [
-      2,
-      5
-    ]
-  }
+    "model": "catalog.item",
+    "pk": 3,
+    "fields": {
+        "name": "Электровыжигатель \"Каприз\"",
+        "is_published": true,
+        "text": "<p>Превосходно выжигает на любом материале</p>",
+        "category": 1,
+        "tags": [
+            2,
+            5
+        ]
+    }
 },
 {
-  "model": "catalog.Item",
-  "pk": 4,
-  "fields": {
-    "name": "Тапочки \"Тапатульки\"",
-    "is_published": true,
-    "text": "Роскошно сидящие тапочки",
-    "category": 2,
-    "tags": [
-      1,
-      3,
-      4
-    ]
-  }
+    "model": "catalog.item",
+    "pk": 4,
+    "fields": {
+        "name": "Тапочки \"Тапатульки\"",
+        "is_published": true,
+        "text": "<p>Роскошно сидящие тапочки</p>",
+        "category": 2,
+        "tags": [
+            1,
+            3,
+            4
+        ]
+    }
 },
 {
-  "model": "catalog.Item",
-  "pk": 5,
-  "fields": {
-    "name": "Видеокарта RTX6090 TI",
-    "is_published": true,
-    "text": "Видеокарта превосходно тянущая касынку",
-    "category": 1,
-    "tags": [
-      3,
-      4
-    ]
-  }
+    "model": "catalog.item",
+    "pk": 5,
+    "fields": {
+        "name": "Видеокарта RTX6090 TI",
+        "is_published": true,
+        "text": "<p>Видеокарта превосходно тянущая касынку</p>",
+        "category": 1,
+        "tags": [
+            3,
+            4
+        ]
+    }
+},
+{
+    "model": "catalog.mainimage",
+    "pk": 3,
+    "fields": {
+        "item": 4,
+        "image": "items/main/slippers.jpeg",
+        "alt": "тапочки"
+    }
+},
+{
+    "model": "catalog.mainimage",
+    "pk": 4,
+    "fields": {
+        "item": 1,
+        "image": "items/main/phone.jpg",
+        "alt": "телефон"
+    }
+},
+{
+    "model": "catalog.mainimage",
+    "pk": 5,
+    "fields": {
+        "item": 5,
+        "image": "items/main/GPU.jpeg",
+        "alt": "видеокарта"
+    }
+},
+{
+    "model": "catalog.mainimage",
+    "pk": 6,
+    "fields": {
+        "item": 3,
+        "image": "items/main/burner.webp",
+        "alt": "электровыжигатель"
+    }
+},
+{
+    "model": "catalog.mainimage",
+    "pk": 7,
+    "fields": {
+        "item": 2,
+        "image": "items/main/jacket.jpg",
+        "alt": "пиджак"
+    }
 }
 ]
