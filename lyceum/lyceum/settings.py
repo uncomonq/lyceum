@@ -2,6 +2,7 @@ import importlib
 from pathlib import Path
 
 from decouple import config
+from django.utils.translation import gettext_lazy as _
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -117,8 +118,8 @@ MEDIA_ROOT = BASE_DIR / "media"
 LANGUAGE_CODE = "ru"
 
 LANGUAGES = [
-    ("ru", "Русский"),
-    ("en", "English"),
+    ("ru", _("Russian")),
+    ("en", _("English")),
 ]
 
 LOCALE_PATHS = [

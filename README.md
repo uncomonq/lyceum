@@ -183,9 +183,9 @@ DJANGO_ALLOW_REVERSE=False
 2. После изменения переводов обновите сообщения и скомпилируйте их:
 
    ```bash
-   cd lyceum
-   python manage.py makemessages -l en
-   python manage.py compilemessages
+   # из корня репозитория
+   python lyceum/manage.py makemessages -l ru -l en
+   python lyceum/manage.py compilemessages
    ```
 
 3. Примените миграции и перезапустите приложение как обычно.

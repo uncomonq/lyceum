@@ -7,6 +7,7 @@ from http import HTTPStatus
 
 from django.test import TestCase
 from django.urls import reverse
+from django.utils.translation import override
 
 
 class HomepageURLTests(TestCase):
@@ -30,14 +31,32 @@ class NavigationLabelsTests(TestCase):
         response = self.client.get(reverse("homepage:main"))
 
         self.assertContains(response, "Главная")
-        self.assertContains(response, "К проекту")
-        self.assertContains(response, "К списку товаров")
+        self.assertContains(response, "О проекте")
+        self.assertContains(response, "Список товаров")
         self.assertNotContains(response, "На главную")
 
     def test_catalog_page_labels(self):
         response = self.client.get(reverse("catalog:item_list"))
 
         self.assertContains(response, "На главную")
-        self.assertContains(response, "К проекту")
+        self.assertContains(response, "О проекте")
         self.assertContains(response, "Список товаров")
         self.assertNotContains(response, "К списку товаров")
+
+    def test_catalog_page_labels_in_english(self):
+        with override("en"):
+            response = self.client.get(reverse("catalog:item_list"))
+
+        self.assertContains(response, "To home")
+        self.assertContains(response, "About")
+        self.assertContains(response, "Items")
+        self.assertNotContains(response, "К списку товаров")
+
+    def test_home_page_labels_in_english(self):
+        with override("en"):
+            response = self.client.get(reverse("homepage:main"))
+
+        self.assertContains(response, "Home")
+        self.assertContains(response, "About")
+        self.assertContains(response, "Items")
+        self.assertNotContains(response, "На главную")
