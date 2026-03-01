@@ -27,7 +27,10 @@ class CoffeeEndpointTests(TestCase):
 
 class NavigationLabelsTests(TestCase):
     def test_home_page_labels(self):
-        response = self.client.get(reverse("homepage:main"))
+        response = self.client.get(
+            reverse("homepage:main"),
+            HTTP_ACCEPT_LANGUAGE="ru",
+        )
 
         self.assertContains(response, "Главная")
         self.assertContains(response, "О проекте")
@@ -35,12 +38,15 @@ class NavigationLabelsTests(TestCase):
         self.assertNotContains(response, "На главную")
 
     def test_catalog_page_labels(self):
-        response = self.client.get(reverse("catalog:item_list"))
+        response = self.client.get(
+            reverse("catalog:item_list"),
+            HTTP_ACCEPT_LANGUAGE="ru",
+        )
 
         self.assertContains(response, "На главную")
         self.assertContains(response, "О проекте")
         self.assertContains(response, "Список товаров")
-        self.assertNotContains(response, "К списку товаров")
+        self.assertNotContains(response, "Главная")
 
     def test_catalog_page_labels_in_english(self):
         response = self.client.get(
