@@ -50,25 +50,31 @@
    pip install -r requirements/dev.txt
    ```
 
-4. Перейти в директорию проекта с `manage.py`:
-
-   ```bash
-   cd lyceum
-   ```
-
-5. Создание .env (проект содержит .env.example с дефолтными значениями переменных окружения, при необходимости отредактировать):
+4. Создание .env (проект содержит .env.example с дефолтными значениями переменных окружения, при необходимости отредактировать):
 
    ```bash
    cp .env.example lyceum/.env
    ```
 
-6. Выполните миграцию:
+5. Создайте db.sqlite3 (проект содержит db.example.sqlite3)
+
+   ```powershell
+   copy db.example.sqlite3 lyceum\db.sqlite3
+   ```
+
+6. Перейти в директорию проекта с `manage.py`:
+
+   ```bash
+   cd lyceum
+   ```
+
+7. Выполните миграцию:
 
    ```bash
    python3 manage.py migrate
    ```
 
-7. Запустить сервер разработки:
+8. Запустить сервер разработки:
 
    ```bash
    python3 manage.py runserver
@@ -96,25 +102,31 @@
    pip install -r requirements/dev.txt
    ```
 
-4. Перейти в директорию проекта с `manage.py`:
-
-   ```powershell
-   cd lyceum
-   ```
-
-5. Создание .env (проект содержит .env.example с дефолтными значениями переменных окружения, при необходимости отредактировать):
+4. Создание .env (проект содержит .env.example с дефолтными значениями переменных окружения, при необходимости отредактировать):
 
    ```powershell
    copy .env.example lyceum\.env
    ```
 
-6. Выполните миграцию:
+5. Создайте db.sqlite3 (проект содержит db.example.sqlite3)
+
+   ```powershell
+   copy db.example.sqlite3 lyceum\db.sqlite3
+   ```
+
+6. Перейти в директорию проекта с `manage.py`:
+
+   ```powershell
+   cd lyceum
+   ```
+
+7. Выполните миграцию:
 
    ```powershell
    python manage.py migrate
    ```
 
-7. Запустить сервер разработки:
+8. Запустить сервер разработки:
 
    ```powershell
    python manage.py runserver
@@ -160,17 +172,30 @@ DJANGO_ALLOW_REVERSE=False
   python manage.py runserver
   ```
 
+## Админка
+
+Для того чтобы зайти в админку нужно создать супер-пользователя:
+
+   ```bash
+   python3 manage.py createsuperuser
+   ```
+
+Админка будет доступна по адресу
+<http://127.0.0.1:8000/admin>
+
 ## ER-диаграмма базы данных
+
+В репозитории есть db.example.sqlite3. Это база для тестов, добавлена в репозиторий в учебных целях!
 
 Ниже приведена ER-диаграмма, показывающая таблицы и связи в базе данных проекта.
 
 ![ER-диаграмма базы данных Lyceum](ER.jpg)
 
-**Кратко:**
-
 - `catalog_category` — категории (1→N товаров);
 - `catalog_item` — товары (имеют FK на категорию и M2M на теги);
 - `catalog_tag` — теги (используются многократно для товаров).
+- `main_image` — главная картинка товара (1→1 );
+- `item_image` — галерея картинок (1 товар→N картинок);
 
 ## Локализация и мультиязычность
 
