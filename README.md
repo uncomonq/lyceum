@@ -185,11 +185,13 @@ DJANGO_ALLOW_REVERSE=False
    ```bash
    # вариант 1: из корня репозитория
    python lyceum/manage.py makemessages -l ru
+   python lyceum/manage.py makemessages -l en
    python lyceum/manage.py compilemessages
 
    # вариант 2: из директории lyceum
    cd lyceum
    python manage.py makemessages -l ru
+   python manage.py makemessages -l en
    python manage.py compilemessages
    ```
 
