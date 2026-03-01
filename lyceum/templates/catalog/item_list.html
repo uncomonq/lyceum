@@ -1,9 +1,10 @@
 {% extends 'base.html' %}
+{% load i18n %}
 
-{% block title %}Каталог{% endblock %}
+{% block title %}{% trans "Каталог" %}{% endblock %}
 
 {% block content %}
-<h1 class="mb-4">Каталог товаров</h1>
+<h1 class="mb-4">{% trans "Каталог товаров" %}</h1>
 
 <div class="row">
   {% for item in items %}

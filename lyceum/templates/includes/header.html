@@ -1,8 +1,9 @@
-{% load static %}
+{% load i18n static %}
+{% get_current_language as CURRENT_LANGUAGE %}
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
   <div class="container">
     <a class="navbar-brand" href="{% url 'homepage:main' %}">
-        <img src="{% static 'img/logo.png' %}" width="40" class="me-2" alt="Логотип сайта">
+        <img src="{% static 'img/logo.png' %}" width="40" class="me-2" alt="{% trans 'Логотип сайта' %}">
         Lyceum
     </a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
@@ -12,30 +13,51 @@
       <ul class="navbar-nav ms-auto">
         <li class="nav-item">
           {% if request.resolver_match.view_name == 'homepage:main' %}
-            <span class="nav-link active disabled" aria-current="page">На главную</span>
+            <span class="nav-link active disabled" aria-current="page">{% trans "Главная" %}</span>
           {% else %}
-            <a class="nav-link" href="{% url 'homepage:main' %}">На главную</a>
+            {% if CURRENT_LANGUAGE|slice:":2" == "en" %}
+              <a class="nav-link" href="{% url 'homepage:main' %}">To home</a>
+            {% else %}
+              <a class="nav-link" href="{% url 'homepage:main' %}">{% trans "На главную" %}</a>
+            {% endif %}
           {% endif %}
         </li>
 
         <li class="nav-item">
           {% if request.resolver_match.view_name == 'about:about' %}
-            <span class="nav-link active disabled" aria-current="page">О проекте</span>
+            <span class="nav-link active disabled" aria-current="page">{% trans "О проекте" %}</span>
           {% else %}
-            <a class="nav-link" href="{% url 'about:about' %}">О проекте</a>
+            {% if CURRENT_LANGUAGE|slice:":2" == "en" %}
+              <a class="nav-link" href="{% url 'about:about' %}">About project</a>
+            {% else %}
+              <a class="nav-link" href="{% url 'about:about' %}">{% trans "К проекту" %}</a>
+            {% endif %}
           {% endif %}
         </li>
 
         <li class="nav-item">
           {% if request.resolver_match.view_name == 'catalog:item_list' %}
-            <span class="nav-link active disabled" aria-current="page">Список товаров</span>
+            <span class="nav-link active disabled" aria-current="page">{% trans "Список товаров" %}</span>
           {% else %}
-            <a class="nav-link" href="{% url 'catalog:item_list' %}">Список товаров</a>
+            {% if CURRENT_LANGUAGE|slice:":2" == "en" %}
+              <a class="nav-link" href="{% url 'catalog:item_list' %}">To items list</a>
+            {% else %}
+              <a class="nav-link" href="{% url 'catalog:item_list' %}">{% trans "К списку товаров" %}</a>
+            {% endif %}
           {% endif %}
         </li>
-
       </ul>
-      <img src="{% static 'img/cat.jpg' %}" width="100" alt="Фото котика">
+      <form action="{% url 'set_language' %}" method="post" class="ms-3">
+        {% csrf_token %}
+        <input name="next" type="hidden" value="{{ request.get_full_path }}">
+        <select name="language" onchange="this.form.submit()" class="form-select form-select-sm bg-dark text-light border-secondary">
+          {% get_available_languages as LANGUAGES %}
+          {% for code, name in LANGUAGES %}
+            <option value="{{ code }}"{% if code == CURRENT_LANGUAGE %} selected{% endif %}>{{ name }}</option>
+          {% endfor %}
+        </select>
+      </form>
+      <img src="{% static 'img/cat.jpg' %}" width="100" alt="{% trans 'Фото котика' %}">
     </div>
   </div>
 </nav>

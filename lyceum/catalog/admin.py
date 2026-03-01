@@ -1,6 +1,4 @@
 from django.contrib import admin
-from django.utils.html import format_html
-from sorl.thumbnail import get_thumbnail
 
 import catalog.models
 
@@ -29,25 +27,6 @@ class ItemAdmin(admin.ModelAdmin):
     list_display_links = (catalog.models.Item.name.field.name,)
     filter_horizontal = (catalog.models.Item.tags.field.name,)
     inlines = (MainImageInline, ItemImageInline)
-
-    def main_image_preview(self, obj):
-        if not hasattr(obj, "main_image"):
-            return "—"
-
-        thumb = get_thumbnail(
-            obj.main_image.image,
-            "300x300",
-            crop="center",
-            quality=80,
-        )
-
-        return format_html(
-            '<img src="{}" width="60" height="60"'
-            ' style="object-fit:cover;" />',
-            thumb.url,
-        )
-
-    main_image_preview.short_description = "Главное изображение"
 
 
 @admin.register(catalog.models.Category)

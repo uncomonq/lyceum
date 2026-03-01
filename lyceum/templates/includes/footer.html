@@ -1,3 +1,30 @@
+{% now "Y" as server_year %}
+{% now "U" as server_unix_ts %}
 <footer class="bg-light text-center p-3 mt-5">
-    <p class="mb-0">© 2026 Lyceum</p>
+    <p class="mb-0">© <span id="footer-year" data-server-year="{{ server_year }}" data-server-ts="{{ server_unix_ts }}">{{ server_year }}</span> Lyceum</p>
 </footer>
+<script>
+  (function () {
+    const footerYear = document.getElementById("footer-year");
+    if (!footerYear) {
+      return;
+    }
+
+    const serverYear = footerYear.dataset.serverYear;
+    const serverTimestamp = Number(footerYear.dataset.serverTs);
+
+    if (!Number.isFinite(serverTimestamp)) {
+      return;
+    }
+
+    const clientTimestamp = Math.floor(Date.now() / 1000);
+    const maxDiffSeconds = 24 * 60 * 60;
+
+    if (Math.abs(clientTimestamp - serverTimestamp) <= maxDiffSeconds) {
+      footerYear.textContent = String(new Date().getFullYear());
+      return;
+    }
+
+    footerYear.textContent = serverYear;
+  })();
+</script>

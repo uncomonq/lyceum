@@ -1,7 +1,8 @@
 {% extends "base.html" %}
-{% block title %}О проекте{% endblock %}
+{% load i18n %}
+{% block title %}{% trans "О проекте" %}{% endblock %}
 
 {% block content %}
-<h1>О проекте</h1>
-<p>Учебный проект по специализации django Яндекс Лицея.</p>
+<h1>{% trans "О проекте" %}</h1>
+<p>{% trans "Учебный проект по специализации django Яндекс Лицея." %}</p>
 {% endblock %}
