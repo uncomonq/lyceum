@@ -174,25 +174,17 @@ DJANGO_ALLOW_REVERSE=False
 
 ## Локализация и мультиязычность
 
-В проекте включена локализация интерфейса,
+В проекте включена локализация интерфейса, поддерживаются ru и en,
 добавлен переключатель языка в шапке и подключен `LocaleMiddleware`.
 
 ### Что важно для развёртывания
 
 1. Убедитесь, что установлен `USE_I18N = True` (включено по умолчанию).
-2. После изменения переводов обновите сообщения и скомпилируйте их:
+2. Перед запуском создать файлы для переводов:
 
    ```bash
-   # вариант 1: из корня репозитория
-   python lyceum/manage.py makemessages -l ru
-   python lyceum/manage.py makemessages -l en
-   python lyceum/manage.py compilemessages
-
-   # вариант 2: из директории lyceum
-   cd lyceum
-   python manage.py makemessages -l ru
-   python manage.py makemessages -l en
-   python manage.py compilemessages
+   django-admin manage.py compilemessages
+   python3 manage.py runserver
    ```
 
 3. Примените миграции и перезапустите приложение как обычно.
