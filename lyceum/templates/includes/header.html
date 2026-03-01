@@ -1,8 +1,9 @@
-{% load i18n static %}
+{% load static %}
+{% load i18n %}
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
   <div class="container">
     <a class="navbar-brand" href="{% url 'homepage:main' %}">
-        <img src="{% static 'img/logo.png' %}" width="40" class="me-2" alt="{% trans 'Логотип сайта' %}">
+        <img src="{% static 'img/logo.png' %}" width="40" class="me-2" alt="{% trans 'Site logo' %}">
         Lyceum
     </a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
@@ -12,25 +13,25 @@
       <ul class="navbar-nav ms-auto">
         <li class="nav-item">
           {% if request.resolver_match.view_name == 'homepage:main' %}
-            <span class="nav-link active disabled" aria-current="page">{% trans "Главная" %}</span>
+            <span class="nav-link active disabled" aria-current="page">{% trans "Home" %}</span>
           {% else %}
-            <a class="nav-link" href="{% url 'homepage:main' %}">{% trans "На главную" %}</a>
+            <a class="nav-link" href="{% url 'homepage:main' %}">{% trans "To home" %}</a>
           {% endif %}
         </li>
 
         <li class="nav-item">
           {% if request.resolver_match.view_name == 'about:about' %}
-            <span class="nav-link active disabled" aria-current="page">{% trans "О проекте" %}</span>
+            <span class="nav-link active disabled" aria-current="page">{% trans "About project" %}</span>
           {% else %}
-            <a class="nav-link" href="{% url 'about:about' %}">{% trans "О проекте" %}</a>
+            <a class="nav-link" href="{% url 'about:about' %}">{% trans "About project" %}</a>
           {% endif %}
         </li>
 
         <li class="nav-item">
           {% if request.resolver_match.view_name == 'catalog:item_list' %}
-            <span class="nav-link active disabled" aria-current="page">{% trans "Список товаров" %}</span>
+            <span class="nav-link active disabled" aria-current="page">{% trans "Items list" %}</span>
           {% else %}
-            <a class="nav-link" href="{% url 'catalog:item_list' %}">{% trans "Список товаров" %}</a>
+            <a class="nav-link" href="{% url 'catalog:item_list' %}">{% trans "Items list" %}</a>
           {% endif %}
         </li>
       </ul>
@@ -45,7 +46,7 @@
           {% endfor %}
         </select>
       </form>
-      <img src="{% static 'img/cat.jpg' %}" width="100" alt="{% trans 'Фото котика' %}">
+      <img src="{% static 'img/cat.jpg' %}" width="100" alt="{% trans 'Cat photo' %}">
     </div>
   </div>
 </nav>
