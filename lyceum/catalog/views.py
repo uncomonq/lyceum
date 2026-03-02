@@ -22,20 +22,19 @@ def item_list(request):
 
 def item_detail(request, pk):
     templates = "catalog/item.html"
-    item = django.shortcuts.get_object_or_404(catalog.models.Item, pk=pk)
+    item = django.shortcuts.get_object_or_404(
+        catalog.models.Item.objects.select_related(
+            "category",
+            "main_image",
+        ).prefetch_related("tags", "images"),
+        pk=pk,
+    )
+    main_image = getattr(item, "main_image", None)
+
     return django.shortcuts.render(
         request,
         templates,
-        {"item": item},
-        )
-
-
-def item_db_detail(request, pk):
-    item = get_object_
-    return django.shortcuts.render(
-        request,
-        "catalog/item.html",
-        {"item": item},
+        {"item": item, "main_image": main_image},
     )
 
 

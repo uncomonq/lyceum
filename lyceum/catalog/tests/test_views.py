@@ -1,12 +1,82 @@
 from http import HTTPStatus
 
+from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import override_settings, TestCase
 from django.urls import reverse
-from parameterized import parameterized
+
+from catalog.models import Category, Item, ItemImage, MainImage, Tag
 
 
 @override_settings(ALLOW_REVERSE=False)
 class CatalogViewsTests(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        cls.category_a = Category.objects.create(
+            name="Аксессуары",
+            slug="accessories",
+            weight=10,
+            normalized_name="аксессуары",
+        )
+        cls.category_b = Category.objects.create(
+            name="Электроника",
+            slug="electronics",
+            weight=20,
+            normalized_name="электроника",
+        )
+        cls.tag_hot = Tag.objects.create(
+            name="Хит",
+            slug="hit",
+            normalized_name="хит",
+        )
+        cls.tag_new = Tag.objects.create(
+            name="Новинка",
+            slug="new",
+            normalized_name="новинка",
+        )
+
+        cls.item_published_a = Item.objects.create(
+            name="Ремешок",
+            text="<p>Это превосходно удобный ремешок для часов.</p>",
+            category=cls.category_a,
+            is_published=True,
+        )
+        cls.item_published_a.tags.add(cls.tag_new)
+
+        cls.item_published_b = Item.objects.create(
+            name="Планшет",
+            text="<p>Роскошно быстрый планшет для работы и игр.</p>",
+            category=cls.category_b,
+            is_published=True,
+        )
+        cls.item_published_b.tags.add(cls.tag_hot, cls.tag_new)
+
+        cls.item_unpublished = Item.objects.create(
+            name="Скрытый товар",
+            text="<p>Роскошно секретный товар.</p>",
+            category=cls.category_a,
+            is_published=False,
+        )
+
+        cls.main_image = MainImage.objects.create(
+            item=cls.item_published_b,
+            image=SimpleUploadedFile(
+                "main.jpg",
+                b"filecontent",
+                content_type="image/jpeg",
+            ),
+            alt="Главное изображение",
+        )
+        cls.extra_image = ItemImage.objects.create(
+            item=cls.item_published_b,
+            image=SimpleUploadedFile(
+                "extra.jpg",
+                b"filecontent2",
+                content_type="image/jpeg",
+            ),
+            alt="Дополнительное изображение",
+            ordering=1,
+        )
+
     def test_item_list_returns_ok(self):
         response = self.client.get(reverse("catalog:item_list"))
         self.assertEqual(response.status_code, HTTPStatus.OK)
@@ -15,22 +85,46 @@ class CatalogViewsTests(TestCase):
         response = self.client.get(reverse("catalog:item_list"))
         self.assertTemplateUsed(response, "catalog/item_list.html")
 
-    def test_item_list_contains_all_static_items(self):
+    def test_item_list_context_contains_only_published_items(self):
         response = self.client.get(reverse("catalog:item_list"))
-        self.assertIn("items", response.context)
-        self.assertEqual(len(response.context["items"]), 4)
 
-    @parameterized.expand(
-        [
-            ("existing_pk", 2, "Чай улун"),
-            ("fallback_pk", 999, "Кофе в зёрнах"),
-        ],
-    )
-    def test_item_detail_returns_expected_item(self, _, pk, expected_name):
-        response = self.client.get(reverse("catalog:item_detail", args=[pk]))
+        self.assertIn("items", response.context)
+        items = list(response.context["items"])
+
+        self.assertEqual(items, [self.item_published_a, self.item_published_b])
+        self.assertNotIn(self.item_unpublished, items)
+
+    def test_item_list_context_is_ordered_by_category_name(self):
+        response = self.client.get(reverse("catalog:item_list"))
+        items = list(response.context["items"])
+
+        self.assertEqual(items[0].category.name, "Аксессуары")
+        self.assertEqual(items[1].category.name, "Электроника")
+
+    def test_item_detail_returns_expected_context(self):
+        response = self.client.get(
+            reverse("catalog:item_detail", args=[self.item_published_b.pk]),
+        )
 
         self.assertEqual(response.status_code, HTTPStatus.OK)
         self.assertTemplateUsed(response, "catalog/item.html")
         self.assertIn("item", response.context)
-        self.assertEqual(response.context["item"]["name"], expected_name)
-        self.assertEqual(response.context["item"]["pk"], pk)
+        self.assertIn("main_image", response.context)
+
+        item = response.context["item"]
+
+        self.assertEqual(item.pk, self.item_published_b.pk)
+        self.assertEqual(item.category.name, "Электроника")
+        self.assertEqual(
+            {tag.name for tag in item.tags.all()},
+            {"Хит", "Новинка"},
+        )
+        self.assertEqual(response.context["main_image"], self.main_image)
+        self.assertEqual(list(item.images.all()), [self.extra_image])
+
+    def test_item_detail_returns_404_for_unknown_pk(self):
+        response = self.client.get(
+            reverse("catalog:item_detail", args=[999999]),
+        )
+
+        self.assertEqual(response.status_code, HTTPStatus.NOT_FOUND)

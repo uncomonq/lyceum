@@ -13,7 +13,6 @@ def home(request):
         catalog.models.Item.objects.filter(is_published=True, is_on_main=True)
         .select_related("category")
         .prefetch_related("tags")
-        .only("name", "category__name", "text", "tags__name")
         .order_by("name")
     )
     return django.shortcuts.render(
