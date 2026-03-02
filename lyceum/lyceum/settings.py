@@ -115,11 +115,11 @@ MEDIA_URL = "/media/"
 
 MEDIA_ROOT = BASE_DIR / "media"
 
-LANGUAGE_CODE = "ru"
+LANGUAGE_CODE = "ru-ru"
 
 LANGUAGES = [
-    ("ru", _("Russian")),
-    ("en", _("English")),
+    ("ru-ru", _("Russian")),
+    ("en-us", _("English")),
 ]
 
 LOCALE_PATHS = [

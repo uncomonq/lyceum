@@ -2,26 +2,36 @@ __all__ = ("item_list", "item_detail", "return_value_view")
 import django.http
 import django.shortcuts
 
-from catalog.static_data import get_catalog_items, get_item_by_pk
+import catalog.models
 
 
 def item_list(request):
     templates = "catalog/item_list.html"
+    items = (
+        catalog.models.Item.objects.filter(is_published=True)
+        .select_related("category")
+        .prefetch_related("tags")
+        .order_by("category__name")
+    )
     return django.shortcuts.render(
         request,
         templates,
-        {"items": get_catalog_items()},
+        {"items": items},
     )
 
 
 def item_detail(request, pk):
     templates = "catalog/item.html"
-    item = get_item_by_pk(pk)
-    return django.shortcuts.render(request, templates, {"item": item})
+    item = django.shortcuts.get_object_or_404(catalog.models.Item, pk=pk)
+    return django.shortcuts.render(
+        request,
+        templates,
+        {"item": item},
+        )
 
 
 def item_db_detail(request, pk):
-    item = get_item_by_pk(pk)
+    item = get_object_
     return django.shortcuts.render(
         request,
         "catalog/item.html",

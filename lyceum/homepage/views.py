@@ -4,15 +4,22 @@ import http
 from django.http import HttpResponse
 import django.shortcuts
 
-from catalog.static_data import get_catalog_items
+import catalog.models
 
 
 def home(request):
     templates = "homepage/main.html"
+    items = (
+        catalog.models.Item.objects.filter(is_published=True, is_on_main=True)
+        .select_related("category")
+        .prefetch_related("tags")
+        .only("name", "category__name", "text", "tags__name")
+        .order_by("name")
+    )
     return django.shortcuts.render(
         request,
         templates,
-        {"items": get_catalog_items()[:3]},
+        {"items": items},
     )
 
 

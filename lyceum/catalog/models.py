@@ -131,6 +131,12 @@ class Item(core.models.CommonModel):
         verbose_name="теги",
     )
 
+    is_on_main = django.db.models.BooleanField(
+        default=False,
+        verbose_name="на главной",
+        help_text="Статус отображения на главной.",
+    )
+
     class Meta:
         db_table = "catalog_item"
         verbose_name = "товар"

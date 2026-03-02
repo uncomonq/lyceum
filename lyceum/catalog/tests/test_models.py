@@ -161,7 +161,9 @@ class TagNormalizeUniqueTests(TestCase):
     )
     def test_tag_canonical_conflicts(self, _, name):
         tag = Tag(
-            name=name, slug=f"tag-{normalize_name(name)}", is_published=True,
+            name=name,
+            slug=f"tag-{normalize_name(name)}",
+            is_published=True,
         )
         with self.assertRaises(ValidationError):
             tag.full_clean()
@@ -240,7 +242,8 @@ class ImageStringRepresentationTests(TestCase):
             ),
         )
         self.assertEqual(
-            str(main_image), f"Главное изображение: {self.item.name}",
+            str(main_image),
+            f"Главное изображение: {self.item.name}",
         )
 
     def test_item_image_str(self):
@@ -254,7 +257,8 @@ class ImageStringRepresentationTests(TestCase):
             ordering=1,
         )
         self.assertEqual(
-            str(item_image), f"{self.item.name} — image #{item_image.pk}",
+            str(item_image),
+            f"{self.item.name} — image #{item_image.pk}",
         )
 
 

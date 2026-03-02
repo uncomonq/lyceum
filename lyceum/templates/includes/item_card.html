@@ -2,12 +2,13 @@
 {% load i18n %}
 <div class="col-md-4 mb-4">
   <div class="card h-100 shadow-sm">
-    <img src="{% static item.image_url %}"
-     alt="{{ item.image_alt }}"
-     class="card-img-top img-fluid">
     <div class="card-body d-flex flex-column">
       <h5 class="card-title">{{ item.name }}</h5>
-      <p class="card-text">{{ item.text|truncatechars:100 }}</p>
+      <p class="card_category">{{ item.category.name }}</p>
+      <p class="card-text">{{ item.text|truncatewords:10 }}</p>
+      {% for tag in item.tags.all %}
+        <p class="card_tag">{{ tag.name }}</p>
+      {% endfor %}
       <a href="{% url 'catalog:item_detail' item.pk %}" class="btn btn-primary mt-auto">
         {% trans "Details" %}
       </a>
