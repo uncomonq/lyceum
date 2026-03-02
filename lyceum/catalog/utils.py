@@ -33,4 +33,4 @@ def normalize_name(value: str) -> str:
     value = value.translate(_SIMILAR)
     value = _NON_ALNUM.sub("", value)
 
-    return value
+    return _NON_ALNUM.sub("", value)

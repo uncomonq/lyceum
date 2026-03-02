@@ -5,7 +5,7 @@
     <div class="card-body d-flex flex-column">
       <h5 class="card-title">{{ item.name }}</h5>
       <p class="card_category">{{ item.category.name }}</p>
-      <p class="card-text">{{ item.text|truncatewords:10 }}</p>
+      <p class="card-text">{{ item.text|truncatewords_html:10 }}</p>
       {% for tag in item.tags.all %}
         <p class="card_tag">{{ tag.name }}</p>
       {% endfor %}

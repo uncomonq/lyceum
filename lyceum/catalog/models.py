@@ -30,7 +30,7 @@ class Tag(core.models.CommonModel):
         null=False,
         blank=False,
         editable=False,
-        unique=True,
+        unique=False,
         error_messages={"unique": "Объект с похожим именем уже существует."},
     )
 
@@ -81,7 +81,7 @@ class Category(core.models.CommonModel):
         null=False,
         blank=False,
         editable=False,
-        unique=True,
+        unique=False,
         error_messages={"unique": "Объект с похожим именем уже существует."},
     )
 
@@ -121,12 +121,14 @@ class Item(core.models.CommonModel):
         Category,
         on_delete=django.db.models.CASCADE,
         related_name="items",
+        related_query_name="item",
         verbose_name="категория",
     )
 
     tags = django.db.models.ManyToManyField(
         Tag,
         related_name="items",
+        related_query_name="item",
         blank=True,
         verbose_name="теги",
     )
@@ -165,6 +167,7 @@ class MainImage(django.db.models.Model):
         Item,
         on_delete=django.db.models.CASCADE,
         related_name="main_image",
+        related_query_name="main_image",
         verbose_name="товар",
     )
 
@@ -193,6 +196,7 @@ class ItemImage(django.db.models.Model):
         Item,
         on_delete=django.db.models.CASCADE,
         related_name="images",
+        related_query_name="image",
         verbose_name="товар",
     )
     image = django.db.models.ImageField(

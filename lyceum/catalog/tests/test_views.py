@@ -1,3 +1,4 @@
+__all__ = "CatalogViewsTests"
 from http import HTTPStatus
 
 from django.core.files.uploadedfile import SimpleUploadedFile
@@ -85,13 +86,26 @@ class CatalogViewsTests(TestCase):
         response = self.client.get(reverse("catalog:item_list"))
         self.assertTemplateUsed(response, "catalog/item_list.html")
 
-    def test_item_list_context_contains_only_published_items(self):
+    def test_item_list_context_contains_items_key(self):
         response = self.client.get(reverse("catalog:item_list"))
 
         self.assertIn("items", response.context)
+
+    def test_item_list_context_contains_expected_count(self):
+        response = self.client.get(reverse("catalog:item_list"))
+
+        self.assertEqual(len(response.context["items"]), 2)
+
+    def test_item_list_context_contains_only_published_items(self):
+        response = self.client.get(reverse("catalog:item_list"))
         items = list(response.context["items"])
 
         self.assertEqual(items, [self.item_published_a, self.item_published_b])
+
+    def test_item_list_context_excludes_unpublished_items(self):
+        response = self.client.get(reverse("catalog:item_list"))
+        items = list(response.context["items"])
+
         self.assertNotIn(self.item_unpublished, items)
 
     def test_item_list_context_is_ordered_by_category_name(self):
@@ -101,25 +115,68 @@ class CatalogViewsTests(TestCase):
         self.assertEqual(items[0].category.name, "Аксессуары")
         self.assertEqual(items[1].category.name, "Электроника")
 
-    def test_item_detail_returns_expected_context(self):
+    def test_item_detail_returns_ok(self):
         response = self.client.get(
             reverse("catalog:item_detail", args=[self.item_published_b.pk]),
         )
 
         self.assertEqual(response.status_code, HTTPStatus.OK)
+
+    def test_item_detail_uses_expected_template(self):
+        response = self.client.get(
+            reverse("catalog:item_detail", args=[self.item_published_b.pk]),
+        )
+
         self.assertTemplateUsed(response, "catalog/item.html")
+
+    def test_item_detail_contains_expected_context_keys(self):
+        response = self.client.get(
+            reverse("catalog:item_detail", args=[self.item_published_b.pk]),
+        )
+
         self.assertIn("item", response.context)
         self.assertIn("main_image", response.context)
 
+    def test_item_detail_context_contains_expected_item(self):
+        response = self.client.get(
+            reverse("catalog:item_detail", args=[self.item_published_b.pk]),
+        )
+
+        self.assertEqual(response.context["item"].pk, self.item_published_b.pk)
+
+    def test_item_detail_context_contains_expected_category(self):
+        response = self.client.get(
+            reverse("catalog:item_detail", args=[self.item_published_b.pk]),
+        )
+
+        self.assertEqual(response.context["item"].category.name, "Электроника")
+
+    def test_item_detail_context_contains_expected_tags(self):
+        response = self.client.get(
+            reverse("catalog:item_detail", args=[self.item_published_b.pk]),
+        )
+
         item = response.context["item"]
 
-        self.assertEqual(item.pk, self.item_published_b.pk)
-        self.assertEqual(item.category.name, "Электроника")
         self.assertEqual(
             {tag.name for tag in item.tags.all()},
             {"Хит", "Новинка"},
         )
+
+    def test_item_detail_context_contains_expected_main_image(self):
+        response = self.client.get(
+            reverse("catalog:item_detail", args=[self.item_published_b.pk]),
+        )
+
         self.assertEqual(response.context["main_image"], self.main_image)
+
+    def test_item_detail_context_contains_expected_extra_images(self):
+        response = self.client.get(
+            reverse("catalog:item_detail", args=[self.item_published_b.pk]),
+        )
+
+        item = response.context["item"]
+
         self.assertEqual(list(item.images.all()), [self.extra_image])
 
     def test_item_detail_returns_404_for_unknown_pk(self):
