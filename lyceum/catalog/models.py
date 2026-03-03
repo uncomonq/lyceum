@@ -189,10 +189,14 @@ class Item(core.models.CommonModel):
     created_at = django.db.models.DateTimeField(
         "дата создания",
         auto_now_add=True,
+        null=True,
+        blank=True,
     )
     updated_at = django.db.models.DateTimeField(
         "дата изменения",
         auto_now=True,
+        null=True,
+        blank=True,
     )
     text = tinymce.models.HTMLField(
         "текст",

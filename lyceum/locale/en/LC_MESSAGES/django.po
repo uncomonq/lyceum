@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-03 18:00+0300\n"
+"POT-Creation-Date: 2026-03-03 19:18+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,11 +18,11 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: .\lyceum\settings.py:121
+#: .\lyceum\settings.py:122
 msgid "Russian"
 msgstr ""
 
-#: .\lyceum\settings.py:122
+#: .\lyceum\settings.py:123
 msgid "English"
 msgstr ""
 
@@ -41,14 +41,6 @@ msgstr ""
 
 #: .\templates\catalog\item.html:35
 msgid "Download image"
-msgstr ""
-
-#: .\templates\catalog\item_list.html:4
-msgid "Catalog"
-msgstr ""
-
-#: .\templates\catalog\item_list.html:7
-msgid "Items catalog"
 msgstr ""
 
 #: .\templates\homepage\main.html:4 .\templates\includes\header.html:16

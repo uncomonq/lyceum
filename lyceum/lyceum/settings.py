@@ -33,10 +33,11 @@ INSTALLED_APPS = [
     "tinymce",
     "sorl.thumbnail",
     "core.apps.CoreConfig",
+    "homepage.apps.HomepageConfig",
     "about.apps.AboutConfig",
     "catalog.apps.CatalogConfig",
     "django_cleanup.apps.CleanupConfig",
-    "homepage.apps.HomepageConfig",
+    "download.apps.DownloadConfig",
 ]
 
 MIDDLEWARE = [
