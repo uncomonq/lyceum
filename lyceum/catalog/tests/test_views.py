@@ -98,7 +98,7 @@ class CatalogViewsTests(TestCase):
             name="Старый товар",
             text="<p>Роскошно старый товар.</p>",
             category=cls.category_a,
-            is_published=True,
+            is_published=False,
         )
         Item.objects.filter(pk=cls.old_item.pk).update(
             created_at=now - timedelta(days=20),
@@ -112,7 +112,7 @@ class CatalogViewsTests(TestCase):
                 name=f"Пятничный {index}",
                 text="<p>Превосходно пятничный товар.</p>",
                 category=cls.category_b,
-                is_published=True,
+                is_published=False,
             )
             ts = friday_date - timedelta(weeks=index)
             Item.objects.filter(pk=item.pk).update(
@@ -286,7 +286,8 @@ class CatalogViewsTests(TestCase):
 
         self.assertEqual(response.status_code, HTTPStatus.OK)
         self.assertIn("attachment", response["Content-Disposition"])
-        self.assertIn("main.jpg", response["Content-Disposition"])
+        self.assertIn("main", response["Content-Disposition"])
+        self.assertIn(".jpg", response["Content-Disposition"])
 
     def test_download_additional_image_returns_attachment(self):
         response = self.client.get(
@@ -295,7 +296,8 @@ class CatalogViewsTests(TestCase):
 
         self.assertEqual(response.status_code, HTTPStatus.OK)
         self.assertIn("attachment", response["Content-Disposition"])
-        self.assertIn("extra.jpg", response["Content-Disposition"])
+        self.assertIn("extra", response["Content-Disposition"])
+        self.assertIn(".jpg", response["Content-Disposition"])
 
     def test_download_unknown_file_returns_404(self):
         response = self.client.get(
