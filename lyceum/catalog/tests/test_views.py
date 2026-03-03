@@ -141,6 +141,11 @@ class CatalogViewsTests(TestCase):
         self.assertIn("is_published", item.get_deferred_fields())
         self.assertIn("is_on_main", item.get_deferred_fields())
 
+    def test_published_manager_prefetches_tags(self):
+        item = list(Item.objects.published())[0]
+
+        self.assertIn("tags", item._prefetched_objects_cache)
+
     def test_item_detail_returns_ok(self):
         response = self.client.get(
             reverse("catalog:item_detail", args=[self.item_published_b.pk]),

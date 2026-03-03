@@ -95,6 +95,11 @@ class HomepageURLTests(TestCase):
 
         self.assertNotIn("images", item._prefetched_objects_cache)
 
+    def test_on_main_manager_prefetches_tags(self):
+        item = list(Item.objects.on_main())[0]
+
+        self.assertIn("tags", item._prefetched_objects_cache)
+
 
 @override_settings(ALLOW_REVERSE=False)
 class CoffeeEndpointTests(TestCase):
