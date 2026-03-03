@@ -57,7 +57,12 @@ class CatalogViewsTests(TestCase):
             category=cls.category_a,
             is_published=False,
         )
-
+        cls.category_empty = Category.objects.create(
+            name="Пустая",
+            slug="empty",
+            weight=30,
+            normalized_name="пустая",
+        )
         cls.main_image = MainImage.objects.create(
             item=cls.item_published_b,
             image=SimpleUploadedFile(
@@ -114,6 +119,27 @@ class CatalogViewsTests(TestCase):
 
         self.assertEqual(items[0].category.name, "Аксессуары")
         self.assertEqual(items[1].category.name, "Электроника")
+
+    def test_item_list_groups_items_by_category_in_page(self):
+        response = self.client.get(reverse("catalog:item_list"))
+
+        content = response.content.decode("utf-8")
+
+        self.assertIn("Аксессуары", content)
+        self.assertIn("Электроника", content)
+        self.assertIn("Ремешок", content)
+        self.assertIn("Планшет", content)
+
+    def test_item_list_does_not_show_categories_without_active_items(self):
+        response = self.client.get(reverse("catalog:item_list"))
+
+        self.assertNotIn("Пустая", response.content.decode("utf-8"))
+
+    def test_published_manager_defers_filtered_fields(self):
+        item = Item.objects.published().first()
+
+        self.assertIn("is_published", item.get_deferred_fields())
+        self.assertIn("is_on_main", item.get_deferred_fields())
 
     def test_item_detail_returns_ok(self):
         response = self.client.get(

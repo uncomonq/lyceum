@@ -6,9 +6,14 @@
 {% block content %}
 <h1 class="mb-4">{% trans "Items catalog" %}</h1>
 
-<div class="row">
-  {% for item in items %}
-    {% include 'includes/item_card.html' %}
-  {% endfor %}
-</div>
+{% regroup items by category as category_groups %}
+
+{% for group in category_groups %}
+  <h2 class="mb-3">{{ group.grouper.name }}</h2>
+  <div class="row mb-4">
+    {% for item in group.list %}
+      {% include 'includes/item_card.html' %}
+    {% endfor %}
+  </div>
+{% endfor %}
 {% endblock %}

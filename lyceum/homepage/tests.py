@@ -84,6 +84,17 @@ class HomepageURLTests(TestCase):
 
         self.assertEqual([item.name for item in items], ["Американо", "Латте"])
 
+    def test_on_main_manager_defers_filtered_fields(self):
+        item = Item.objects.on_main().first()
+
+        self.assertIn("is_published", item.get_deferred_fields())
+        self.assertIn("is_on_main", item.get_deferred_fields())
+
+    def test_on_main_manager_does_not_prefetch_images(self):
+        item = list(Item.objects.on_main())[0]
+
+        self.assertNotIn("images", item._prefetched_objects_cache)
+
 
 @override_settings(ALLOW_REVERSE=False)
 class CoffeeEndpointTests(TestCase):

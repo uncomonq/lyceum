@@ -1,4 +1,12 @@
-__all__ = ("Tag", "Category", "Item", "MainImage", "ItemImage")
+__all__ = (
+    "Tag",
+    "Category",
+    "ItemQuerySet",
+    "ItemManager",
+    "Item",
+    "MainImage",
+    "ItemImage",
+)
 from django.core.exceptions import ValidationError
 from django.core.validators import (
     MaxValueValidator,
@@ -109,7 +117,41 @@ class Category(core.models.CommonModel):
             )
 
 
+class ItemQuerySet(django.db.models.QuerySet):
+    def _with_published_tags(self):
+        return self.prefetch_related(
+            django.db.models.Prefetch(
+                "tags",
+                queryset=Tag.objects.filter(is_published=True).only("name"),
+            ),
+        )
+
+    def published(self):
+        return (
+            self.filter(is_published=True, category__is_published=True)
+            .select_related("category")
+            ._with_published_tags()
+            .only("name", "text", "category__name")
+            .order_by("category__name", "name")
+        )
+
+    def on_main(self):
+        return self.published().filter(is_on_main=True).order_by("name")
+
+
+class ItemManager(django.db.models.Manager):
+    def get_queryset(self):
+        return ItemQuerySet(self.model, using=self._db)
+
+    def published(self):
+        return self.get_queryset().published()
+
+    def on_main(self):
+        return self.get_queryset().on_main()
+
+
 class Item(core.models.CommonModel):
+    objects = ItemManager()
     text = tinymce.models.HTMLField(
         "текст",
         validators=[
