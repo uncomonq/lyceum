@@ -34,6 +34,11 @@
             <a class="nav-link" href="{% url 'catalog:item_list' %}">{% trans "Items list" %}</a>
           {% endif %}
         </li>
+        {% if request.user.is_authenticated and request.user.is_staff %}
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'admin:index' %}">{% trans "Admin panel" %}</a>
+          </li>
+        {% endif %}
       </ul>
       <form action="{% url 'set_language' %}" method="post" class="ms-3">
         {% csrf_token %}

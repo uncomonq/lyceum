@@ -1,9 +1,12 @@
-__all__ = "CatalogViewsTests"
+__all__ = ("CatalogViewsTests",)
+from datetime import timedelta
 from http import HTTPStatus
 
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import override_settings, TestCase
 from django.urls import reverse
+import django.utils.timezone
+
 
 from catalog.models import Category, Item, ItemImage, MainImage, Tag
 
@@ -82,6 +85,41 @@ class CatalogViewsTests(TestCase):
             alt="Дополнительное изображение",
             ordering=1,
         )
+        now = django.utils.timezone.now()
+        Item.objects.filter(pk=cls.item_published_a.pk).update(
+            created_at=now - timedelta(days=1),
+            updated_at=now - timedelta(days=1),
+        )
+        Item.objects.filter(pk=cls.item_published_b.pk).update(
+            created_at=now - timedelta(days=2),
+            updated_at=now - timedelta(days=2),
+        )
+        cls.old_item = Item.objects.create(
+            name="Старый товар",
+            text="<p>Роскошно старый товар.</p>",
+            category=cls.category_a,
+            is_published=True,
+        )
+        Item.objects.filter(pk=cls.old_item.pk).update(
+            created_at=now - timedelta(days=20),
+            updated_at=now - timedelta(days=20),
+        )
+
+        cls.friday_items = []
+        friday_date = now - timedelta(days=(now.weekday() - 4) % 7)
+        for index in range(6):
+            item = Item.objects.create(
+                name=f"Пятничный {index}",
+                text="<p>Превосходно пятничный товар.</p>",
+                category=cls.category_b,
+                is_published=True,
+            )
+            ts = friday_date - timedelta(weeks=index)
+            Item.objects.filter(pk=item.pk).update(
+                created_at=ts - timedelta(days=1),
+                updated_at=ts,
+            )
+            cls.friday_items.append(item)
 
     def test_item_list_returns_ok(self):
         response = self.client.get(reverse("catalog:item_list"))
@@ -146,6 +184,37 @@ class CatalogViewsTests(TestCase):
 
         self.assertIn("tags", item._prefetched_objects_cache)
 
+    def test_item_new_uses_shared_template(self):
+        response = self.client.get(reverse("catalog:item_new"))
+
+        self.assertEqual(response.status_code, HTTPStatus.OK)
+        self.assertTemplateUsed(response, "catalog/item_list.html")
+
+    def test_item_new_contains_only_last_week_and_limit_five(self):
+        response = self.client.get(reverse("catalog:item_new"))
+
+        items = list(response.context["items"])
+        threshold = django.utils.timezone.now() - timedelta(days=7)
+
+        self.assertLessEqual(len(items), 5)
+        for item in items:
+            self.assertGreaterEqual(item.created_at, threshold)
+
+    def test_item_friday_returns_five_items(self):
+        response = self.client.get(reverse("catalog:item_friday"))
+
+        self.assertEqual(response.status_code, HTTPStatus.OK)
+        self.assertTemplateUsed(response, "catalog/item_list.html")
+        self.assertEqual(len(response.context["items"]), 5)
+
+    def test_item_unverified_returns_items_without_updates(self):
+        response = self.client.get(reverse("catalog:item_unverified"))
+
+        self.assertEqual(response.status_code, HTTPStatus.OK)
+        self.assertTemplateUsed(response, "catalog/item_list.html")
+        for item in response.context["items"]:
+            self.assertEqual(item.created_at, item.updated_at)
+
     def test_item_detail_returns_ok(self):
         response = self.client.get(
             reverse("catalog:item_detail", args=[self.item_published_b.pk]),
@@ -209,6 +278,31 @@ class CatalogViewsTests(TestCase):
         item = response.context["item"]
 
         self.assertEqual(list(item.images.all()), [self.extra_image])
+
+    def test_download_main_image_returns_attachment(self):
+        response = self.client.get(
+            reverse("download_media", args=[self.main_image.image.name]),
+        )
+
+        self.assertEqual(response.status_code, HTTPStatus.OK)
+        self.assertIn("attachment", response["Content-Disposition"])
+        self.assertIn("main.jpg", response["Content-Disposition"])
+
+    def test_download_additional_image_returns_attachment(self):
+        response = self.client.get(
+            reverse("download_media", args=[self.extra_image.image.name]),
+        )
+
+        self.assertEqual(response.status_code, HTTPStatus.OK)
+        self.assertIn("attachment", response["Content-Disposition"])
+        self.assertIn("extra.jpg", response["Content-Disposition"])
+
+    def test_download_unknown_file_returns_404(self):
+        response = self.client.get(
+            reverse("download_media", args=["items/main/not-found.jpg"]),
+        )
+
+        self.assertEqual(response.status_code, HTTPStatus.NOT_FOUND)
 
     def test_item_detail_returns_404_for_unknown_pk(self):
         response = self.client.get(

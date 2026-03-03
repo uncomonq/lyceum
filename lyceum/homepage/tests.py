@@ -4,6 +4,7 @@ __all__ = (
 )
 from http import HTTPStatus
 
+from django.contrib.auth import get_user_model
 from django.test import override_settings, TestCase
 from django.urls import reverse
 from parameterized import parameterized
@@ -99,6 +100,24 @@ class HomepageURLTests(TestCase):
         item = list(Item.objects.on_main())[0]
 
         self.assertIn("tags", item._prefetched_objects_cache)
+
+    def test_header_shows_admin_link_for_staff_user(self):
+        user_model = get_user_model()
+        user = user_model.objects.create_user(
+            username="staff",
+            password="password123",
+            is_staff=True,
+        )
+        self.client.force_login(user)
+
+        response = self.client.get(reverse("homepage:main"))
+
+        self.assertContains(response, reverse("admin:index"))
+
+    def test_header_hides_admin_link_for_anonymous_user(self):
+        response = self.client.get(reverse("homepage:main"))
+
+        self.assertNotContains(response, reverse("admin:index"))
 
 
 @override_settings(ALLOW_REVERSE=False)

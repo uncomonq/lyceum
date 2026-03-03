@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load i18n %}
 
 {% block title %}{{ item.name }}{% endblock %}
 
@@ -8,6 +9,12 @@
     <img src="{{ main_image.image.url }}"
          alt="{{ main_image.alt }}"
          class="card-img-top img-fluid">
+    <div class="card-body pt-0">
+      <a class="btn btn-primary mt-3"
+         href="{% url 'download_media' main_image.image.name %}">
+         {% trans "Download main image" %}
+      </a>
+    </div>
   {% endif %}
   <div class="card-body">
     <h2>{{ item.name }}</h2>
@@ -23,6 +30,10 @@
           <img src="{{ image.image.url }}"
                alt="{{ image.alt }}"
                class="img-fluid mb-2">
+          <a class="btn btn-outline-secondary btn-sm mb-3"
+             href="{% url 'download_media' image.image.name %}">
+             {% trans "Download image" %}
+          </a>
         {% endfor %}
       </div>
     {% endif %}

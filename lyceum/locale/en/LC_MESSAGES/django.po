@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-01 14:47+0300\n"
+"POT-Creation-Date: 2026-03-03 18:00+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,6 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
 #: .\lyceum\settings.py:121
 msgid "Russian"
 msgstr ""
@@ -32,6 +33,14 @@ msgstr ""
 
 #: .\templates\about\about.html:7
 msgid "Educational project for Yandex Lyceum Django specialization."
+msgstr ""
+
+#: .\templates\catalog\item.html:15
+msgid "Download main image"
+msgstr ""
+
+#: .\templates\catalog\item.html:35
+msgid "Download image"
 msgstr ""
 
 #: .\templates\catalog\item_list.html:4
@@ -62,10 +71,14 @@ msgstr ""
 msgid "Items list"
 msgstr ""
 
-#: .\templates\includes\header.html:49
+#: .\templates\includes\header.html:39
+msgid "Admin panel"
+msgstr ""
+
+#: .\templates\includes\header.html:54
 msgid "Cat photo"
 msgstr ""
 
-#: .\templates\includes\item_card.html:12
+#: .\templates\includes\item_card.html:13
 msgid "Details"
 msgstr ""

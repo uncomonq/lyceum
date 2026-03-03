@@ -3,6 +3,8 @@ import django.conf.urls.static
 from django.contrib import admin
 from django.urls import include, path
 
+import catalog.views
+
 urlpatterns = [
     path("i18n/", include("django.conf.urls.i18n")),
     path("", include("homepage.urls")),
@@ -10,6 +12,11 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("tinymce/", include("tinymce.urls")),
     path("catalog/", include("catalog.urls")),
+    path(
+        "download/<path:file_path>",
+        catalog.views.download_media,
+        name="download_media",
+    ),
 ]
 
 if settings.DEBUG and settings.DEBUG_TOOLBAR_AVAILABLE:

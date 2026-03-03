@@ -118,25 +118,50 @@ class Category(core.models.CommonModel):
 
 
 class ItemQuerySet(django.db.models.QuerySet):
-    def _with_published_tags(self):
-        return self.prefetch_related(
-            django.db.models.Prefetch(
-                "tags",
-                queryset=Tag.objects.filter(is_published=True).only("name"),
-            ),
+    def _for_card(self):
+        return (
+            self.select_related("category")
+            .prefetch_related(
+                django.db.models.Prefetch(
+                    "tags",
+                    queryset=Tag.objects.filter(is_published=True).only(
+                        "name",
+                    ),
+                ),
+            )
+            .only("name", "text", "category__name")
         )
 
     def published(self):
         return (
             self.filter(is_published=True, category__is_published=True)
-            .select_related("category")
-            ._with_published_tags()
-            .only("name", "text", "category__name")
+            ._for_card()
             .order_by("category__name", "name")
         )
 
     def on_main(self):
         return self.published().filter(is_on_main=True).order_by("name")
+
+    def new_items(self, from_datetime):
+        return (
+            self.filter(created_at__gte=from_datetime)
+            ._for_card()
+            .order_by("?")[:5]
+        )
+
+    def friday_items(self):
+        return (
+            self.filter(updated_at__week_day=6)
+            ._for_card()
+            .order_by(
+                "-updated_at",
+            )[:5]
+        )
+
+    def unverified_items(self):
+        return self.filter(
+            updated_at=django.db.models.F("created_at"),
+        )._for_card()
 
 
 class ItemManager(django.db.models.Manager):
@@ -149,9 +174,26 @@ class ItemManager(django.db.models.Manager):
     def on_main(self):
         return self.get_queryset().on_main()
 
+    def new_items(self, from_datetime):
+        return self.get_queryset().new_items(from_datetime)
+
+    def friday_items(self):
+        return self.get_queryset().friday_items()
+
+    def unverified_items(self):
+        return self.get_queryset().unverified_items()
+
 
 class Item(core.models.CommonModel):
     objects = ItemManager()
+    created_at = django.db.models.DateTimeField(
+        "дата создания",
+        auto_now_add=True,
+    )
+    updated_at = django.db.models.DateTimeField(
+        "дата изменения",
+        auto_now=True,
+    )
     text = tinymce.models.HTMLField(
         "текст",
         validators=[
