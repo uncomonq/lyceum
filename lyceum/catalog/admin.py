@@ -1,4 +1,4 @@
-__all__ = ("ItemAdmin", "CategoryAdmin", "TagAdmin")
+__all__ = ()
 from django.contrib import admin
 
 import catalog.models

@@ -2,13 +2,30 @@ msgid ""
 msgstr ""
 "Project-Id-Version: lyceum\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-03 19:18+0300\n"
+"POT-Creation-Date: 2026-03-06 23:37+0300\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+
+#: .\catalog\views.py:23
+msgid "Items catalog"
+msgstr "Каталог товаров"
+
+#: .\catalog\views.py:41 .\templates\includes\header.html:40
+#: .\templates\includes\header.html:42
+msgid "New items"
+msgstr "Новинки"
+
+#: .\catalog\views.py:47
+msgid "Friday items"
+msgstr "Пятница"
+
+#: .\catalog\views.py:53
+msgid "Unverified items"
+msgstr "Непроверенные"
 
 #: .\lyceum\settings.py:122
 msgid "Russian"
@@ -19,7 +36,7 @@ msgid "English"
 msgstr "Английский"
 
 #: .\templates\about\about.html:3 .\templates\about\about.html:6
-#: .\templates\includes\header.html:24 .\templates\includes\header.html:26
+#: .\templates\includes\header.html:27
 msgid "About project"
 msgstr "О проекте"
 
@@ -27,11 +44,11 @@ msgstr "О проекте"
 msgid "Educational project for Yandex Lyceum Django specialization."
 msgstr "Учебный проект по специализации django Яндекс Лицея."
 
-#: .\templates\catalog\item.html:15
+#: .\templates\catalog\item.html:14
 msgid "Download main image"
 msgstr "Скачать главное изображение"
 
-#: .\templates\catalog\item.html:35
+#: .\templates\catalog\item.html:33
 msgid "Download image"
 msgstr "Скачать изображение"
 
@@ -51,30 +68,28 @@ msgstr "Логотип сайта"
 msgid "To home"
 msgstr "На главную"
 
-#: .\templates\includes\header.html:32 .\templates\includes\header.html:34
+#: .\templates\includes\header.html:33 .\templates\includes\header.html:35
 msgid "Items list"
 msgstr "Список товаров"
 
-#: .\templates\includes\header.html:39
+#: .\templates\includes\header.html:47 .\templates\includes\header.html:49
+#, fuzzy
+#| msgid "Friday items"
+msgid "Friday"
+msgstr "Пятница"
+
+#: .\templates\includes\header.html:54 .\templates\includes\header.html:56
+msgid "Unverified"
+msgstr "Непроверенные"
+
+#: .\templates\includes\header.html:61
 msgid "Admin panel"
 msgstr "Админка"
 
-#: .\templates\includes\header.html:54
+#: .\templates\includes\header.html:76
 msgid "Cat photo"
 msgstr "Фото котика"
 
 #: .\templates\includes\item_card.html:13
 msgid "Details"
 msgstr "Подробнее"
-
-#~ msgid "Catalog"
-#~ msgstr "Каталог"
-
-#~ msgid "Items catalog"
-#~ msgstr "Каталог товаров"
-
-#~ msgid "Русский"
-#~ msgstr "Русский"
-
-#~ msgid "Английский"
-#~ msgstr "Английский"

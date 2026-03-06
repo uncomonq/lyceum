@@ -1,4 +1,4 @@
-__all__ = ("description",)
+__all__ = ()
 import django.shortcuts
 
 

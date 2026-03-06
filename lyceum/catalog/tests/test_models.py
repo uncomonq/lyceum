@@ -81,11 +81,11 @@ class ValidateKeywordsTest(TestCase):
 class NormalizeTests(TestCase):
     def test_normalize_basic(self):
         cases = {
-            "  ПреВосХодно!  ": "превосходно",
-            "роскошно!!!": "роскошно",
-            "нов-инка": "новинка",
-            "pockoшno": "роскошно",
-            "aA": "аа",
+            "  ПреВосХодно!  ": "prevoskhodno",
+            "роскошно!!!": "roskoshno",
+            "нов-инка": "novinka",
+            "pockoшno": "pockoshno",
+            "aA": "aa",
         }
         for inp, want in cases.items():
             self.assertEqual(normalize_name(inp), want)

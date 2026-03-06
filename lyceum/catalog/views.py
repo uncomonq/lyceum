@@ -12,6 +12,7 @@ import django.db.models
 import django.http
 import django.shortcuts
 import django.utils.timezone
+from django.utils.translation import gettext_lazy as _
 
 import catalog.models
 
@@ -19,7 +20,7 @@ import catalog.models
 def item_list(request):
     items = catalog.models.Item.objects.published()
 
-    return _render_item_list(request, items, "Items catalog")
+    return _render_item_list(request, items, _("Items catalog"))
 
 
 def _render_item_list(request, items, title):
@@ -37,19 +38,19 @@ def item_new(request):
     week_ago = django.utils.timezone.now() - timedelta(days=7)
     items = catalog.models.Item.objects.new_items(week_ago)
 
-    return _render_item_list(request, items, "Новинки")
+    return _render_item_list(request, items, _("New items"))
 
 
 def item_friday(request):
     items = catalog.models.Item.objects.friday_items()
 
-    return _render_item_list(request, items, "Пятница")
+    return _render_item_list(request, items, _("Friday items"))
 
 
 def item_unverified(request):
     items = catalog.models.Item.objects.unverified_items()
 
-    return _render_item_list(request, items, "Непроверенное")
+    return _render_item_list(request, items, _("Unverified items"))
 
 
 def item_detail(request, pk):

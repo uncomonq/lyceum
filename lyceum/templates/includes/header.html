@@ -20,11 +20,12 @@
         </li>
 
         <li class="nav-item">
-          {% if request.resolver_match.view_name == 'about:about' %}
-            <span class="nav-link active disabled" aria-current="page">{% trans "About project" %}</span>
-          {% else %}
-            <a class="nav-link" href="{% url 'about:about' %}">{% trans "About project" %}</a>
-          {% endif %}
+          <a
+            class="nav-link{% if request.resolver_match.view_name == 'about:about' %} active disabled{% endif %}"
+            {% if request.resolver_match.view_name != 'about:about' %}href="{% url 'about:about' %}"{% else %}aria-current="page"{% endif %}
+          >
+            {% trans "About project" %}
+          </a>
         </li>
 
         <li class="nav-item">
@@ -32,6 +33,27 @@
             <span class="nav-link active disabled" aria-current="page">{% trans "Items list" %}</span>
           {% else %}
             <a class="nav-link" href="{% url 'catalog:item_list' %}">{% trans "Items list" %}</a>
+          {% endif %}
+        </li>
+        <li class="nav-item">
+          {% if request.resolver_match.view_name == 'catalog:item_new' %}
+            <span class="nav-link active disabled" aria-current="page">{% trans "New items" %}</span>
+          {% else %}
+            <a class="nav-link" href="{% url 'catalog:item_new' %}">{% trans "New items" %}</a>
+          {% endif %}
+        </li>
+        <li class="nav-item">
+          {% if request.resolver_match.view_name == 'catalog:item_friday' %}
+            <span class="nav-link active disabled" aria-current="page">{% trans "Friday" %}</span>
+          {% else %}
+            <a class="nav-link" href="{% url 'catalog:item_friday' %}">{% trans "Friday" %}</a>
+          {% endif %}
+        </li>
+        <li class="nav-item">
+          {% if request.resolver_match.view_name == 'catalog:item_unverified' %}
+            <span class="nav-link active disabled" aria-current="page">{% trans "Unverified" %}</span>
+          {% else %}
+            <a class="nav-link" href="{% url 'catalog:item_unverified' %}">{% trans "Unverified" %}</a>
           {% endif %}
         </li>
         {% if request.user.is_authenticated and request.user.is_staff %}

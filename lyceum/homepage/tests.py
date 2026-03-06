@@ -119,6 +119,13 @@ class HomepageURLTests(TestCase):
 
         self.assertNotContains(response, reverse("admin:index"))
 
+    def test_header_contains_catalog_shortcut_links(self):
+        response = self.client.get(reverse("homepage:main"))
+
+        self.assertContains(response, reverse("catalog:item_new"))
+        self.assertContains(response, reverse("catalog:item_friday"))
+        self.assertContains(response, reverse("catalog:item_unverified"))
+
 
 @override_settings(ALLOW_REVERSE=False)
 class CoffeeEndpointTests(TestCase):
