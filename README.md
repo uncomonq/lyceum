@@ -56,10 +56,10 @@
    cp .env.example lyceum/.env
    ```
 
-5. Создайте db.sqlite3 (проект содержит db.example.sqlite3)
+5. Создайте db.sqlite3
 
-   ```powershell
-   copy db.example.sqlite3 lyceum\db.sqlite3
+   ```bash
+   cp db.example.sqlite3 lyceum/db.sqlite3
    ```
 
 6. Перейти в директорию проекта с `manage.py`:

@@ -11,7 +11,6 @@ from django.core.exceptions import ValidationError
 from django.core.validators import (
     MaxValueValidator,
     MinValueValidator,
-    validate_slug,
 )
 import django.db.models
 import django.utils.safestring
@@ -28,7 +27,6 @@ class Tag(core.models.CommonModel):
         "слаг",
         max_length=200,
         unique=True,
-        validators=[validate_slug],
         help_text="Должен содержать только латинские буквы, цифры,"
         " дефисы и знаки подчёркивания",
     )
@@ -70,7 +68,6 @@ class Category(core.models.CommonModel):
         "слаг",
         max_length=200,
         unique=True,
-        validators=[validate_slug],
         help_text="Должен содержать только латинские буквы, цифры,"
         " дефисы и знаки подчёркивания",
     )
@@ -247,8 +244,6 @@ class Item(core.models.CommonModel):
             f'style="object-fit:cover;" />',
         )
 
-    main_image_preview.short_description = "Изображение"
-
 
 class MainImage(django.db.models.Model):
     item = django.db.models.OneToOneField(
@@ -262,13 +257,6 @@ class MainImage(django.db.models.Model):
     image = django.db.models.ImageField(
         upload_to="items/main/",
         verbose_name="главное изображение",
-    )
-
-    alt = django.db.models.CharField(
-        max_length=200,
-        blank=True,
-        default="",
-        verbose_name="alt",
     )
 
     class Meta:
@@ -290,12 +278,6 @@ class ItemImage(django.db.models.Model):
     image = django.db.models.ImageField(
         upload_to="items/gallery/",
         verbose_name="изображение",
-    )
-    alt = django.db.models.CharField(
-        max_length=200,
-        blank=True,
-        default="",
-        verbose_name="alt",
     )
     ordering = django.db.models.PositiveIntegerField(
         "порядок",

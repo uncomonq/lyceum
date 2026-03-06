@@ -147,8 +147,7 @@
     "pk": 3,
     "fields": {
         "item": 4,
-        "image": "items/main/slippers.jpeg",
-        "alt": "тапочки"
+        "image": "items/main/slippers.jpeg"
     }
 },
 {
@@ -156,8 +155,7 @@
     "pk": 4,
     "fields": {
         "item": 1,
-        "image": "items/main/phone.jpg",
-        "alt": "телефон"
+        "image": "items/main/phone.jpg"
     }
 },
 {
@@ -165,8 +163,7 @@
     "pk": 5,
     "fields": {
         "item": 5,
-        "image": "items/main/GPU.jpeg",
-        "alt": "видеокарта"
+        "image": "items/main/GPU.jpeg"
     }
 },
 {
@@ -174,8 +171,7 @@
     "pk": 6,
     "fields": {
         "item": 3,
-        "image": "items/main/burner.webp",
-        "alt": "электровыжигатель"
+        "image": "items/main/burner.webp"
     }
 },
 {
@@ -183,8 +179,7 @@
     "pk": 7,
     "fields": {
         "item": 2,
-        "image": "items/main/jacket.jpg",
-        "alt": "пиджак"
+        "image": "items/main/jacket.jpg"
     }
 }
 ]

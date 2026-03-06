@@ -35,6 +35,10 @@ class ItemAdmin(admin.ModelAdmin):
         catalog.models.Item.updated_at.field.name,
     )
 
+    @admin.display(description="Изображение")
+    def main_image_preview(self, obj):
+        return obj.main_image_preview()
+
 
 @admin.register(catalog.models.Category)
 class CategoryAdmin(admin.ModelAdmin):

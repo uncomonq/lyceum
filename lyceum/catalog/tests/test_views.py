@@ -73,7 +73,6 @@ class CatalogViewsTests(TestCase):
                 b"filecontent",
                 content_type="image/jpeg",
             ),
-            alt="Главное изображение",
         )
         cls.extra_image = ItemImage.objects.create(
             item=cls.item_published_b,
@@ -82,7 +81,6 @@ class CatalogViewsTests(TestCase):
                 b"filecontent2",
                 content_type="image/jpeg",
             ),
-            alt="Дополнительное изображение",
             ordering=1,
         )
         now = django.utils.timezone.now()

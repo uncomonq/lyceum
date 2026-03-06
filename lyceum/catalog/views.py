@@ -62,7 +62,6 @@ def item_detail(request, pk):
                 "images",
                 queryset=catalog.models.ItemImage.objects.only(
                     "image",
-                    "alt",
                     "ordering",
                     "item_id",
                 ),
@@ -73,7 +72,6 @@ def item_detail(request, pk):
             "text",
             "category__name",
             "main_image__image",
-            "main_image__alt",
         ),
         pk=pk,
     )
