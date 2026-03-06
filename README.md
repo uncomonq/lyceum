@@ -1,6 +1,7 @@
 # Учебный проект «Lyceum»
 
-[![Lint & test](https://img.shields.io)](https://gitlab.crja72.ru/django/2026/spring/course/students/379829-rizaeffk-course-1585/badges/main/pipeline.svg)
+[![lint & test](https://img.shields.io/gitlab/pipeline/django%2F2026%2Fspring%2Fcourse%2Fstudents%2F379829-rizaeffk-course-1585?branch=main&label=lint%20%26%20test)](https://gitlab.crja72.ru/django/2026/spring/course/students/379829-rizaeffk-course-1585/-/pipelines)
+
 Это учебный проект для Специализации Яндекс Лицея «Веб-разработка на Django.
 
 ## CI/CD
@@ -18,6 +19,7 @@
 - [Python](https://www.python.org/downloads/) (3.10-3.14)
 - [Venv](https://pandac.in/blogs/venv-python/#:~:text=Install%20Python%203%20and%20venv,package%20you%20want%20to%20install.) (для создания виртуального окружения на Linux)
 - [Git](https://git-scm.com/install/) (для клонирования репозитория)
+- [gettext](https://www.gnu.org/software/gettext/) (для компиляции файлов локализации)
 
 ## Зависимости
 
@@ -79,6 +81,18 @@
    python3 manage.py runserver
    ```
 
+9. (Опционально) Создайте суперпользователя для входа в админку:
+
+   ```bash
+   python3 manage.py createsuperuser
+   ```
+
+10. (Опционально) Скомпилируйте переводы интерфейса:
+
+   ```bash
+   django-admin compilemessages
+   ```
+
 ## Установка и запуск в dev-режиме (Windows)
 
 1. Клонировать репозиторий:
@@ -131,9 +145,23 @@
    python manage.py runserver
    ```
 
-После запуска приложение будет доступно по адресу:
+9. (Опционально) Создайте суперпользователя для входа в админку:
 
-<http://127.0.0.1:8000/>
+   ```powershell
+   python manage.py createsuperuser
+   ```
+
+10. (Опционально) Скомпилируйте переводы интерфейса:
+
+   ```powershell
+   django-admin compilemessages
+   ```
+
+## После запуска
+
+- Приложение доступно по адресу: <http://127.0.0.1:8000/>
+- Админка доступна по адресу: <http://127.0.0.1:8000/admin> (если создан суперпользователь).
+- Локализация поддерживает `ru` и `en`, переключатель языка находится в шапке сайта.
 
 ## Переменные окружения (.env)
 
@@ -195,23 +223,6 @@ DJANGO_ALLOW_REVERSE=False
 - `catalog_tag` — теги (используются многократно для товаров).
 - `main_image` — главная картинка товара (1→1 );
 - `item_image` — галерея картинок (1 товар→N картинок);
-
-## Локализация и мультиязычность
-
-В проекте включена локализация интерфейса, поддерживаются ru и en,
-добавлен переключатель языка в шапке и подключен `LocaleMiddleware`.
-
-### Что важно для развёртывания
-
-1. Убедитесь, что установлен `USE_I18N = True` (включено по умолчанию).
-2. Перед запуском создать файлы для переводов:
-
-   ```bash
-   django-admin compilemessages
-   python3 manage.py runserver
-   ```
-
-3. Примените миграции и перезапустите приложение как обычно.
 
 ### Год в футере
 
