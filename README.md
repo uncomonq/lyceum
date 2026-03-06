@@ -1,6 +1,6 @@
 # Учебный проект «Lyceum»
 
-[![lint & test](https://img.shields.io/gitlab/pipeline/django%2F2026%2Fspring%2Fcourse%2Fstudents%2F379829-rizaeffk-course-1585?branch=main&label=lint%20%26%20test)](https://gitlab.crja72.ru/django/2026/spring/course/students/379829-rizaeffk-course-1585/-/pipelines)
+[![lint & test](https://gitlab.crja72.ru/django/2026/spring/course/students/379829-rizaeffk-course-1585/badges/main/pipeline.svg?key_text=lint%20%26%20test&key_width=110)](https://gitlab.crja72.ru/django/2026/spring/course/students/379829-rizaeffk-course-1585/-/pipelines)
 
 Это учебный проект для Специализации Яндекс Лицея «Веб-разработка на Django.
 
@@ -19,7 +19,7 @@
 - [Python](https://www.python.org/downloads/) (3.10-3.14)
 - [Venv](https://pandac.in/blogs/venv-python/#:~:text=Install%20Python%203%20and%20venv,package%20you%20want%20to%20install.) (для создания виртуального окружения на Linux)
 - [Git](https://git-scm.com/install/) (для клонирования репозитория)
-- [gettext](https://www.gnu.org/software/gettext/) (для компиляции файлов локализации)
+- [gettext](https://mlocati.github.io/articles/gettext-iconv-windows.html) (для компиляции файлов локализации)
 
 ## Зависимости
 
