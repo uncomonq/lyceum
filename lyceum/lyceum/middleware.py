@@ -1,4 +1,4 @@
-__all__ = ("ReverseRussianWordsMiddleware",)
+__all__ = ()
 import re
 import threading
 
@@ -32,7 +32,7 @@ class ReverseRussianWordsMiddleware:
         if not do_reverse:
             return response
 
-        text = response.content.decode("utf-8")
+        text = response.content.decode(response.charset)
         new_text = _reverse_russian_words(text)
-        response.content = new_text.encode("utf-8")
+        response.content = new_text.encode(response.charset)
         return response

@@ -1,4 +1,4 @@
-__all__ = ("home", "coffee")
+__all__ = ()
 import http
 
 from django.http import HttpResponse

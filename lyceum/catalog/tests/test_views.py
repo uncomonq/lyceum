@@ -1,4 +1,4 @@
-__all__ = ("CatalogViewsTests",)
+__all__ = ()
 from datetime import timedelta
 from http import HTTPStatus
 

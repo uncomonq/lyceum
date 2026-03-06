@@ -1,4 +1,4 @@
-__all__ = ("CatalogConfig",)
+__all__ = ()
 from django.apps import AppConfig
 
 

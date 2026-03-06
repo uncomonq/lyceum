@@ -1,4 +1,4 @@
-__all__ = ("ItemAdminFormWidgetTest",)
+__all__ = ()
 from django.contrib.admin.sites import AdminSite
 from django.test import TestCase
 from tinymce.widgets import TinyMCE

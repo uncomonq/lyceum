@@ -1,9 +1,4 @@
-__all__ = (
-    "ReverseFunctionTests",
-    "MiddlewareEnabledTests",
-    "MiddlewareDisabledTests",
-    "MiddlewareDefaultSettingTests",
-)
+__all__ = ()
 from django.conf import settings
 from django.test import override_settings, TestCase
 

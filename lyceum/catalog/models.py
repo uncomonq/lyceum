@@ -1,12 +1,4 @@
-__all__ = (
-    "Tag",
-    "Category",
-    "ItemQuerySet",
-    "ItemManager",
-    "Item",
-    "MainImage",
-    "ItemImage",
-)
+__all__ = ()
 from django.core.validators import (
     MaxValueValidator,
     MinValueValidator,
@@ -24,7 +16,6 @@ import core.models
 class Tag(core.models.NormalizedNameModel):
 
     class Meta:
-        db_table = "catalog_tag"
         verbose_name = "тег"
         verbose_name_plural = "теги"
 
@@ -41,7 +32,6 @@ class Category(core.models.NormalizedNameModel):
     )
 
     class Meta:
-        db_table = "catalog_category"
         verbose_name = "категория"
         verbose_name_plural = "категории"
         ordering = ["weight"]
@@ -158,7 +148,6 @@ class Item(core.models.CommonModel):
     )
 
     class Meta:
-        db_table = "catalog_item"
         verbose_name = "товар"
         verbose_name_plural = "товары"
 

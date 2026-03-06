@@ -1,7 +1,6 @@
 # Учебный проект «Lyceum»
 
-[![CI: flake8 & black](https://gitlab.crja72.ru/django/2026/spring/course/students/379829-rizaeffk-course-1585/badges/main/pipeline.svg)](https://gitlab.crja72.ru/django/2026/spring/course/students/379829-rizaeffk-course-1585/-/commits/main)
-
+[![Lint & test](https://img.shields.io)](https://gitlab.crja72.ru/django/2026/spring/course/students/379829-rizaeffk-course-1585/badges/main/pipeline.svg)
 Это учебный проект для Специализации Яндекс Лицея «Веб-разработка на Django.
 
 ## CI/CD

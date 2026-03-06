@@ -1,4 +1,4 @@
-__all__ = ("CommonModel", "NormalizedNameModel")
+__all__ = ()
 
 from django.core.exceptions import ValidationError
 import django.db.models

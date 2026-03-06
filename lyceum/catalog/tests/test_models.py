@@ -1,14 +1,4 @@
-__all__ = (
-    "ItemModelTest",
-    "ValidateKeywordsTest",
-    "NormalizeTests",
-    "CategoryNormalizeUniqueTests",
-    "CategoryWeightValidationTests",
-    "TagNormalizeUniqueTests",
-    "ItemImageOrderingTests",
-    "ImageStringRepresentationTests",
-    "ItemMainImagePreviewTests",
-)
+__all__ = ()
 from unittest import mock
 
 from django.core.exceptions import ValidationError
@@ -40,12 +30,10 @@ class ItemModelTest(TestCase):
 
         item.full_clean()
         item.save()
-
         self.assertEqual(item.name, "Тестовый товар")
 
 
 class ValidateKeywordsTest(TestCase):
-
     def setUp(self):
         self.validator = ValidateMustContain(
             "превосходно",

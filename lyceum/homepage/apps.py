@@ -1,4 +1,4 @@
-__all__ = ("HomepageConfig",)
+__all__ = ()
 from django.apps import AppConfig
 
 

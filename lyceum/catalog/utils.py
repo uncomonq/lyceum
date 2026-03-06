@@ -1,4 +1,4 @@
-__all__ = ("normalize_name",)
+__all__ = ()
 import re
 
 import unidecode

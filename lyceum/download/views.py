@@ -1,4 +1,4 @@
-__all__ = ("download_media",)
+__all__ = ()
 import mimetypes
 
 from django.conf import settings

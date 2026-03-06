@@ -1,11 +1,4 @@
-__all__ = (
-    "item_list",
-    "item_new",
-    "item_friday",
-    "item_unverified",
-    "item_detail",
-    "return_value_view",
-)
+__all__ = ()
 from datetime import timedelta
 
 import django.db.models

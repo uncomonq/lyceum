@@ -1,9 +1,4 @@
-__all__ = (
-    "ReverseFunctionTests",
-    "MiddlewareEnabledTests",
-    "MiddlewareDisabledTests",
-    "MiddlewareDefaultSettingTests",
-)
+__all__ = ()
 from django.conf import settings
 from django.test import override_settings, TestCase
 from django.urls import reverse
@@ -34,7 +29,6 @@ class ReverseFunctionTests(TestCase):
 
 @override_settings(ALLOW_REVERSE=True)
 class MiddlewareEnabledTests(TestCase):
-
     def setUp(self):
         lyceum.middleware.ReverseRussianWordsMiddleware.counter = 0
 
@@ -52,7 +46,6 @@ class MiddlewareEnabledTests(TestCase):
 
 @override_settings(ALLOW_REVERSE=False)
 class MiddlewareDisabledTests(TestCase):
-
     def setUp(self):
         lyceum.middleware.ReverseRussianWordsMiddleware.counter = 0
 
@@ -64,7 +57,6 @@ class MiddlewareDisabledTests(TestCase):
 
 
 class MiddlewareDefaultSettingTests(TestCase):
-
     def setUp(self):
         lyceum.middleware.ReverseRussianWordsMiddleware.counter = 0
 
