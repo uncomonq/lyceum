@@ -7,7 +7,6 @@ __all__ = (
     "MainImage",
     "ItemImage",
 )
-from django.core.exceptions import ValidationError
 from django.core.validators import (
     MaxValueValidator,
     MinValueValidator,
@@ -22,55 +21,15 @@ import catalog.validators
 import core.models
 
 
-class Tag(core.models.CommonModel):
-    slug = django.db.models.SlugField(
-        "слаг",
-        max_length=200,
-        unique=True,
-        help_text="Должен содержать только латинские буквы, цифры,"
-        " дефисы и знаки подчёркивания",
-    )
-    normalized_name = django.db.models.CharField(
-        "normalized_name",
-        max_length=200,
-        null=False,
-        blank=False,
-        editable=False,
-        unique=False,
-        error_messages={"unique": "Объект с похожим именем уже существует."},
-    )
+class Tag(core.models.NormalizedNameModel):
 
     class Meta:
         db_table = "catalog_tag"
         verbose_name = "тег"
         verbose_name_plural = "теги"
 
-    def save(self, *args, **kwargs):
-        self.normalized_name = catalog.utils.normalize_name(self.name or "")
-        super().save(*args, **kwargs)
 
-    def clean(self):
-        super().clean()
-        norm = catalog.utils.normalize_name(self.name)
-        self.normalized_name = norm
-
-        qs = self.__class__.objects.filter(normalized_name=norm)
-        if self.pk:
-            qs = qs.exclude(pk=self.pk)
-        if qs.exists():
-            raise ValidationError(
-                {"name": "Категория с похожим именем уже существует."},
-            )
-
-
-class Category(core.models.CommonModel):
-    slug = django.db.models.SlugField(
-        "слаг",
-        max_length=200,
-        unique=True,
-        help_text="Должен содержать только латинские буквы, цифры,"
-        " дефисы и знаки подчёркивания",
-    )
+class Category(core.models.NormalizedNameModel):
     weight = django.db.models.PositiveSmallIntegerField(
         "вес",
         default=100,
@@ -80,38 +39,12 @@ class Category(core.models.CommonModel):
         ],
         help_text="От 1 до 32767",
     )
-    normalized_name = django.db.models.CharField(
-        "normalized_name",
-        max_length=200,
-        null=False,
-        blank=False,
-        editable=False,
-        unique=False,
-        error_messages={"unique": "Объект с похожим именем уже существует."},
-    )
 
     class Meta:
         db_table = "catalog_category"
         verbose_name = "категория"
         verbose_name_plural = "категории"
         ordering = ["weight"]
-
-    def save(self, *args, **kwargs):
-        self.normalized_name = catalog.utils.normalize_name(self.name or "")
-        super().save(*args, **kwargs)
-
-    def clean(self):
-        super().clean()
-        norm = catalog.utils.normalize_name(self.name)
-        self.normalized_name = norm
-
-        qs = self.__class__.objects.filter(normalized_name=norm)
-        if self.pk:
-            qs = qs.exclude(pk=self.pk)
-        if qs.exists():
-            raise ValidationError(
-                {"name": "Категория с похожим именем уже существует."},
-            )
 
 
 class ItemQuerySet(django.db.models.QuerySet):
