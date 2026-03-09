@@ -11,6 +11,7 @@ urlpatterns = [
     path("tinymce/", include("tinymce.urls")),
     path("catalog/", include("catalog.urls")),
     path("download/", include("download.urls")),
+    path("feedback/", include("feedback.urls")),
 ]
 
 if settings.DEBUG and settings.DEBUG_TOOLBAR_AVAILABLE:
