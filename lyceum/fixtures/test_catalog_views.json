@@ -1,0 +1,102 @@
+[
+  {
+    "model": "catalog.category",
+    "pk": 101,
+    "fields": {
+      "name": "Аксессуары",
+      "is_published": true,
+      "slug": "accessories",
+      "weight": 10,
+      "normalized_name": "аксессуары"
+    }
+  },
+  {
+    "model": "catalog.category",
+    "pk": 102,
+    "fields": {
+      "name": "Электроника",
+      "is_published": true,
+      "slug": "electronics",
+      "weight": 20,
+      "normalized_name": "электроника"
+    }
+  },
+  {
+    "model": "catalog.category",
+    "pk": 103,
+    "fields": {
+      "name": "Пустая",
+      "is_published": true,
+      "slug": "empty",
+      "weight": 30,
+      "normalized_name": "пустая"
+    }
+  },
+  {
+    "model": "catalog.tag",
+    "pk": 101,
+    "fields": {
+      "name": "Хит",
+      "is_published": true,
+      "slug": "hit",
+      "normalized_name": "хит"
+    }
+  },
+  {
+    "model": "catalog.tag",
+    "pk": 102,
+    "fields": {
+      "name": "Новинка",
+      "is_published": true,
+      "slug": "new",
+      "normalized_name": "новинка"
+    }
+  },
+  {
+    "model": "catalog.item",
+    "pk": 101,
+    "fields": {
+      "name": "Ремешок",
+      "is_published": true,
+      "text": "<p>Это превосходно удобный ремешок для часов.</p>",
+      "category": 101
+    }
+  },
+  {
+    "model": "catalog.item",
+    "pk": 102,
+    "fields": {
+      "name": "Планшет",
+      "is_published": true,
+      "text": "<p>Роскошно быстрый планшет для работы и игр.</p>",
+      "category": 102
+    }
+  },
+  {
+    "model": "catalog.item",
+    "pk": 103,
+    "fields": {
+      "name": "Скрытый товар",
+      "is_published": false,
+      "text": "<p>Роскошно секретный товар.</p>",
+      "category": 101
+    }
+  },
+  {
+    "model": "catalog.mainimage",
+    "pk": 101,
+    "fields": {
+      "item": 102,
+      "image": "items/main/main.jpg"
+    }
+  },
+  {
+    "model": "catalog.itemimage",
+    "pk": 101,
+    "fields": {
+      "item": 102,
+      "image": "items/gallery/extra.jpg",
+      "ordering": 1
+    }
+  }
+]

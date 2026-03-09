@@ -2,7 +2,6 @@ __all__ = ()
 from datetime import timedelta
 from http import HTTPStatus
 
-from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import override_settings, TestCase
 from django.urls import reverse
 import django.utils.timezone
@@ -13,76 +12,24 @@ from catalog.models import Category, Item, ItemImage, MainImage, Tag
 
 @override_settings(ALLOW_REVERSE=False)
 class CatalogViewsTests(TestCase):
+    fixtures = ["fixtures/test_catalog_views.json"]
+
     @classmethod
     def setUpTestData(cls):
-        cls.category_a = Category.objects.create(
-            name="Аксессуары",
-            slug="accessories",
-            weight=10,
-            normalized_name="аксессуары",
-        )
-        cls.category_b = Category.objects.create(
-            name="Электроника",
-            slug="electronics",
-            weight=20,
-            normalized_name="электроника",
-        )
-        cls.tag_hot = Tag.objects.create(
-            name="Хит",
-            slug="hit",
-            normalized_name="хит",
-        )
-        cls.tag_new = Tag.objects.create(
-            name="Новинка",
-            slug="new",
-            normalized_name="новинка",
-        )
+        cls.category_a = Category.objects.get(pk=101)
+        cls.category_b = Category.objects.get(pk=102)
+        cls.tag_hot = Tag.objects.get(pk=101)
+        cls.tag_new = Tag.objects.get(pk=102)
 
-        cls.item_published_a = Item.objects.create(
-            name="Ремешок",
-            text="<p>Это превосходно удобный ремешок для часов.</p>",
-            category=cls.category_a,
-            is_published=True,
-        )
+        cls.item_published_a = Item.objects.get(pk=101)
+        cls.item_published_b = Item.objects.get(pk=102)
+        cls.item_unpublished = Item.objects.get(pk=103)
+        cls.category_empty = Category.objects.get(pk=103)
+        cls.main_image = MainImage.objects.get(pk=101)
+        cls.extra_image = ItemImage.objects.get(pk=101)
+
         cls.item_published_a.tags.add(cls.tag_new)
-
-        cls.item_published_b = Item.objects.create(
-            name="Планшет",
-            text="<p>Роскошно быстрый планшет для работы и игр.</p>",
-            category=cls.category_b,
-            is_published=True,
-        )
         cls.item_published_b.tags.add(cls.tag_hot, cls.tag_new)
-
-        cls.item_unpublished = Item.objects.create(
-            name="Скрытый товар",
-            text="<p>Роскошно секретный товар.</p>",
-            category=cls.category_a,
-            is_published=False,
-        )
-        cls.category_empty = Category.objects.create(
-            name="Пустая",
-            slug="empty",
-            weight=30,
-            normalized_name="пустая",
-        )
-        cls.main_image = MainImage.objects.create(
-            item=cls.item_published_b,
-            image=SimpleUploadedFile(
-                "main.jpg",
-                b"filecontent",
-                content_type="image/jpeg",
-            ),
-        )
-        cls.extra_image = ItemImage.objects.create(
-            item=cls.item_published_b,
-            image=SimpleUploadedFile(
-                "extra.jpg",
-                b"filecontent2",
-                content_type="image/jpeg",
-            ),
-            ordering=1,
-        )
         now = django.utils.timezone.now()
         Item.objects.filter(pk=cls.item_published_a.pk).update(
             created_at=now - timedelta(days=1),

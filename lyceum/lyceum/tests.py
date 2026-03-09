@@ -1,29 +1,34 @@
 __all__ = ()
 from django.conf import settings
 from django.test import override_settings, TestCase
+from parameterized import parameterized
 
 import lyceum.middleware
 
 
 class ReverseFunctionTests(TestCase):
-    def test_reverse_russian_words_complex_cases(self):
-        cases = {
-            "Привет мир": "тевирП рим",
-            "Привет, мир!": "тевирП, рим!",
-            "Hello мир": "Hello рим",
-            "мир123": "мир123",
-            "123мир": "123мир",
-            "мир-это тест": "рим-отэ тсет",
-            "мир!!!": "рим!!!",
-            "мирHello": "мирHello",
-        }
-
-        for original, expected in cases.items():
-            with self.subTest(original=original):
-                self.assertEqual(
-                    lyceum.middleware._reverse_russian_words(original),
-                    expected,
-                )
+    @parameterized.expand(
+        [
+            ("simple_words", "Привет мир", "тевирП рим"),
+            ("with_punctuation", "Привет, мир!", "тевирП, рим!"),
+            ("mixed_languages", "Hello мир", "Hello рим"),
+            ("letters_then_digits", "мир123", "мир123"),
+            ("digits_then_letters", "123мир", "123мир"),
+            ("with_dash", "мир-это тест", "рим-отэ тсет"),
+            ("many_punctuation", "мир!!!", "рим!!!"),
+            ("cyrillic_then_latin", "мирHello", "мирHello"),
+        ],
+    )
+    def test_reverse_russian_words_complex_cases(
+        self,
+        _,
+        original,
+        expected,
+    ):
+        self.assertEqual(
+            lyceum.middleware._reverse_russian_words(original),
+            expected,
+        )
 
 
 @override_settings(ALLOW_REVERSE=True)

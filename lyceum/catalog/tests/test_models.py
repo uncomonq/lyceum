@@ -90,13 +90,13 @@ class CategoryNormalizeUniqueTests(TestCase):
 
     @parameterized.expand(
         [
-            ("Новая",),
-            (" новая ",),
-            ("нОвая!",),
-            ("Nовая",),
+            ("same_case", "Новая"),
+            ("spaces", " новая "),
+            ("mixed_case", "нОвая!"),
+            ("latin_char", "Nовая"),
         ],
     )
-    def test_canonical_conflicts(self, name):
+    def test_canonical_conflicts(self, _, name):
         c = Category(name=name, slug="x", is_published=True, weight=1)
         with self.assertRaises(ValidationError):
             c.full_clean()
