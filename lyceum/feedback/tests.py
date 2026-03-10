@@ -2,6 +2,8 @@ __all__ = ()
 from pathlib import Path
 import tempfile
 
+from django.contrib.auth import get_user_model
+from django.core import mail
 from django.test import override_settings, TestCase
 from django.urls import reverse
 
@@ -49,6 +51,33 @@ class FeedbackViewsTests(TestCase):
 
         self.assertRedirects(response, reverse("feedback:feedback"))
 
+    def test_feedback_form_redirect_displays_success_message(self):
+        response = self.client.post(
+            reverse("feedback:feedback"),
+            {
+                "name": "Иван",
+                "mail": "ivan@example.com",
+                "text": "Спасибо за проект!",
+            },
+            follow=True,
+        )
+
+        self.assertContains(response, "Форма успешно отправлена.")
+
+    def test_feedback_form_invalid_data_shows_form_errors(self):
+        response = self.client.post(
+            reverse("feedback:feedback"),
+            {
+                "name": "Иван",
+                "mail": "not-an-email",
+                "text": "Текст",
+            },
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertIn("form", response.context)
+        self.assertTrue(response.context["form"].errors)
+
 
 class FeedbackSendMailTests(TestCase):
     def test_feedback_form_saves_mail_to_send_mail_directory(self):
@@ -69,6 +98,42 @@ class FeedbackSendMailTests(TestCase):
                 )
 
             files = list(Path(temp_dir).iterdir())
+            saved_mail_content = files[0].read_text(encoding="utf-8")
 
         self.assertEqual(len(files), 1)
+        self.assertIn("Текст для письма", saved_mail_content)
         self.assertEqual(Feedback.objects.count(), 1)
+
+    @override_settings(
+        EMAIL_BACKEND="django.core.mail.backends.locmem.EmailBackend",
+    )
+    def test_feedback_form_uses_text_as_email_body(self):
+        self.client.post(
+            reverse("feedback:feedback"),
+            {
+                "name": "Иван",
+                "mail": "ivan@example.com",
+                "text": "Тело письма",
+            },
+        )
+
+        self.assertEqual(len(mail.outbox), 1)
+        self.assertEqual(mail.outbox[0].body, "Тело письма")
+        self.assertEqual(mail.outbox[0].from_email, "noreply@example.com")
+        self.assertEqual(mail.outbox[0].to, ["ivan@example.com"])
+
+
+class FeedbackAdminTests(TestCase):
+    def test_feedback_model_visible_in_admin_index(self):
+        user_model = get_user_model()
+        user = user_model.objects.create_superuser(
+            username="admin",
+            password="pass12345",
+            email="admin@example.com",
+        )
+        self.client.force_login(user)
+
+        response = self.client.get(reverse("admin:index"))
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Feedback")

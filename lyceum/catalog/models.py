@@ -154,6 +154,7 @@ class Item(core.models.CommonModel):
     def main_image_preview(self):
         if not hasattr(self, "main_image"):
             return ""
+
         thumb = sorl.thumbnail.get_thumbnail(
             self.main_image.image,
             "300x300",

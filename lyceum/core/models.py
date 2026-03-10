@@ -58,6 +58,7 @@ class NormalizedNameModel(CommonModel):
         qs = self.__class__.objects.filter(normalized_name=norm)
         if self.pk:
             qs = qs.exclude(pk=self.pk)
+
         if qs.exists():
             raise ValidationError(
                 {"name": "Объект с похожим именем уже существует."},

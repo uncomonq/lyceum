@@ -23,6 +23,7 @@ class ReverseRussianWordsMiddleware:
         response = self.get_response(request)
         if not getattr(settings, "ALLOW_REVERSE", True):
             return response
+
         with ReverseRussianWordsMiddleware._lock:
             ReverseRussianWordsMiddleware.counter = (
                 ReverseRussianWordsMiddleware.counter + 1

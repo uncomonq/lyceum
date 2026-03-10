@@ -24,7 +24,6 @@ def feedback(request):
             message=feedback_text,
             from_email=settings.DJANGO_MAIL,
             recipient_list=[feedback_mail],
-            fail_silently=True,
         )
         messages.success(
             request,

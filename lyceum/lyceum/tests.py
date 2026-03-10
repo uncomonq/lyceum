@@ -68,7 +68,7 @@ class MiddlewareDefaultSettingTests(TestCase):
         lyceum.middleware.ReverseRussianWordsMiddleware.counter = 0
 
     def test_behavior_matches_settings_default(self):
-        for i in range(1, 11):
+        for _ in range(1, 11):
             response = self.client.get("/coffee/")
             content = response.content.decode()
 
