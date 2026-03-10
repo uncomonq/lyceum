@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: lyceum\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-06 23:37+0300\n"
+"POT-Creation-Date: 2026-03-10 20:48+0300\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -10,28 +10,28 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
-#: .\catalog\views.py:23
+#: .\catalog\views.py:16
 msgid "Items catalog"
 msgstr "Каталог товаров"
 
-#: .\catalog\views.py:41 .\templates\includes\header.html:40
-#: .\templates\includes\header.html:42
+#: .\catalog\views.py:34 .\templates\includes\header.html:47
+#: .\templates\includes\header.html:49
 msgid "New items"
 msgstr "Новинки"
 
-#: .\catalog\views.py:47
+#: .\catalog\views.py:40
 msgid "Friday items"
 msgstr "Пятница"
 
-#: .\catalog\views.py:53
+#: .\catalog\views.py:46
 msgid "Unverified items"
 msgstr "Непроверенные"
 
-#: .\lyceum\settings.py:122
+#: .\lyceum\settings.py:128
 msgid "Russian"
 msgstr "Русский"
 
-#: .\lyceum\settings.py:123
+#: .\lyceum\settings.py:129
 msgid "English"
 msgstr "Английский"
 
@@ -52,6 +52,19 @@ msgstr "Скачать главное изображение"
 msgid "Download image"
 msgstr "Скачать изображение"
 
+#: .\templates\feedback\feedback.html:3 .\templates\feedback\feedback.html:6
+#: .\templates\includes\header.html:33 .\templates\includes\header.html:35
+msgid "Feedback"
+msgstr "Обратная связь"
+
+#: .\templates\feedback\feedback.html:25 .\templates\homepage\echo.html:15
+msgid "Submit"
+msgstr "Отправить"
+
+#: .\templates\homepage\echo.html:3 .\templates\homepage\echo.html:6
+msgid "Echo"
+msgstr ""
+
 #: .\templates\homepage\main.html:4 .\templates\includes\header.html:16
 msgid "Home"
 msgstr "Главная"
@@ -68,25 +81,25 @@ msgstr "Логотип сайта"
 msgid "To home"
 msgstr "На главную"
 
-#: .\templates\includes\header.html:33 .\templates\includes\header.html:35
+#: .\templates\includes\header.html:40 .\templates\includes\header.html:42
 msgid "Items list"
 msgstr "Список товаров"
 
-#: .\templates\includes\header.html:47 .\templates\includes\header.html:49
+#: .\templates\includes\header.html:54 .\templates\includes\header.html:56
 #, fuzzy
 #| msgid "Friday items"
 msgid "Friday"
 msgstr "Пятница"
 
-#: .\templates\includes\header.html:54 .\templates\includes\header.html:56
+#: .\templates\includes\header.html:61 .\templates\includes\header.html:63
 msgid "Unverified"
 msgstr "Непроверенные"
 
-#: .\templates\includes\header.html:61
+#: .\templates\includes\header.html:68
 msgid "Admin panel"
 msgstr "Админка"
 
-#: .\templates\includes\header.html:76
+#: .\templates\includes\header.html:83
 msgid "Cat photo"
 msgstr "Фото котика"
 

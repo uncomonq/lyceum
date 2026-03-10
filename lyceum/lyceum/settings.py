@@ -38,7 +38,13 @@ INSTALLED_APPS = [
     "catalog.apps.CatalogConfig",
     "django_cleanup.apps.CleanupConfig",
     "download.apps.DownloadConfig",
+    "feedback.apps.FeedbackConfig",
 ]
+
+DJANGO_MAIL = config("DJANGO_MAIL", default="noreply@example.com")
+
+EMAIL_BACKEND = "django.core.mail.backends.filebased.EmailBackend"
+EMAIL_FILE_PATH = BASE_DIR / "send_mail"
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",

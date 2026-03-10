@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-03 19:18+0300\n"
+"POT-Creation-Date: 2026-03-10 20:49+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,16 +18,33 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: .\lyceum\settings.py:122
+#: .\catalog\views.py:16
+msgid "Items catalog"
+msgstr ""
+
+#: .\catalog\views.py:34 .\templates\includes\header.html:47
+#: .\templates\includes\header.html:49
+msgid "New items"
+msgstr ""
+
+#: .\catalog\views.py:40
+msgid "Friday items"
+msgstr ""
+
+#: .\catalog\views.py:46
+msgid "Unverified items"
+msgstr ""
+
+#: .\lyceum\settings.py:128
 msgid "Russian"
 msgstr ""
 
-#: .\lyceum\settings.py:123
+#: .\lyceum\settings.py:129
 msgid "English"
 msgstr ""
 
 #: .\templates\about\about.html:3 .\templates\about\about.html:6
-#: .\templates\includes\header.html:24 .\templates\includes\header.html:26
+#: .\templates\includes\header.html:27
 msgid "About project"
 msgstr ""
 
@@ -35,12 +52,25 @@ msgstr ""
 msgid "Educational project for Yandex Lyceum Django specialization."
 msgstr ""
 
-#: .\templates\catalog\item.html:15
+#: .\templates\catalog\item.html:14
 msgid "Download main image"
 msgstr ""
 
-#: .\templates\catalog\item.html:35
+#: .\templates\catalog\item.html:33
 msgid "Download image"
+msgstr ""
+
+#: .\templates\feedback\feedback.html:3 .\templates\feedback\feedback.html:6
+#: .\templates\includes\header.html:33 .\templates\includes\header.html:35
+msgid "Feedback"
+msgstr ""
+
+#: .\templates\feedback\feedback.html:25 .\templates\homepage\echo.html:15
+msgid "Submit"
+msgstr ""
+
+#: .\templates\homepage\echo.html:3 .\templates\homepage\echo.html:6
+msgid "Echo"
 msgstr ""
 
 #: .\templates\homepage\main.html:4 .\templates\includes\header.html:16
@@ -59,15 +89,23 @@ msgstr ""
 msgid "To home"
 msgstr ""
 
-#: .\templates\includes\header.html:32 .\templates\includes\header.html:34
+#: .\templates\includes\header.html:40 .\templates\includes\header.html:42
 msgid "Items list"
 msgstr ""
 
-#: .\templates\includes\header.html:39
+#: .\templates\includes\header.html:54 .\templates\includes\header.html:56
+msgid "Friday"
+msgstr ""
+
+#: .\templates\includes\header.html:61 .\templates\includes\header.html:63
+msgid "Unverified"
+msgstr ""
+
+#: .\templates\includes\header.html:68
 msgid "Admin panel"
 msgstr ""
 
-#: .\templates\includes\header.html:54
+#: .\templates\includes\header.html:83
 msgid "Cat photo"
 msgstr ""
 

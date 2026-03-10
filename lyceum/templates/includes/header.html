@@ -29,6 +29,13 @@
         </li>
 
         <li class="nav-item">
+          {% if request.resolver_match.view_name == 'feedback:feedback' %}
+            <span class="nav-link active disabled" aria-current="page">{% trans "Feedback" %}</span>
+          {% else %}
+            <a class="nav-link" href="{% url 'feedback:feedback' %}">{% trans "Feedback" %}</a>
+          {% endif %}
+        </li>
+        <li class="nav-item">
           {% if request.resolver_match.view_name == 'catalog:item_list' %}
             <span class="nav-link active disabled" aria-current="page">{% trans "Items list" %}</span>
           {% else %}

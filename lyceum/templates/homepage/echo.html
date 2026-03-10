@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block title %}Echo{% endblock %}
+
+{% block content %}
+  <h1 class="mb-4">{% trans "Echo" %}</h1>
+  <form method="post" action="{% url 'homepage:echo_submit' %}" class="card p-4 shadow-sm">
+    {% csrf_token %}
+    {% for field in form %}
+      <div class="mb-3">
+        <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+        {{ field }}
+      </div>
+    {% endfor %}
+    <button type="submit" class="btn btn-primary">{% trans "Submit" %}</button>
+  </form>
+{% endblock %}

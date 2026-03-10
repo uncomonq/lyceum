@@ -3,13 +3,24 @@ from django.db import models
 
 class Feedback(models.Model):
     name = models.CharField(
-        "название",
+        "имя",
         max_length=50,
     )
     text = models.TextField(
         "текст",
     )
-    created_at = models.DateTimeField(
-        "дата создания",
+    created_on = models.DateTimeField(
+        "дата и время создания",
         auto_now_add=True,
     )
+    mail = models.EmailField(
+        "почта",
+        max_length=254,
+    )
+
+    class Meta:
+        verbose_name = "обратная связь"
+        verbose_name_plural = "Обратная связь"
+
+    def __str__(self):
+        return self.name
