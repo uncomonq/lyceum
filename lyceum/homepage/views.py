@@ -3,7 +3,7 @@ import http
 
 from django.http import HttpResponse
 import django.shortcuts
-from django.views.decorators.http import require_POST
+from django.views.decorators.http import require_http_methods, require_POST
 
 import catalog.models
 from homepage.forms import EchoForm
@@ -23,6 +23,7 @@ def coffee(request):
     return HttpResponse("Я чайник", status=http.HTTPStatus.IM_A_TEAPOT)
 
 
+@require_http_methods(["GET"])
 def echo(request):
     form = EchoForm()
     return django.shortcuts.render(
