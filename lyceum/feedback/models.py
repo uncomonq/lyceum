@@ -20,8 +20,8 @@ class Feedback(models.Model):
     )
 
     class Meta:
-        verbose_name = "обратная связь"
-        verbose_name_plural = "Обратная связь"
+        verbose_name = "Feedback"
+        verbose_name_plural = "Feedback"
 
     def __str__(self):
         return self.name

@@ -56,8 +56,8 @@
         "name": "Электроника",
         "is_published": true,
         "slug": "electronics",
-        "weight": 100,
-        "normalized_name": "электроника"
+        "normalized_name": "электроника",
+        "weight": 100
     }
 },
 {
@@ -67,8 +67,8 @@
         "name": "Одежда",
         "is_published": true,
         "slug": "clothing",
-        "weight": 100,
-        "normalized_name": "одежда"
+        "normalized_name": "одежда",
+        "weight": 100
     }
 },
 {
@@ -77,8 +77,11 @@
     "fields": {
         "name": "Phone Ultra6000",
         "is_published": true,
+        "created_at": "2026-03-03T15:20:42.071Z",
+        "updated_at": "2026-03-03T15:20:42.076Z",
         "text": "<p>Телефон превосходно тянущий сапера</p>",
         "category": 1,
+        "is_on_main": true,
         "tags": [
             1,
             2
@@ -91,8 +94,11 @@
     "fields": {
         "name": "Пиджак \"90-тые\"",
         "is_published": true,
+        "created_at": "2026-03-03T15:20:42.071Z",
+        "updated_at": "2026-03-03T15:20:42.076Z",
         "text": "<p>Роскошно сшитый пиджак</p>",
         "category": 2,
+        "is_on_main": true,
         "tags": [
             3,
             4
@@ -105,8 +111,11 @@
     "fields": {
         "name": "Электровыжигатель \"Каприз\"",
         "is_published": true,
+        "created_at": "2026-03-03T15:20:42.071Z",
+        "updated_at": "2026-03-03T15:20:42.076Z",
         "text": "<p>Превосходно выжигает на любом материале</p>",
         "category": 1,
+        "is_on_main": true,
         "tags": [
             2,
             5
@@ -119,8 +128,11 @@
     "fields": {
         "name": "Тапочки \"Тапатульки\"",
         "is_published": true,
+        "created_at": "2026-03-03T15:20:42.071Z",
+        "updated_at": "2026-03-03T15:20:42.076Z",
         "text": "<p>Роскошно сидящие тапочки</p>",
         "category": 2,
+        "is_on_main": true,
         "tags": [
             1,
             3,
@@ -134,9 +146,13 @@
     "fields": {
         "name": "Видеокарта RTX6090 TI",
         "is_published": true,
-        "text": "<p>Видеокарта превосходно тянущая касынку</p>",
+        "created_at": "2026-03-03T15:20:42.071Z",
+        "updated_at": "2026-03-06T19:08:04.739Z",
+        "text": "<p>Видеокарта превосходно тянущая касынку.</p>",
         "category": 1,
+        "is_on_main": true,
         "tags": [
+            2,
             3,
             4
         ]
@@ -147,7 +163,7 @@
     "pk": 3,
     "fields": {
         "item": 4,
-        "image": "items/main/slippers.jpeg"
+        "image": "items/main/f7a026d234dc16229b7143e13d0d02c77b7354d5_original.jpeg"
     }
 },
 {
@@ -155,7 +171,7 @@
     "pk": 4,
     "fields": {
         "item": 1,
-        "image": "items/main/phone.jpg"
+        "image": "items/main/15bf3ebce4aac91f3dddcbec8498fb3f569583ba2caaa68b1c9ca53a63d55d04.jpg"
     }
 },
 {
@@ -163,7 +179,7 @@
     "pk": 5,
     "fields": {
         "item": 5,
-        "image": "items/main/GPU.jpeg"
+        "image": "items/main/videokarty-nvidia_Z9KZn4D.jpeg"
     }
 },
 {
@@ -171,7 +187,7 @@
     "pk": 6,
     "fields": {
         "item": 3,
-        "image": "items/main/burner.webp"
+        "image": "items/main/orig.webp"
     }
 },
 {
@@ -179,7 +195,7 @@
     "pk": 7,
     "fields": {
         "item": 2,
-        "image": "items/main/jacket.jpg"
+        "image": "items/main/2101__black__00-750x1163.jpg"
     }
 }
 ]

@@ -3,6 +3,11 @@ from django.contrib import admin
 
 import catalog.models
 
+CATEGORY_NAME_FIELD = catalog.models.Category.name.field.name
+CATEGORY_WEIGHT_FIELD = catalog.models.Category.weight.field.name
+CATEGORY_PUBLISHED_FIELD = catalog.models.Category.is_published.field.name
+CATEGORY_SLUG_FIELD = catalog.models.Category.slug.field.name
+
 
 class MainImageInline(admin.StackedInline):
     model = catalog.models.MainImage
@@ -43,20 +48,18 @@ class ItemAdmin(admin.ModelAdmin):
 @admin.register(catalog.models.Category)
 class CategoryAdmin(admin.ModelAdmin):
     list_display = (
-        catalog.models.Category.name.field.name,
-        catalog.models.Category.weight.field.name,
-        catalog.models.Category.is_published.field.name,
+        CATEGORY_NAME_FIELD,
+        CATEGORY_WEIGHT_FIELD,
+        CATEGORY_PUBLISHED_FIELD,
     )
     list_editable = (
-        catalog.models.Category.weight.field.name,
-        catalog.models.Category.is_published.field.name,
+        CATEGORY_WEIGHT_FIELD,
+        CATEGORY_PUBLISHED_FIELD,
     )
     prepopulated_fields = {
-        catalog.models.Category.slug.field.name: (
-            catalog.models.Category.name.field.name,
-        ),
+        CATEGORY_SLUG_FIELD: (CATEGORY_NAME_FIELD,),
     }
-    search_fields = (catalog.models.Category.name.field.name,)
+    search_fields = (CATEGORY_NAME_FIELD,)
 
 
 @admin.register(catalog.models.Tag)
