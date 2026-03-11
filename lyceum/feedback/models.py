@@ -6,6 +6,8 @@ class Feedback(models.Model):
     name = models.CharField(
         "имя",
         max_length=50,
+        blank=True,
+        default="",
     )
     text = models.TextField(
         "текст",
@@ -24,4 +26,4 @@ class Feedback(models.Model):
         verbose_name_plural = "Feedback"
 
     def __str__(self):
-        return self.name
+        return self.name or self.mail

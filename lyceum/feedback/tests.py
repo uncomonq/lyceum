@@ -51,6 +51,18 @@ class FeedbackViewsTests(TestCase):
 
         self.assertRedirects(response, reverse("feedback:feedback"))
 
+    def test_feedback_form_submits_without_name(self):
+        response = self.client.post(
+            reverse("feedback:feedback"),
+            {
+                "name": "",
+                "mail": "ivan@example.com",
+                "text": "Спасибо за проект!",
+            },
+        )
+
+        self.assertRedirects(response, reverse("feedback:feedback"))
+
     def test_feedback_form_redirect_displays_success_message(self):
         response = self.client.post(
             reverse("feedback:feedback"),
@@ -76,7 +88,11 @@ class FeedbackViewsTests(TestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertIn("form", response.context)
-        self.assertTrue(response.context["form"].errors)
+        self.assertFormError(
+            response.context["form"],
+            "mail",
+            "Введите правильный адрес электронной почты.",
+        )
 
 
 class FeedbackSendMailTests(TestCase):
