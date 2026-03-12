@@ -11,7 +11,7 @@
     {% endfor %}
   {% endif %}
 
-  <form method="post" class="card p-4 shadow-sm">
+  <form method="post" enctype="multipart/form-data" class="card p-4 shadow-sm">
     {% csrf_token %}
     {% for field in form %}
       <div class="mb-3">

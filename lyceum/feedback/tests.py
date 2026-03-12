@@ -4,15 +4,17 @@ import tempfile
 
 from django.contrib.auth import get_user_model
 from django.core import mail
+from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import override_settings, TestCase
 from django.urls import reverse
 
 from feedback.forms import FeedbackForm
-from feedback.models import Feedback
+from feedback.models import Feedback, FeedbackFile, FeedbackPersonData
 
 
 @override_settings(
     EMAIL_BACKEND="django.core.mail.backends.locmem.EmailBackend",
+    ALLOW_REVERSE=False,
 )
 class FeedbackViewsTests(TestCase):
     def test_feedback_page_contains_form_in_context(self):
@@ -62,9 +64,37 @@ class FeedbackViewsTests(TestCase):
         )
 
         feedback_obj = Feedback.objects.get()
-        self.assertEqual(feedback_obj.name, "Иван")
-        self.assertEqual(feedback_obj.mail, "ivan@example.com")
+        self.assertEqual(feedback_obj.person.name, "Иван")
+        self.assertEqual(feedback_obj.person.mail, "ivan@example.com")
         self.assertEqual(feedback_obj.text, "Спасибо за проект!")
+
+    def test_feedback_form_allows_file_upload(self):
+        uploaded_file = SimpleUploadedFile(
+            "test.txt",
+            b"feedback attachment",
+            content_type="text/plain",
+        )
+
+        with tempfile.TemporaryDirectory() as media_dir:
+            with override_settings(MEDIA_ROOT=media_dir):
+                self.client.post(
+                    reverse("feedback:feedback"),
+                    {
+                        "name": "Иван",
+                        "mail": "ivan@example.com",
+                        "text": "Спасибо за проект!",
+                        "files": uploaded_file,
+                    },
+                )
+
+                feedback_obj = Feedback.objects.get()
+                attached_file = FeedbackFile.objects.get(feedback=feedback_obj)
+                self.assertTrue(
+                    attached_file.file.name.startswith(
+                        f"uploads/{feedback_obj.pk}/",
+                    ),
+                )
+                self.assertTrue(Path(attached_file.file.path).exists())
 
     def test_feedback_form_redirect_displays_success_message(self):
         response = self.client.post(
@@ -98,6 +128,7 @@ class FeedbackViewsTests(TestCase):
         )
 
 
+@override_settings(ALLOW_REVERSE=False)
 class FeedbackSendMailTests(TestCase):
     def test_feedback_form_saves_mail_to_send_mail_directory(self):
         file_backend = "django.core.mail.backends.filebased.EmailBackend"
@@ -142,6 +173,7 @@ class FeedbackSendMailTests(TestCase):
         self.assertEqual(mail.outbox[0].to, ["ivan@example.com"])
 
 
+@override_settings(ALLOW_REVERSE=False)
 class FeedbackAdminTests(TestCase):
     def test_feedback_model_visible_in_admin_index(self):
         user_model = get_user_model()
@@ -166,17 +198,19 @@ class FeedbackAdminTests(TestCase):
         )
         self.client.force_login(user)
 
-        feedback_obj = Feedback.objects.create(
+        person = FeedbackPersonData.objects.create(
             name="Иван",
             mail="ivan@example.com",
+        )
+        feedback_obj = Feedback.objects.create(
+            person=person,
             text="Текст",
         )
 
         response = self.client.post(
             reverse("admin:feedback_feedback_change", args=[feedback_obj.pk]),
             {
-                "name": feedback_obj.name,
-                "mail": feedback_obj.mail,
+                "person": feedback_obj.person_id,
                 "text": feedback_obj.text,
                 "status": "in_progress",
                 "_save": "Save",

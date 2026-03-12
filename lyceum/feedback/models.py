@@ -3,15 +3,40 @@ from django.conf import settings
 from django.db import models
 
 
+def feedback_upload_to(instance, filename):
+    return f"uploads/{instance.feedback_id}/{filename}"
+
+
+class FeedbackPersonData(models.Model):
+    name = models.CharField(
+        "имя",
+        max_length=50,
+    )
+    mail = models.EmailField(
+        "почта",
+        max_length=254,
+    )
+
+    class Meta:
+        verbose_name = "данные отправителя"
+        verbose_name_plural = "данные отправителей"
+
+    def __str__(self):
+        return self.name
+
+
 class Feedback(models.Model):
     class Status(models.TextChoices):
         RECEIVED = "received", "получено"
         IN_PROGRESS = "in_progress", "в обработке"
         ANSWERED = "answered", "ответ дан"
 
-    name = models.CharField(
-        "имя",
-        max_length=50,
+    person = models.ForeignKey(
+        FeedbackPersonData,
+        on_delete=models.CASCADE,
+        blank=True,
+        related_name="feedbacks",
+        verbose_name="данные отправителя",
     )
     text = models.TextField(
         "текст",
@@ -19,10 +44,6 @@ class Feedback(models.Model):
     created_on = models.DateTimeField(
         "дата и время создания",
         auto_now_add=True,
-    )
-    mail = models.EmailField(
-        "почта",
-        max_length=254,
     )
     status = models.CharField(
         "статус обработки",
@@ -36,7 +57,24 @@ class Feedback(models.Model):
         verbose_name_plural = "Feedback"
 
     def __str__(self):
-        return self.name
+        return self.person.name
+
+
+class FeedbackFile(models.Model):
+    feedback = models.ForeignKey(
+        Feedback,
+        on_delete=models.CASCADE,
+        related_name="files",
+        verbose_name="обратная связь",
+    )
+    file = models.FileField(
+        "файл",
+        upload_to=feedback_upload_to,
+    )
+
+    class Meta:
+        verbose_name = "файл обратной связи"
+        verbose_name_plural = "файлы обратной связи"
 
 
 class StatusLog(models.Model):

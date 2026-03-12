@@ -4,6 +4,26 @@ from django.contrib import admin
 import feedback.models
 
 
+@admin.register(feedback.models.FeedbackPersonData)
+class FeedbackPersonDataAdmin(admin.ModelAdmin):
+    list_display = (
+        feedback.models.FeedbackPersonData.name.field.name,
+        feedback.models.FeedbackPersonData.mail.field.name,
+    )
+    search_fields = (
+        feedback.models.FeedbackPersonData.name.field.name,
+        feedback.models.FeedbackPersonData.mail.field.name,
+    )
+
+
+@admin.register(feedback.models.FeedbackFile)
+class FeedbackFileAdmin(admin.ModelAdmin):
+    list_display = (
+        feedback.models.FeedbackFile.feedback.field.name,
+        feedback.models.FeedbackFile.file.field.name,
+    )
+
+
 @admin.register(feedback.models.StatusLog)
 class StatusLogAdmin(admin.ModelAdmin):
     list_display = (
@@ -37,15 +57,14 @@ def _get_previous_status(feedback_id):
 @admin.register(feedback.models.Feedback)
 class FeedbackAdmin(admin.ModelAdmin):
     list_display = (
-        feedback.models.Feedback.name.field.name,
-        feedback.models.Feedback.mail.field.name,
+        feedback.models.Feedback.person.field.name,
         feedback.models.Feedback.status.field.name,
         feedback.models.Feedback.created_on.field.name,
     )
     list_editable = (feedback.models.Feedback.status.field.name,)
     search_fields = (
-        feedback.models.Feedback.name.field.name,
-        feedback.models.Feedback.mail.field.name,
+        "person__name",
+        "person__mail",
         feedback.models.Feedback.text.field.name,
     )
 
