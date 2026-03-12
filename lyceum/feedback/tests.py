@@ -51,17 +51,20 @@ class FeedbackViewsTests(TestCase):
 
         self.assertRedirects(response, reverse("feedback:feedback"))
 
-    def test_feedback_form_submits_without_name(self):
-        response = self.client.post(
+    def test_feedback_form_creates_feedback_record_in_db(self):
+        self.client.post(
             reverse("feedback:feedback"),
             {
-                "name": "",
+                "name": "Иван",
                 "mail": "ivan@example.com",
                 "text": "Спасибо за проект!",
             },
         )
 
-        self.assertRedirects(response, reverse("feedback:feedback"))
+        feedback_obj = Feedback.objects.get()
+        self.assertEqual(feedback_obj.name, "Иван")
+        self.assertEqual(feedback_obj.mail, "ivan@example.com")
+        self.assertEqual(feedback_obj.text, "Спасибо за проект!")
 
     def test_feedback_form_redirect_displays_success_message(self):
         response = self.client.post(
@@ -153,3 +156,38 @@ class FeedbackAdminTests(TestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Feedback")
+
+    def test_admin_creates_status_log_on_status_change(self):
+        user_model = get_user_model()
+        user = user_model.objects.create_superuser(
+            username="admin2",
+            password="pass12345",
+            email="admin2@example.com",
+        )
+        self.client.force_login(user)
+
+        feedback_obj = Feedback.objects.create(
+            name="Иван",
+            mail="ivan@example.com",
+            text="Текст",
+        )
+
+        response = self.client.post(
+            reverse("admin:feedback_feedback_change", args=[feedback_obj.pk]),
+            {
+                "name": feedback_obj.name,
+                "mail": feedback_obj.mail,
+                "text": feedback_obj.text,
+                "status": "in_progress",
+                "_save": "Save",
+            },
+            follow=True,
+        )
+
+        self.assertEqual(response.status_code, 200)
+        feedback_obj.refresh_from_db()
+        self.assertEqual(feedback_obj.status, "in_progress")
+        status_log = feedback_obj.status_logs.get()
+        self.assertEqual(status_log.user, user)
+        self.assertEqual(status_log.from_status, "received")
+        self.assertEqual(status_log.to_status, "in_progress")
