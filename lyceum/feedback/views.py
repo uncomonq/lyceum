@@ -6,34 +6,14 @@ from django.contrib import messages
 from django.core.mail import send_mail
 from django.shortcuts import redirect, render
 
-from feedback.forms import (
-    apply_bootstrap_classes,
-    FeedbackAuthorForm,
-    FeedbackFilesForm,
-    FeedbackForm,
-)
+from feedback.forms import FeedbackAuthorForm, FeedbackFilesForm, FeedbackForm
 from feedback.models import FeedbackFile
 
 
-def _build_forms(request):
-    if request.method == "POST":
-        return (
-            apply_bootstrap_classes(FeedbackForm(request.POST)),
-            apply_bootstrap_classes(FeedbackAuthorForm(request.POST)),
-            apply_bootstrap_classes(
-                FeedbackFilesForm(request.POST, request.FILES),
-            ),
-        )
-
-    return (
-        apply_bootstrap_classes(FeedbackForm()),
-        apply_bootstrap_classes(FeedbackAuthorForm()),
-        apply_bootstrap_classes(FeedbackFilesForm()),
-    )
-
-
 def feedback(request):
-    form, author_form, files_form = _build_forms(request)
+    form = FeedbackForm(request.POST or None)
+    author_form = FeedbackAuthorForm(request.POST or None)
+    files_form = FeedbackFilesForm(request.POST or None, request.FILES or None)
 
     if (
         request.method == "POST"

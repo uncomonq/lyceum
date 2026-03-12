@@ -22,8 +22,20 @@ class FeedbackViewsTests(TestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertIn("form", response.context)
+
+    def test_feedback_page_contains_author_form_in_context(self):
+        response = self.client.get(reverse("feedback:feedback"))
+
         self.assertIn("author_form", response.context)
+
+    def test_feedback_page_contains_files_form_in_context(self):
+        response = self.client.get(reverse("feedback:feedback"))
+
         self.assertIn("files_form", response.context)
+
+    def test_feedback_context_forms_have_expected_types(self):
+        response = self.client.get(reverse("feedback:feedback"))
+
         self.assertIsInstance(response.context["form"], FeedbackForm)
         self.assertIsInstance(
             response.context["author_form"],

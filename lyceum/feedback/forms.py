@@ -24,6 +24,15 @@ class MultipleFileField(forms.FileField):
 
 
 class FeedbackForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        for field in self.visible_fields():
+            css_classes = field.field.widget.attrs.get("class", "")
+            field.field.widget.attrs["class"] = (
+                f"{css_classes} form-control".strip()
+            )
+
     class Meta:
         model = Feedback
         exclude = (
@@ -47,6 +56,15 @@ class FeedbackForm(forms.ModelForm):
 
 
 class FeedbackAuthorForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        for field in self.visible_fields():
+            css_classes = field.field.widget.attrs.get("class", "")
+            field.field.widget.attrs["class"] = (
+                f"{css_classes} form-control".strip()
+            )
+
     class Meta:
         model = FeedbackPersonData
         exclude = ("feedback",)
@@ -75,12 +93,11 @@ class FeedbackFilesForm(forms.Form):
         widget=MultipleFileInput(),
     )
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
 
-def apply_bootstrap_classes(form):
-    for field in form.visible_fields():
-        css_classes = field.field.widget.attrs.get("class", "")
-        field.field.widget.attrs["class"] = (
-            f"{css_classes} form-control".strip()
-        )
-
-    return form
+        for field in self.visible_fields():
+            css_classes = field.field.widget.attrs.get("class", "")
+            field.field.widget.attrs["class"] = (
+                f"{css_classes} form-control".strip()
+            )
