@@ -24,53 +24,12 @@ class MultipleFileField(forms.FileField):
 
 
 class FeedbackForm(forms.ModelForm):
-    name = forms.CharField(
-        label="Имя",
-        help_text="Укажите ваше имя.",
-        max_length=50,
-        widget=forms.TextInput(attrs={"placeholder": "Ваше имя"}),
-    )
-    mail = forms.EmailField(
-        label="Почта",
-        help_text="Укажите почту для обратной связи.",
-        widget=forms.EmailInput(
-            attrs={
-                "placeholder": "name@example.com",
-            },
-        ),
-    )
-    files = MultipleFileField(
-        label="Файлы",
-        required=False,
-        widget=MultipleFileInput(),
-    )
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-
-        for field in self.visible_fields():
-            css_classes = field.field.widget.attrs.get("class", "")
-            field.field.widget.attrs["class"] = (
-                f"{css_classes} form-control".strip()
-            )
-
-    def save(self, commit=True):
-        person = FeedbackPersonData.objects.create(
-            name=self.cleaned_data["name"],
-            mail=self.cleaned_data["mail"],
-        )
-
-        feedback_obj = super().save(commit=False)
-        feedback_obj.person = person
-
-        if commit:
-            feedback_obj.save()
-
-        return feedback_obj
-
     class Meta:
         model = Feedback
-        fields = ("text",)
+        exclude = (
+            "created_on",
+            "status",
+        )
         labels = {
             "text": "Текст обращения",
         }
@@ -85,3 +44,43 @@ class FeedbackForm(forms.ModelForm):
                 },
             ),
         }
+
+
+class FeedbackAuthorForm(forms.ModelForm):
+    class Meta:
+        model = FeedbackPersonData
+        exclude = ("feedback",)
+        labels = {
+            "name": "Имя",
+            "mail": "Почта",
+        }
+        help_texts = {
+            "name": "Укажите ваше имя.",
+            "mail": "Укажите почту для обратной связи.",
+        }
+        widgets = {
+            "name": forms.TextInput(attrs={"placeholder": "Ваше имя"}),
+            "mail": forms.EmailInput(
+                attrs={
+                    "placeholder": "name@example.com",
+                },
+            ),
+        }
+
+
+class FeedbackFilesForm(forms.Form):
+    files = MultipleFileField(
+        label="Файлы",
+        required=False,
+        widget=MultipleFileInput(),
+    )
+
+
+def apply_bootstrap_classes(form):
+    for field in form.visible_fields():
+        css_classes = field.field.widget.attrs.get("class", "")
+        field.field.widget.attrs["class"] = (
+            f"{css_classes} form-control".strip()
+        )
+
+    return form

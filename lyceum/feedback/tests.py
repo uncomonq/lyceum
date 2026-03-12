@@ -8,7 +8,7 @@ from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import override_settings, TestCase
 from django.urls import reverse
 
-from feedback.forms import FeedbackForm
+from feedback.forms import FeedbackAuthorForm, FeedbackFilesForm, FeedbackForm
 from feedback.models import Feedback, FeedbackFile, FeedbackPersonData
 
 
@@ -22,18 +22,32 @@ class FeedbackViewsTests(TestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertIn("form", response.context)
+        self.assertIn("author_form", response.context)
+        self.assertIn("files_form", response.context)
         self.assertIsInstance(response.context["form"], FeedbackForm)
+        self.assertIsInstance(
+            response.context["author_form"],
+            FeedbackAuthorForm,
+        )
+        self.assertIsInstance(
+            response.context["files_form"],
+            FeedbackFilesForm,
+        )
 
     def test_feedback_form_has_expected_labels_and_help_texts(self):
         form = FeedbackForm()
+        author_form = FeedbackAuthorForm()
 
-        self.assertEqual(form.fields["name"].label, "Имя")
-        self.assertEqual(form.fields["mail"].label, "Почта")
+        self.assertEqual(author_form.fields["name"].label, "Имя")
+        self.assertEqual(author_form.fields["mail"].label, "Почта")
         self.assertEqual(form.fields["text"].label, "Текст обращения")
 
-        self.assertEqual(form.fields["name"].help_text, "Укажите ваше имя.")
         self.assertEqual(
-            form.fields["mail"].help_text,
+            author_form.fields["name"].help_text,
+            "Укажите ваше имя.",
+        )
+        self.assertEqual(
+            author_form.fields["mail"].help_text,
             "Укажите почту для обратной связи.",
         )
         self.assertEqual(
@@ -120,9 +134,9 @@ class FeedbackViewsTests(TestCase):
         )
 
         self.assertEqual(response.status_code, 200)
-        self.assertIn("form", response.context)
+        self.assertIn("author_form", response.context)
         self.assertFormError(
-            response.context["form"],
+            response.context["author_form"],
             "mail",
             "Введите правильный адрес электронной почты.",
         )
@@ -198,21 +212,32 @@ class FeedbackAdminTests(TestCase):
         )
         self.client.force_login(user)
 
-        person = FeedbackPersonData.objects.create(
+        feedback_obj = Feedback.objects.create(
+            text="Текст",
+        )
+        FeedbackPersonData.objects.create(
+            feedback=feedback_obj,
             name="Иван",
             mail="ivan@example.com",
-        )
-        feedback_obj = Feedback.objects.create(
-            person=person,
-            text="Текст",
         )
 
         response = self.client.post(
             reverse("admin:feedback_feedback_change", args=[feedback_obj.pk]),
             {
-                "person": feedback_obj.person_id,
                 "text": feedback_obj.text,
                 "status": "in_progress",
+                "person-TOTAL_FORMS": "1",
+                "person-INITIAL_FORMS": "1",
+                "person-MIN_NUM_FORMS": "0",
+                "person-MAX_NUM_FORMS": "1",
+                "person-0-id": str(feedback_obj.person.pk),
+                "person-0-feedback": str(feedback_obj.pk),
+                "person-0-name": feedback_obj.person.name,
+                "person-0-mail": feedback_obj.person.mail,
+                "files-TOTAL_FORMS": "0",
+                "files-INITIAL_FORMS": "0",
+                "files-MIN_NUM_FORMS": "0",
+                "files-MAX_NUM_FORMS": "1000",
                 "_save": "Save",
             },
             follow=True,

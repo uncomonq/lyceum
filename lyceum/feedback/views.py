@@ -6,32 +6,60 @@ from django.contrib import messages
 from django.core.mail import send_mail
 from django.shortcuts import redirect, render
 
-from feedback.forms import FeedbackForm
+from feedback.forms import (
+    apply_bootstrap_classes,
+    FeedbackAuthorForm,
+    FeedbackFilesForm,
+    FeedbackForm,
+)
 from feedback.models import FeedbackFile
 
 
-def feedback(request):
-    form = FeedbackForm(request.POST or None, request.FILES or None)
+def _build_forms(request):
+    if request.method == "POST":
+        return (
+            apply_bootstrap_classes(FeedbackForm(request.POST)),
+            apply_bootstrap_classes(FeedbackAuthorForm(request.POST)),
+            apply_bootstrap_classes(
+                FeedbackFilesForm(request.POST, request.FILES),
+            ),
+        )
 
-    if request.method == "POST" and form.is_valid():
+    return (
+        apply_bootstrap_classes(FeedbackForm()),
+        apply_bootstrap_classes(FeedbackAuthorForm()),
+        apply_bootstrap_classes(FeedbackFilesForm()),
+    )
+
+
+def feedback(request):
+    form, author_form, files_form = _build_forms(request)
+
+    if (
+        request.method == "POST"
+        and form.is_valid()
+        and author_form.is_valid()
+        and files_form.is_valid()
+    ):
         feedback_obj = form.save()
 
-        for uploaded_file in form.cleaned_data["files"]:
+        person = author_form.save(commit=False)
+        person.feedback = feedback_obj
+        person.save()
+
+        for uploaded_file in files_form.cleaned_data["files"]:
             FeedbackFile.objects.create(
                 feedback=feedback_obj,
                 file=uploaded_file,
             )
 
-        feedback_mail = feedback_obj.person.mail
-        feedback_text = form.cleaned_data["text"]
-
         Path(settings.EMAIL_FILE_PATH).mkdir(parents=True, exist_ok=True)
 
         send_mail(
             subject="Спасибо за обратную связь",
-            message=feedback_text,
+            message=form.cleaned_data["text"],
             from_email=settings.DJANGO_MAIL,
-            recipient_list=[feedback_mail],
+            recipient_list=[person.mail],
         )
         messages.success(
             request,
@@ -39,4 +67,12 @@ def feedback(request):
         )
         return redirect("feedback:feedback")
 
-    return render(request, "feedback/feedback.html", {"form": form})
+    return render(
+        request,
+        "feedback/feedback.html",
+        {
+            "form": form,
+            "author_form": author_form,
+            "files_form": files_form,
+        },
+    )

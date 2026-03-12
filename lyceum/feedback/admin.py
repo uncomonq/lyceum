@@ -4,24 +4,16 @@ from django.contrib import admin
 import feedback.models
 
 
-@admin.register(feedback.models.FeedbackPersonData)
-class FeedbackPersonDataAdmin(admin.ModelAdmin):
-    list_display = (
-        feedback.models.FeedbackPersonData.name.field.name,
-        feedback.models.FeedbackPersonData.mail.field.name,
-    )
-    search_fields = (
-        feedback.models.FeedbackPersonData.name.field.name,
-        feedback.models.FeedbackPersonData.mail.field.name,
-    )
+class FeedbackPersonDataInline(admin.StackedInline):
+    model = feedback.models.FeedbackPersonData
+    extra = 0
+    max_num = 1
+    can_delete = False
 
 
-@admin.register(feedback.models.FeedbackFile)
-class FeedbackFileAdmin(admin.ModelAdmin):
-    list_display = (
-        feedback.models.FeedbackFile.feedback.field.name,
-        feedback.models.FeedbackFile.file.field.name,
-    )
+class FeedbackFileInline(admin.TabularInline):
+    model = feedback.models.FeedbackFile
+    extra = 0
 
 
 @admin.register(feedback.models.StatusLog)
@@ -57,7 +49,8 @@ def _get_previous_status(feedback_id):
 @admin.register(feedback.models.Feedback)
 class FeedbackAdmin(admin.ModelAdmin):
     list_display = (
-        feedback.models.Feedback.person.field.name,
+        "author_name",
+        "author_mail",
         feedback.models.Feedback.status.field.name,
         feedback.models.Feedback.created_on.field.name,
     )
@@ -67,6 +60,15 @@ class FeedbackAdmin(admin.ModelAdmin):
         "person__mail",
         feedback.models.Feedback.text.field.name,
     )
+    inlines = (FeedbackPersonDataInline, FeedbackFileInline)
+
+    @admin.display(description="Имя")
+    def author_name(self, obj):
+        return obj.person.name
+
+    @admin.display(description="Почта")
+    def author_mail(self, obj):
+        return obj.person.mail
 
     def save_model(self, request, obj, form, change):
         previous_status = None

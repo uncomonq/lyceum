@@ -3,41 +3,12 @@ from django.conf import settings
 from django.db import models
 
 
-def feedback_upload_to(instance, filename):
-    return f"uploads/{instance.feedback_id}/{filename}"
-
-
-class FeedbackPersonData(models.Model):
-    name = models.CharField(
-        "имя",
-        max_length=50,
-    )
-    mail = models.EmailField(
-        "почта",
-        max_length=254,
-    )
-
-    class Meta:
-        verbose_name = "данные отправителя"
-        verbose_name_plural = "данные отправителей"
-
-    def __str__(self):
-        return self.name
-
-
 class Feedback(models.Model):
     class Status(models.TextChoices):
         RECEIVED = "received", "получено"
         IN_PROGRESS = "in_progress", "в обработке"
         ANSWERED = "answered", "ответ дан"
 
-    person = models.ForeignKey(
-        FeedbackPersonData,
-        on_delete=models.CASCADE,
-        blank=True,
-        related_name="feedbacks",
-        verbose_name="данные отправителя",
-    )
     text = models.TextField(
         "текст",
     )
@@ -60,7 +31,34 @@ class Feedback(models.Model):
         return self.person.name
 
 
+class FeedbackPersonData(models.Model):
+    feedback = models.OneToOneField(
+        Feedback,
+        on_delete=models.PROTECT,
+        related_name="person",
+        verbose_name="обратная связь",
+    )
+    name = models.CharField(
+        "имя",
+        max_length=50,
+    )
+    mail = models.EmailField(
+        "почта",
+        max_length=254,
+    )
+
+    class Meta:
+        verbose_name = "данные отправителя"
+        verbose_name_plural = "данные отправителей"
+
+    def __str__(self):
+        return self.name
+
+
 class FeedbackFile(models.Model):
+    def upload_to(self, filename):
+        return f"uploads/{self.feedback_id}/{filename}"
+
     feedback = models.ForeignKey(
         Feedback,
         on_delete=models.CASCADE,
@@ -69,7 +67,7 @@ class FeedbackFile(models.Model):
     )
     file = models.FileField(
         "файл",
-        upload_to=feedback_upload_to,
+        upload_to=upload_to,
     )
 
     class Meta:
