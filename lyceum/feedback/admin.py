@@ -27,8 +27,9 @@ class StatusLogAdmin(admin.ModelAdmin):
 
 
 def _get_previous_status(feedback_id):
-    feedback_obj = feedback.models.Feedback.objects.only(
-        feedback.models.Feedback.status.field.name,
+    feedback_model = feedback.models.Feedback
+    feedback_obj = feedback_model.objects.only(
+        feedback_model.status.field.name,
     ).get(pk=feedback_id)
     return feedback_obj.status
 
