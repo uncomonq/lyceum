@@ -26,6 +26,13 @@ class StatusLogAdmin(admin.ModelAdmin):
     )
 
 
+def _get_previous_status(feedback_id):
+    feedback_obj = feedback.models.Feedback.objects.only(
+        feedback.models.Feedback.status.field.name,
+    ).get(pk=feedback_id)
+    return feedback_obj.status
+
+
 @admin.register(feedback.models.Feedback)
 class FeedbackAdmin(admin.ModelAdmin):
     list_display = (
@@ -44,14 +51,7 @@ class FeedbackAdmin(admin.ModelAdmin):
     def save_model(self, request, obj, form, change):
         previous_status = None
         if change:
-            previous_status = (
-                feedback.models.Feedback.objects.filter(pk=obj.pk)
-                .values_list(
-                    feedback.models.Feedback.status.field.name,
-                    flat=True,
-                )
-                .first()
-            )
+            previous_status = _get_previous_status(obj.pk)
 
         super().save_model(request, obj, form, change)
 
