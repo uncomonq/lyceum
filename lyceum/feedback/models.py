@@ -62,7 +62,7 @@ class StatusLog(models.Model):
         choices=Feedback.Status.choices,
         db_column="from",
     )
-    to_status = models.CharField(
+    to = models.CharField(
         "в статус",
         max_length=20,
         choices=Feedback.Status.choices,
@@ -75,4 +75,4 @@ class StatusLog(models.Model):
         ordering = ("-timestamp",)
 
     def __str__(self):
-        return f"{self.feedback_id}: {self.from_status} -> {self.to_status}"
+        return f"{self.feedback_id}: {self.from_status} -> {self.to}"

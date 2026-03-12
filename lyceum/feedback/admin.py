@@ -10,7 +10,7 @@ class StatusLogAdmin(admin.ModelAdmin):
         feedback.models.StatusLog.feedback.field.name,
         feedback.models.StatusLog.user.field.name,
         feedback.models.StatusLog.from_status.field.name,
-        feedback.models.StatusLog.to_status.field.name,
+        feedback.models.StatusLog.to.field.name,
         feedback.models.StatusLog.timestamp.field.name,
     )
     list_select_related = (
@@ -21,7 +21,7 @@ class StatusLogAdmin(admin.ModelAdmin):
         feedback.models.StatusLog.feedback.field.name,
         feedback.models.StatusLog.user.field.name,
         feedback.models.StatusLog.from_status.field.name,
-        feedback.models.StatusLog.to_status.field.name,
+        feedback.models.StatusLog.to.field.name,
         feedback.models.StatusLog.timestamp.field.name,
     )
 
@@ -55,10 +55,15 @@ class FeedbackAdmin(admin.ModelAdmin):
 
         super().save_model(request, obj, form, change)
 
-        if change and previous_status and previous_status != obj.status:
-            feedback.models.StatusLog.objects.create(
-                user=request.user,
-                feedback=obj,
-                from_status=previous_status,
-                to_status=obj.status,
-            )
+        if not change or not previous_status:
+            return
+
+        if previous_status == obj.status:
+            return
+
+        feedback.models.StatusLog.objects.create(
+            user=request.user,
+            feedback=obj,
+            from_status=previous_status,
+            to=obj.status,
+        )

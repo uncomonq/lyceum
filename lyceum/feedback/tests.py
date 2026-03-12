@@ -190,4 +190,4 @@ class FeedbackAdminTests(TestCase):
         status_log = feedback_obj.status_logs.get()
         self.assertEqual(status_log.user, user)
         self.assertEqual(status_log.from_status, "received")
-        self.assertEqual(status_log.to_status, "in_progress")
+        self.assertEqual(status_log.to, "in_progress")
