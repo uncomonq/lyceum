@@ -41,6 +41,8 @@ class FeedbackPersonData(models.Model):
     name = models.CharField(
         "имя",
         max_length=50,
+        blank=True,
+        default="",
     )
     mail = models.EmailField(
         "почта",
@@ -52,7 +54,7 @@ class FeedbackPersonData(models.Model):
         verbose_name_plural = "данные отправителей"
 
     def __str__(self):
-        return self.name
+        return self.name or self.mail
 
 
 class FeedbackFile(models.Model):

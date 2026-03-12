@@ -59,6 +59,8 @@ class FeedbackAuthorForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
+        self.fields["name"].required = False
+
         for field in self.visible_fields():
             css_classes = field.field.widget.attrs.get("class", "")
             field.field.widget.attrs["class"] = (
