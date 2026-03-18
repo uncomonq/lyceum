@@ -3,6 +3,8 @@ from django.urls import path
 
 import users.views
 
+app_name = "users"
+
 urlpatterns = [
     path(
         "login/",
@@ -63,4 +65,8 @@ urlpatterns = [
         ),
         name="signup",
     ),
+    path("activate/<str:username>/", users.views.activate, name="activate"),
+    path("users/", users.views.UserListView.as_view(template_name="users/user_list.html"), name="user_list"),
+    path("users/<int:pk>/", users.views.UserDetailView.as_view(template_name="users/user_detail.html"), name="user_detail"),
+    path("profile/", users.views.profile, name="profile"),
 ]

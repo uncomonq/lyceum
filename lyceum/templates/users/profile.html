@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h2>Мой профиль</h2>
+
+  {% if profile_obj.image %}
+    <img src="{{ profile_obj.image.url }}" alt="{{ request.user.username }}" width="200" class="mb-3">
+  {% endif %}
+
+  <form method="post" enctype="multipart/form-data" class="mb-3">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-primary">Сохранить</button>
+  </form>
+
+  <a href="{% url 'homepage:coffee' %}" class="btn btn-outline-secondary">Выпить кофе</a>
+{% endblock %}

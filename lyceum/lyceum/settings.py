@@ -152,4 +152,7 @@ STATICFILES_DIRS = [
     BASE_DIR / "static_dev",
 ]
 
+LOGIN_URL = "users:login"
+LOGIN_REDIRECT_URL = "users:profile"
+LOGOUT_REDIRECT_URL = "users:logout"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"

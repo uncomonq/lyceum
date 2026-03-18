@@ -1,3 +1,4 @@
+__all__ = ()
 import django.contrib.auth.models
 from django.db import models
 
@@ -15,7 +16,6 @@ class Profile(models.Model):
         django.contrib.auth.models.User,
         on_delete=models.CASCADE,
         related_name="profile",
-
     )
     birthday = models.DateField(
         null=True,

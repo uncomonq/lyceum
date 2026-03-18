@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h2>Пользователи</h2>
+
+  <div class="row g-3">
+    {% for user_obj in users %}
+      <div class="col-md-4">
+        <div class="card h-100">
+          {% if user_obj.profile.image %}
+            <img src="{{ user_obj.profile.image.url }}" class="card-img-top" alt="{{ user_obj.username }}">
+          {% endif %}
+          <div class="card-body">
+            <h5 class="card-title">
+              <a href="{% url 'users:user_detail' user_obj.pk %}">{{ user_obj.username }}</a>
+            </h5>
+            {% if user_obj.profile.birthday %}
+              <p class="card-text">{{ user_obj.profile.birthday|date:"d.m" }}</p>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    {% empty %}
+      <p>Пользователей пока нет.</p>
+    {% endfor %}
+  </div>
+{% endblock %}

@@ -1,3 +1,4 @@
+__all__ = ()
 from django.contrib import admin
 import django.contrib.auth.admin
 import django.contrib.auth.models

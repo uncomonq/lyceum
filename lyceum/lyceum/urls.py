@@ -1,5 +1,6 @@
 from django.conf import settings
 import django.conf.urls.static
+
 # import django.contrib.auth.urls
 from django.urls import include, path
 

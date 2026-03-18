@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h2>Пользователь {{ user_obj.username }}</h2>
+
+  {% if user_obj.profile.image %}
+    <img src="{{ user_obj.profile.image.url }}" alt="{{ user_obj.username }}" width="200" class="mb-3">
+  {% endif %}
+
+  <ul class="list-group mb-3">
+    <li class="list-group-item"><strong>Почта:</strong> {{ user_obj.email|default:"не указано" }}</li>
+    <li class="list-group-item">
+      <strong>Имя:</strong>
+      {% if user_obj.first_name %}
+        {{ user_obj.first_name }}
+      {% else %}
+        <em>не указано</em>
+      {% endif %}
+    </li>
+    <li class="list-group-item">
+      <strong>Фамилия:</strong>
+      {% if user_obj.last_name %}
+        {{ user_obj.last_name }}
+      {% else %}
+        <em>не указано</em>
+      {% endif %}
+    </li>
+    <li class="list-group-item">
+      <strong>День рождения:</strong>
+      {% if user_obj.profile.birthday %}
+        {{ user_obj.profile.birthday|date:"d.m.Y" }}
+      {% else %}
+        <em>не указано</em>
+      {% endif %}
+    </li>
+    <li class="list-group-item">
+      <strong>Попыток выпить кофе:</strong> {{ user_obj.profile.coffee_count }}
+    </li>
+  </ul>
+{% endblock %}
