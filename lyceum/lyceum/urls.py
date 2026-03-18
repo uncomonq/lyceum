@@ -1,13 +1,14 @@
 from django.conf import settings
 import django.conf.urls.static
-from django.contrib import admin
+# import django.contrib.auth.urls
 from django.urls import include, path
 
 urlpatterns = [
     path("i18n/", include("django.conf.urls.i18n")),
     path("", include("homepage.urls")),
     path("about/", include("about.urls")),
-    path("admin/", admin.site.urls),
+    path("admin/", django.contrib.admin.site.urls),
+    path("auth/", include("users.urls")),
     path("tinymce/", include("tinymce.urls")),
     path("catalog/", include("catalog.urls")),
     path("download/", include("download.urls")),

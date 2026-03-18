@@ -21,6 +21,12 @@ ALLOWED_HOSTS = [
     if host.strip()
 ]
 
+DEFAULT_USER_IS_ACTIVE = config(
+    "DJANGO_DEFAULT_USER_IS_ACTIVE",
+    default=DEBUG,
+    cast=bool,
+)
+
 ALLOW_REVERSE = config("DJANGO_ALLOW_REVERSE", default=True, cast=bool)
 
 INSTALLED_APPS = [
@@ -39,6 +45,7 @@ INSTALLED_APPS = [
     "django_cleanup.apps.CleanupConfig",
     "download.apps.DownloadConfig",
     "feedback.apps.FeedbackConfig",
+    "users.apps.UsersConfig",
 ]
 
 DJANGO_MAIL = config("DJANGO_MAIL", default="noreply@example.com")
