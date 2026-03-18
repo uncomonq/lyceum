@@ -8,7 +8,7 @@ urlpatterns = [
     path("", include("homepage.urls")),
     path("about/", include("about.urls")),
     path("admin/", django.contrib.admin.site.urls),
-    path("auth/", include("users.urls")),
+    path("auth/", include(("users.urls", "users"), namespace="users")),
     path("tinymce/", include("tinymce.urls")),
     path("catalog/", include("catalog.urls")),
     path("download/", include("download.urls")),

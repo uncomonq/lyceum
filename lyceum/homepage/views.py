@@ -7,6 +7,7 @@ from django.views.decorators.http import require_http_methods, require_POST
 
 import catalog.models
 from homepage.forms import EchoForm
+from users.models import Profile
 
 
 def home(request):
@@ -20,7 +21,10 @@ def home(request):
 
 
 def coffee(request):
-    return HttpResponse("Я чайник", status=http.HTTPStatus.IM_A_TEAPOT)
+    if request.user.is_authenticated:
+        profile, _ = Profile.objects.get_or_create(user=request.user)
+        profile.coffee_count += 1
+        profile.save(update_fields=["coffee_count"])
 
 
 @require_http_methods(["GET"])
