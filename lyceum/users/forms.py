@@ -7,6 +7,9 @@ import django.core.exceptions
 from .models import Profile
 
 User = get_user_model()
+INACTIVE_USER_ERROR = (
+    "Аккаунт не активирован. " "Проверьте письмо со ссылкой активации."
+)
 
 
 class SignUpForm(django.contrib.auth.forms.UserCreationForm):
@@ -21,9 +24,6 @@ class SignUpForm(django.contrib.auth.forms.UserCreationForm):
             field.field.widget.attrs["class"] = (
                 f"{css_classes} form-control".strip()
             )
-            field.field.widget.attrs["class"] = (
-                f"{css_classes} form-control".strip()
-            )
 
 
 class UserLoginForm(django.contrib.auth.forms.AuthenticationForm):
@@ -32,10 +32,7 @@ class UserLoginForm(django.contrib.auth.forms.AuthenticationForm):
         password = self.cleaned_data.get("password")
 
         if username and password:
-            try:
-                user = User.objects.get(username=username)
-            except User.DoesNotExist:
-                user = None
+            user = User.objects.filter(username=username).first()
 
             if (
                 user is not None
@@ -43,9 +40,7 @@ class UserLoginForm(django.contrib.auth.forms.AuthenticationForm):
                 and user.check_password(password)
             ):
                 raise django.core.exceptions.ValidationError(
-                    "Аккаунт не активирован. "
-                    "Проверьте письмо со ссылкой активации.",
-                    code="inactive",
+                    INACTIVE_USER_ERROR, code="inactive",
                 )
 
         return super().clean()
@@ -53,9 +48,7 @@ class UserLoginForm(django.contrib.auth.forms.AuthenticationForm):
     def confirm_login_allowed(self, user):
         if not user.is_active:
             raise django.core.exceptions.ValidationError(
-                "Аккаунт не активирован. "
-                "Проверьте письмо со ссылкой активации.",
-                code="inactive",
+                INACTIVE_USER_ERROR, code="inactive",
             )
 
         super().confirm_login_allowed(user)

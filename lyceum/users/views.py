@@ -19,22 +19,6 @@ User = django.contrib.auth.get_user_model()
 _ACTIVATION_TTL = datetime.timedelta(hours=12)
 
 
-class LogoutView(django.contrib.auth.views.LogoutView):
-    http_method_names = ["get", "post", "options"]
-
-    def get(self, request, *args, **kwargs):
-        django.contrib.auth.logout(request)
-        return django.contrib.auth.render(
-            request, self.template_name, self.get_context_data()
-        )
-
-    def post(self, request, *args, **kwargs):
-        django.contrib.auth.logout(request)
-        return django.contrib.auth.render(
-            request, self.template_name, self.get_context_data()
-        )
-
-
 class SignUpView(django.views.generic.CreateView):
     form_class = SignUpForm
     success_url = django.urls.reverse_lazy("users:login")
