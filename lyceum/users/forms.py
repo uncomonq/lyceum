@@ -4,11 +4,11 @@ from django.contrib.auth import get_user_model
 import django.contrib.auth.forms
 import django.core.exceptions
 
-from .models import Profile
+import users.models
 
 User = get_user_model()
 INACTIVE_USER_ERROR = (
-    "Аккаунт не активирован. " "Проверьте письмо со ссылкой активации."
+    "Аккаунт не активирован. Проверьте письмо со ссылкой активации."
 )
 
 
@@ -40,7 +40,8 @@ class UserLoginForm(django.contrib.auth.forms.AuthenticationForm):
                 and user.check_password(password)
             ):
                 raise django.core.exceptions.ValidationError(
-                    INACTIVE_USER_ERROR, code="inactive",
+                    INACTIVE_USER_ERROR,
+                    code="inactive",
                 )
 
         return super().clean()
@@ -48,7 +49,8 @@ class UserLoginForm(django.contrib.auth.forms.AuthenticationForm):
     def confirm_login_allowed(self, user):
         if not user.is_active:
             raise django.core.exceptions.ValidationError(
-                INACTIVE_USER_ERROR, code="inactive",
+                INACTIVE_USER_ERROR,
+                code="inactive",
             )
 
         super().confirm_login_allowed(user)
@@ -60,7 +62,7 @@ class ProfileForm(forms.ModelForm):
     last_name = forms.CharField(required=False, label="Фамилия")
 
     class Meta:
-        model = Profile
+        model = users.models.Profile
         fields = ("email", "first_name", "last_name", "birthday", "image")
         widgets = {
             "birthday": forms.DateInput(attrs={"type": "date"}),

@@ -1,3 +1,4 @@
+__all__ = ()
 import datetime
 
 import django.conf
@@ -11,8 +12,8 @@ import django.urls
 import django.utils
 import django.views.generic
 
-from .forms import ProfileForm, SignUpForm
-from .models import Profile
+import users.forms
+from users.models import Profile
 
 User = django.contrib.auth.get_user_model()
 
@@ -20,17 +21,17 @@ _ACTIVATION_TTL = datetime.timedelta(hours=12)
 
 
 class SignUpView(django.views.generic.CreateView):
-    form_class = SignUpForm
+    form_class = users.forms.SignUpForm
     success_url = django.urls.reverse_lazy("users:login")
     template_name = "users/signup.html"
 
     @django.db.transaction.atomic
     def form_valid(self, form):
         form.instance.is_active = django.conf.settings.DEFAULT_USER_IS_ACTIVE
-        response = super().form_valid(form)
+        self.object = form.save()
         Profile.objects.get_or_create(user=self.object)
         self._send_activation_email(self.object.username)
-        return response
+        return django.shortcuts.redirect(self.get_success_url())
 
     def _send_activation_email(self, username):
         activation_url = self.request.build_absolute_uri(
@@ -80,9 +81,11 @@ class UserDetailView(django.views.generic.DetailView):
 
 @django.contrib.auth.decorators.login_required
 def profile(request):
-    profile_obj, _ = Profile.objects.get_or_create(user=request.user)
+    profile_obj, _ = Profile.objects.get_or_create(
+        user=request.user,
+    )
     if request.method == "POST":
-        form = ProfileForm(
+        form = users.forms.ProfileForm(
             request.POST,
             request.FILES,
             instance=profile_obj,
@@ -93,7 +96,7 @@ def profile(request):
             django.contrib.messages.success(request, "Профиль обновлён")
             return django.shortcuts.redirect("users:profile")
     else:
-        form = ProfileForm(instance=profile_obj, user=request.user)
+        form = users.forms.ProfileForm(instance=profile_obj, user=request.user)
 
     return django.shortcuts.render(
         request,

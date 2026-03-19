@@ -1,5 +1,6 @@
 from django.conf import settings
 import django.conf.urls.static
+import django.contrib.admin
 from django.urls import include, path
 
 urlpatterns = [
@@ -8,6 +9,7 @@ urlpatterns = [
     path("about/", include("about.urls")),
     path("admin/", django.contrib.admin.site.urls),
     path("auth/", include(("users.urls", "users"), namespace="users")),
+    path("accounts/", include("django.contrib.auth.urls")),
     path("tinymce/", include("tinymce.urls")),
     path("catalog/", include("catalog.urls")),
     path("download/", include("download.urls")),
