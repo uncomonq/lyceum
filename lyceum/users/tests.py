@@ -37,7 +37,7 @@ class SignUpAndActivationTests(TestCase):
         self.assertEqual(len(mail.outbox), 1)
         self.assertIn("/auth/activate/new_user/", mail.outbox[0].body)
 
-    @patch("users.views.timezone.now")
+    @patch("django.utils.timezone.now")
     def test_activation_works_in_12_hours(self, mocked_now):
         user = User.objects.create_user(
             username="valid_user",
@@ -57,7 +57,7 @@ class SignUpAndActivationTests(TestCase):
         user.refresh_from_db()
         self.assertTrue(user.is_active)
 
-    @patch("users.views.timezone.now")
+    @patch("django.utils.timezone.now")
     def test_activation_fails_after_12_hours(self, mocked_now):
         user = User.objects.create_user(
             username="expired_user",
@@ -132,14 +132,17 @@ class UserPagesTests(TestCase):
         self.assertEqual(self.user.first_name, "Имя")
         self.assertEqual(self.profile.birthday, datetime.date(2000, 1, 10))
 
-    def test_logout_allows_get_and_finishes_session(self):
+    def test_logout_requires_post_and_finishes_session(self):
         self.client.login(
             username="active_user",
             password="strong_password_123",
         )
-        response = self.client.get(reverse("users:logout"))
-        self.assertEqual(response.status_code, 200)
-        self.assertContains(response, "Вы вышли из аккаунта")
+
+        get_response = self.client.get(reverse("users:logout"))
+        self.assertEqual(get_response.status_code, 405)
+
+        post_response = self.client.post(reverse("users:logout"))
+        self.assertRedirects(post_response, reverse("users:login"))
         self.assertNotIn("_auth_user_id", self.client.session)
 
     def test_inactive_user_sees_activation_error_on_login(self):
