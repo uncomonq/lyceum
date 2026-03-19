@@ -26,6 +26,8 @@ def coffee(request):
         profile.coffee_count += 1
         profile.save(update_fields=["coffee_count"])
 
+    return HttpResponse("Я чайник", status=http.HTTPStatus.IM_A_TEAPOT)
+
 
 @require_http_methods(["GET"])
 def echo(request):

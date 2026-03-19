@@ -1,15 +1,16 @@
 __all__ = ()
 from django import forms
 from django.contrib.auth import get_user_model
-from django.contrib.auth.forms import UserCreationForm
+import django.contrib.auth.forms
+import django.core.exceptions
 
 from .models import Profile
 
 User = get_user_model()
 
 
-class SignUpForm(UserCreationForm):
-    class Meta(UserCreationForm.Meta):
+class SignUpForm(django.contrib.auth.forms.UserCreationForm):
+    class Meta(django.contrib.auth.forms.UserCreationForm.Meta):
         model = User
         fields = ("username",)
 
@@ -23,6 +24,41 @@ class SignUpForm(UserCreationForm):
             field.field.widget.attrs["class"] = (
                 f"{css_classes} form-control".strip()
             )
+
+
+class UserLoginForm(django.contrib.auth.forms.AuthenticationForm):
+    def clean(self):
+        username = self.cleaned_data.get("username")
+        password = self.cleaned_data.get("password")
+
+        if username and password:
+            try:
+                user = User.objects.get(username=username)
+            except User.DoesNotExist:
+                user = None
+
+            if (
+                user is not None
+                and not user.is_active
+                and user.check_password(password)
+            ):
+                raise django.core.exceptions.ValidationError(
+                    "Аккаунт не активирован. "
+                    "Проверьте письмо со ссылкой активации.",
+                    code="inactive",
+                )
+
+        return super().clean()
+
+    def confirm_login_allowed(self, user):
+        if not user.is_active:
+            raise django.core.exceptions.ValidationError(
+                "Аккаунт не активирован. "
+                "Проверьте письмо со ссылкой активации.",
+                code="inactive",
+            )
+
+        super().confirm_login_allowed(user)
 
 
 class ProfileForm(forms.ModelForm):

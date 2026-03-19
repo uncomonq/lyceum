@@ -105,12 +105,14 @@ class UserPagesTests(TestCase):
         response = self.client.get(reverse("users:profile"))
         login_url = reverse("users:login")
         self.assertRedirects(
-            response, f"{login_url}?next={reverse('users:profile')}",
+            response,
+            f"{login_url}?next={reverse('users:profile')}",
         )
 
     def test_profile_update(self):
         self.client.login(
-            username="active_user", password="strong_password_123",
+            username="active_user",
+            password="strong_password_123",
         )
         response = self.client.post(
             reverse("users:profile"),
@@ -130,6 +132,34 @@ class UserPagesTests(TestCase):
         self.assertEqual(self.user.first_name, "Имя")
         self.assertEqual(self.profile.birthday, datetime.date(2000, 1, 10))
 
+    def test_logout_allows_get_and_finishes_session(self):
+        self.client.login(
+            username="active_user",
+            password="strong_password_123",
+        )
+        response = self.client.get(reverse("users:logout"))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Вы вышли из аккаунта")
+        self.assertNotIn("_auth_user_id", self.client.session)
+
+    def test_inactive_user_sees_activation_error_on_login(self):
+        inactive_user = User.objects.create_user(
+            username="inactive_user",
+            password="strong_password_123",
+            is_active=False,
+        )
+
+        response = self.client.post(
+            reverse("users:login"),
+            {
+                "username": inactive_user.username,
+                "password": "strong_password_123",
+            },
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Аккаунт не активирован")
+
 
 class CoffeeCounterTests(TestCase):
     def test_coffee_counter_increments_for_authenticated_user(self):
@@ -141,7 +171,8 @@ class CoffeeCounterTests(TestCase):
         Profile.objects.create(user=user)
 
         self.client.login(
-            username="coffee_user", password="strong_password_123",
+            username="coffee_user",
+            password="strong_password_123",
         )
         self.client.get(reverse("homepage:coffee"))
 
