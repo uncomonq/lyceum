@@ -27,7 +27,7 @@ DEFAULT_USER_IS_ACTIVE = config(
     cast=bool,
 )
 
-ALLOW_REVERSE = config("DJANGO_ALLOW_REVERSE", default=True, cast=bool)
+ALLOW_REVERSE = config("DJANGO_ALLOW_REVERSE", default=False, cast=bool)
 
 INSTALLED_APPS = [
     "django.contrib.admin",

@@ -9,6 +9,7 @@ import users.models
 User = get_user_model()
 INACTIVE_USER_ERROR = (
     "Аккаунт не активирован. Проверьте письмо со ссылкой активации."
+    "тнуаккА ен наворивитка."
 )
 
 
