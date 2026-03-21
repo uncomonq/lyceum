@@ -78,6 +78,7 @@ class SignUpAndActivationTests(TestCase):
         self.assertFalse(user.is_active)
 
 
+@override_settings(ALLOW_REVERSE=False)
 class UserPagesTests(TestCase):
     def setUp(self):
         self.user = User.objects.create_user(
@@ -162,6 +163,78 @@ class UserPagesTests(TestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Аккаунт не активирован")
+
+
+@override_settings(ALLOW_REVERSE=False)
+class LoginByMailTests(TestCase):
+    def setUp(self):
+        self.user = User.objects.create_user(
+            username="mail_user",
+            email="mail_user@example.com",
+            password="strong_password_123",
+            is_active=True,
+        )
+        Profile.objects.create(user=self.user)
+
+    def test_user_can_login_by_mail(self):
+        response = self.client.post(
+            reverse("users:login"),
+            {
+                "username": self.user.email,
+                "password": "strong_password_123",
+            },
+        )
+        self.assertRedirects(response, reverse("users:profile"))
+        self.assertIn("_auth_user_id", self.client.session)
+
+    def test_duplicate_mail_is_not_allowed_on_profile_update(self):
+        second_user = User.objects.create_user(
+            username="second_user",
+            email="second@example.com",
+            password="strong_password_123",
+            is_active=True,
+        )
+        Profile.objects.create(user=second_user)
+
+        self.client.login(
+            username="mail_user",
+            password="strong_password_123",
+        )
+        response = self.client.post(
+            reverse("users:profile"),
+            {
+                "email": "second@example.com",
+                "first_name": "Имя",
+                "last_name": "Фамилия",
+            },
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(
+            response,
+            "Пользователь с такой почтой уже существует.",
+        )
+
+    def test_profile_update_does_not_change_coffee_count(self):
+        self.user.profile.coffee_count = 9
+        self.user.profile.save(update_fields=["coffee_count"])
+        self.client.login(
+            username="mail_user",
+            password="strong_password_123",
+        )
+        response = self.client.post(
+            reverse("users:profile"),
+            {
+                "email": "mail_user@example.com",
+                "first_name": "Имя",
+                "last_name": "Фамилия",
+                "coffee_count": 999,
+            },
+        )
+
+        self.assertRedirects(response, reverse("users:profile"))
+        self.user.profile.refresh_from_db()
+        self.assertEqual(self.user.profile.coffee_count, 9)
 
 
 class CoffeeCounterTests(TestCase):

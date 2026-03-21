@@ -8,37 +8,21 @@
   {% endif %}
 
   <p class="mb-1">
-    <strong>День рождения (birthday):</strong>
+    <strong>День рождения <span class="text-muted">(birthday)</span>:</strong>
     {% if profile_obj.birthday %}
       {{ profile_obj.birthday|date:"d.m.Y" }}
     {% else %}
       <em>не указано</em>
     {% endif %}
   </p>
-  <p class="mb-3"><strong>Попыток выпить кофе (coffee_count):</strong> {{ profile_obj.coffee_count }}</p>
+  <p class="mb-3">
+    <strong>Попыток выпить кофе <span class="text-muted">(coffee_count)</span>:</strong>
+    {{ profile_obj.coffee_count }}
+  </p>
   
   <form method="post" enctype="multipart/form-data" class="mb-3">
     {% csrf_token %}
-    <div class="mb-3">
-      {{ form.email.label_tag }}
-      {{ form.email }}
-    </div>
-    <div class="mb-3">
-      {{ form.first_name.label_tag }}
-      {{ form.first_name }}
-    </div>
-    <div class="mb-3">
-      {{ form.last_name.label_tag }}
-      {{ form.last_name }}
-    </div>
-    <div class="mb-3">
-      {{ form.birthday.label_tag }}
-      {{ form.birthday }}
-    </div>
-    <div class="mb-3">
-      {{ form.image.label_tag }}
-      {{ form.image }}
-    </div>
+    {% include "includes/form_fields.html" with form=form %}
     <button type="submit" class="btn btn-primary">Сохранить</button>
   </form>
 

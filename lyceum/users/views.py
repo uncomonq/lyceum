@@ -13,6 +13,7 @@ import django.utils
 import django.views.generic
 
 import users.forms
+import users.models
 from users.models import Profile
 
 User = django.contrib.auth.get_user_model()
@@ -61,11 +62,11 @@ class UserListView(django.views.generic.ListView):
     context_object_name = "users"
 
     def get_queryset(self):
-        users = list(User.objects.filter(is_active=True))
-        for user in users:
+        user_list = list(users.models.User.objects.active())
+        for user in user_list:
             Profile.objects.get_or_create(user=user)
 
-        return users
+        return user_list
 
 
 class UserDetailView(django.views.generic.DetailView):

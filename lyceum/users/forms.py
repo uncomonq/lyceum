@@ -33,9 +33,17 @@ class UserChangeForm(django.contrib.auth.forms.UserChangeForm):
 
 
 class UserLoginForm(django.contrib.auth.forms.AuthenticationForm):
+    username = forms.CharField(label="Логин или почта")
+
     def clean(self):
         username = self.cleaned_data.get("username")
         password = self.cleaned_data.get("password")
+
+        if username and "@" in username:
+            user_by_mail = users.models.User.objects.by_mail(username)
+            if user_by_mail is not None:
+                username = user_by_mail.username
+                self.cleaned_data["username"] = username
 
         if username and password:
             user = User.objects.filter(username=username).first()
@@ -87,6 +95,25 @@ class ProfileForm(forms.ModelForm):
             field.field.widget.attrs["class"] = (
                 f"{css_classes} form-control".strip()
             )
+
+    def clean_email(self):
+        email = self.cleaned_data["email"]
+        if not email:
+            return email
+
+        exists = (
+            User.objects.filter(email__iexact=email)
+            .exclude(
+                pk=self.user.pk,
+            )
+            .exists()
+        )
+        if exists:
+            raise forms.ValidationError(
+                "Пользователь с такой почтой уже существует.",
+            )
+
+        return email
 
     def save(self, commit=True):
         profile = super().save(commit=False)

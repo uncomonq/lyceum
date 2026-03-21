@@ -3,7 +3,20 @@ import django.contrib.auth.models
 from django.db import models
 
 
+class UserManager(django.contrib.auth.models.UserManager):
+    def get_queryset(self):
+        return super().get_queryset().select_related("profile")
+
+    def active(self):
+        return self.get_queryset().filter(is_active=True)
+
+    def by_mail(self, email):
+        return self.get_queryset().filter(email__iexact=email).first()
+
+
 class User(django.contrib.auth.models.User):
+    objects = UserManager()
+
     class Meta:
         proxy = True
 
