@@ -3,18 +3,12 @@ from django.contrib import admin
 import django.contrib.admin.sites
 import django.contrib.auth
 import django.contrib.auth.admin
-import django.contrib.auth.forms
 import django.contrib.auth.models
 
+import users.forms
 import users.models
 
 User = users.models.User
-
-
-class UserChangeForm(django.contrib.auth.forms.UserChangeForm):
-    class Meta(django.contrib.auth.forms.UserChangeForm.Meta):
-        model = User
-        fields = "__all__"
 
 
 class ProfileInlined(admin.TabularInline):
@@ -25,7 +19,7 @@ class ProfileInlined(admin.TabularInline):
 
 
 class UserAdmin(django.contrib.auth.admin.UserAdmin):
-    form = UserChangeForm
+    form = users.forms.UserChangeForm
     inlines = (ProfileInlined,)
 
 

@@ -26,6 +26,12 @@ class SignUpForm(django.contrib.auth.forms.UserCreationForm):
             )
 
 
+class UserChangeForm(django.contrib.auth.forms.UserChangeForm):
+    class Meta(django.contrib.auth.forms.UserChangeForm.Meta):
+        model = User
+        fields = "__all__"
+
+
 class UserLoginForm(django.contrib.auth.forms.AuthenticationForm):
     def clean(self):
         username = self.cleaned_data.get("username")

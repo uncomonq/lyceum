@@ -24,9 +24,6 @@ class ReverseRussianWordsMiddleware:
         if not getattr(settings, "ALLOW_REVERSE", True):
             return response
 
-        if request.path.startswith("/auth/"):
-            return response
-
         with ReverseRussianWordsMiddleware._lock:
             ReverseRussianWordsMiddleware.counter = (
                 ReverseRussianWordsMiddleware.counter + 1
