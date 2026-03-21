@@ -9,7 +9,6 @@ import users.models
 User = get_user_model()
 INACTIVE_USER_ERROR = (
     "Аккаунт не активирован. Проверьте письмо со ссылкой активации."
-    "тнуаккА ен наворивитка."
 )
 
 
@@ -85,6 +84,7 @@ class ProfileForm(forms.ModelForm):
 
     def save(self, commit=True):
         profile = super().save(commit=False)
+        profile.coffee_count = self.instance.coffee_count
 
         self.user.email = self.cleaned_data["email"]
         self.user.first_name = self.cleaned_data["first_name"]

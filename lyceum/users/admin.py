@@ -4,10 +4,11 @@ import django.contrib.admin.sites
 import django.contrib.auth
 import django.contrib.auth.admin
 import django.contrib.auth.forms
+import django.contrib.auth.models
 
 import users.models
 
-User = django.contrib.auth.get_user_model()
+User = users.models.User
 
 
 class UserChangeForm(django.contrib.auth.forms.UserChangeForm):
@@ -29,7 +30,7 @@ class UserAdmin(django.contrib.auth.admin.UserAdmin):
 
 
 try:
-    admin.site.unregister(User)
+    admin.site.unregister(django.contrib.auth.models.User)
 except django.contrib.admin.sites.NotRegistered:
     pass
 

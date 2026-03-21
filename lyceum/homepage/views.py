@@ -22,9 +22,9 @@ def home(request):
 
 def coffee(request):
     if request.user.is_authenticated:
-        profile, _ = Profile.objects.get_or_create(user=request.user)
-        profile.coffee_count += 1
-        profile.save(update_fields=["coffee_count"])
+        Profile.objects.get_or_create(user=request.user)
+        request.user.profile.coffee_count += 1
+        request.user.profile.save(update_fields=["coffee_count"])
 
     return HttpResponse("Я чайник", status=http.HTTPStatus.IM_A_TEAPOT)
 
