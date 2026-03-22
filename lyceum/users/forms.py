@@ -85,6 +85,7 @@ class ProfileForm(forms.ModelForm):
         fields = ("birthday", "image")
         labels = {
             "birthday": "Birthday",
+            "coffee_count": "Coffee count",
         }
         widgets = {
             "birthday": forms.DateInput(attrs={"type": "date"}),
@@ -98,6 +99,16 @@ class ProfileForm(forms.ModelForm):
         self.fields["first_name"].initial = self.user.first_name
         self.fields["last_name"].initial = self.user.last_name
         self.fields["coffee_count"].initial = self.instance.coffee_count
+        self.order_fields(
+            (
+                "email",
+                "first_name",
+                "last_name",
+                "birthday",
+                "image",
+                "coffee_count",
+            ),
+        )
 
         for field in self.visible_fields():
             css_classes = field.field.widget.attrs.get("class", "")
