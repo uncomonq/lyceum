@@ -8,7 +8,7 @@
   {% endif %}
 
   <p class="mb-1">
-    <strong>Birthday:</strong>
+    <strong>Birthday (<span class="text-muted">Birthday, birthday</span>):</strong>
     {% if profile_obj.birthday %}
       {{ profile_obj.birthday|date:"d.m.Y" }}
     {% else %}
@@ -16,7 +16,7 @@
     {% endif %}
   </p>
   <p class="mb-3">
-    <strong>Coffee count:</strong>
+    <strong>Coffee count (<span class="text-muted">Coffee count, coffee_count</span>):</strong>
     {{ profile_obj.coffee_count }}
   </p>
 
@@ -25,4 +25,6 @@
     {% include "includes/form_fields.html" with form=form %}
     <button type="submit" class="btn btn-primary">Сохранить</button>
   </form>
+
+  <a href="{% url 'homepage:coffee' %}" class="btn btn-outline-secondary">Выпить кофе</a>
 {% endblock %}
