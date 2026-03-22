@@ -26,7 +26,7 @@
       {% endif %}
     </li>
     <li class="list-group-item">
-      <strong>День рождения:</strong>
+      <strong>Birthday</strong> <small class="text-muted">(birthday)</small>
       {% if user_obj.profile.birthday %}
         {{ user_obj.profile.birthday|date:"d.m.Y" }}
       {% else %}
@@ -34,7 +34,7 @@
       {% endif %}
     </li>
     <li class="list-group-item">
-      <strong>Попыток выпить кофе:</strong> {{ user_obj.profile.coffee_count }}
+      <strong>Coffee count</strong> <small class="text-muted">(coffee_count)</small> {{ user_obj.profile.coffee_count }}
     </li>
   </ul>
 {% endblock %}
