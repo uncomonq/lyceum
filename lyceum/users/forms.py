@@ -74,10 +74,18 @@ class ProfileForm(forms.ModelForm):
     email = forms.EmailField(required=False, label="Почта")
     first_name = forms.CharField(required=False, label="Имя")
     last_name = forms.CharField(required=False, label="Фамилия")
+    coffee_count = forms.IntegerField(
+        required=False,
+        disabled=True,
+        label="Coffee count",
+    )
 
     class Meta:
         model = users.models.Profile
-        fields = ("email", "first_name", "last_name", "birthday", "image")
+        fields = ("birthday", "image")
+        labels = {
+            "birthday": "Birthday",
+        }
         widgets = {
             "birthday": forms.DateInput(attrs={"type": "date"}),
         }
@@ -89,6 +97,7 @@ class ProfileForm(forms.ModelForm):
         self.fields["email"].initial = self.user.email
         self.fields["first_name"].initial = self.user.first_name
         self.fields["last_name"].initial = self.user.last_name
+        self.fields["coffee_count"].initial = self.instance.coffee_count
 
         for field in self.visible_fields():
             css_classes = field.field.widget.attrs.get("class", "")

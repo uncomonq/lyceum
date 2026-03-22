@@ -8,7 +8,7 @@
   {% endif %}
 
   <p class="mb-1">
-    <strong>Birthday (<span class="text-muted">Birthday, birthday</span>):</strong>
+    <strong>Birthday (<span class="text-muted">birthday</span>):</strong>
     {% if profile_obj.birthday %}
       {{ profile_obj.birthday|date:"d.m.Y" }}
     {% else %}
@@ -16,7 +16,7 @@
     {% endif %}
   </p>
   <p class="mb-3">
-    <strong>Coffee count (<span class="text-muted">Coffee count, coffee_count</span>):</strong>
+    <strong>Coffee count (<span class="text-muted">coffee_count</span>):</strong>
     {{ profile_obj.coffee_count }}
   </p>
 
