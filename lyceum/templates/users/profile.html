@@ -1,3 +1,5 @@
+{% extends "base.html" %}
+
 {% block content %}
   <h2>Мой профиль</h2>
 
@@ -5,9 +7,22 @@
     <img src="{{ profile_obj.image.url }}" alt="{{ request.user.username }}" width="200" class="mb-3">
   {% endif %}
 
+  <div class="mb-3">
+    <p class="mb-1"><strong>День рождения:</strong>
+      {% if profile_obj.birthday %}
+        {{ profile_obj.birthday|date:"d.m.Y" }}
+      {% else %}
+        <em>не указано</em>
+      {% endif %}
+    </p>
+    <p class="mb-0"><strong>Попыток выпить кофе:</strong> {{ profile_obj.coffee_count }}</p>
+  </div>
+
   <form method="post" enctype="multipart/form-data" class="mb-3">
     {% csrf_token %}
     {% include "includes/form_fields.html" with form=form %}
     <button type="submit" class="btn btn-primary">Сохранить</button>
   </form>
+
+  <a class="btn btn-outline-secondary" href="{% url 'homepage:coffee' %}">Выпить кофе</a>
 {% endblock %}
