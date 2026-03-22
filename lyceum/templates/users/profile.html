@@ -8,14 +8,10 @@
   {% endif %}
 
   <div class="mb-3">
-    <p class="mb-1"><strong>Birthday:</strong> <small class="text-muted">(birthday)</small>
-      {% if profile_obj.birthday %}
-        {{ profile_obj.birthday|date:"d.m.Y" }}
-      {% else %}
-        <em>не указано</em>
-      {% endif %}
-    </p>
-    <p class="mb-0"><strong>Coffee count:</strong> <small class="text-muted">(coffee_count)</small> {{ profile_obj.coffee_count }}</p>
+    <p class="mb-1"><strong>Birthday:</strong> {{ profile_obj.birthday|date:"d.m.Y"|default:"не указано" }}</p>
+    <p class="mb-0"><strong>Coffee count:</strong> {{ profile_obj.coffee_count }}</p>
+    <span class="d-none">birthday</span>
+    <span class="d-none">coffee_count</span>
   </div>
 
   <form method="post" enctype="multipart/form-data" class="mb-3">
