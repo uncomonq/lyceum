@@ -70,51 +70,25 @@ class UserLoginForm(django.contrib.auth.forms.AuthenticationForm):
         super().confirm_login_allowed(user)
 
 
-class ProfileForm(forms.ModelForm):
-    email = forms.EmailField(required=False, label="Почта")
-    first_name = forms.CharField(required=False, label="Имя")
-    last_name = forms.CharField(required=False, label="Фамилия")
-    coffee_count = forms.IntegerField(
-        required=False,
-        disabled=True,
-        label="Coffee count",
-    )
-
-    class Meta:
-        model = users.models.Profile
-        fields = ("birthday", "image")
-        labels = {
-            "birthday": "Birthday",
-            "coffee_count": "Coffee count",
-        }
-        widgets = {
-            "birthday": forms.DateInput(attrs={"type": "date"}),
-        }
-
+class BootstrapFormMixin:
     def __init__(self, *args, **kwargs):
-        self.user = kwargs.pop("user")
         super().__init__(*args, **kwargs)
-
-        self.fields["email"].initial = self.user.email
-        self.fields["first_name"].initial = self.user.first_name
-        self.fields["last_name"].initial = self.user.last_name
-        self.fields["coffee_count"].initial = self.instance.coffee_count
-        self.order_fields(
-            (
-                "email",
-                "first_name",
-                "last_name",
-                "birthday",
-                "image",
-                "coffee_count",
-            ),
-        )
-
         for field in self.visible_fields():
             css_classes = field.field.widget.attrs.get("class", "")
             field.field.widget.attrs["class"] = (
                 f"{css_classes} form-control".strip()
             )
+
+
+class UserProfileForm(BootstrapFormMixin, forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ("email", "first_name", "last_name")
+        labels = {
+            "email": "Почта",
+            "first_name": "Имя",
+            "last_name": "Фамилия",
+        }
 
     def clean_email(self):
         email = self.cleaned_data["email"]
@@ -123,9 +97,7 @@ class ProfileForm(forms.ModelForm):
 
         exists = (
             User.objects.filter(email__iexact=email)
-            .exclude(
-                pk=self.user.pk,
-            )
+            .exclude(pk=self.instance.pk)
             .exists()
         )
         if exists:
@@ -135,17 +107,33 @@ class ProfileForm(forms.ModelForm):
 
         return email
 
+
+class ProfileForm(BootstrapFormMixin, forms.ModelForm):
+    coffee_count = forms.IntegerField(
+        required=False,
+        disabled=True,
+        label="Coffee count",
+    )
+
+    class Meta:
+        model = users.models.Profile
+        fields = ("birthday", "image", "coffee_count")
+        labels = {
+            "birthday": "Birthday",
+            "coffee_count": "Coffee count",
+        }
+        widgets = {
+            "birthday": forms.DateInput(attrs={"type": "date"}),
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["coffee_count"].initial = self.instance.coffee_count
+
     def save(self, commit=True):
         profile = super().save(commit=False)
         profile.coffee_count = self.instance.coffee_count
-
-        self.user.email = self.cleaned_data["email"]
-        self.user.first_name = self.cleaned_data["first_name"]
-        self.user.last_name = self.cleaned_data["last_name"]
-
         if commit:
-            self.user.save(update_fields=["email", "first_name", "last_name"])
-            profile.user = self.user
             profile.save()
 
         return profile

@@ -7,16 +7,20 @@
     <img src="{{ profile_obj.image.url }}" alt="{{ request.user.username }}" width="200" class="mb-3">
   {% endif %}
 
-  <div class="mb-3">
-    <p class="mb-1"><strong>Birthday:</strong> {{ profile_obj.birthday|date:"d.m.Y"|default:"не указано" }}</p>
-    <p class="mb-0"><strong>Coffee count:</strong> {{ profile_obj.coffee_count }}</p>
-    <span class="d-none">birthday</span>
-    <span class="d-none">coffee_count</span>
-  </div>
+  {% if messages %}
+    <div class="text-bg-success p-3 mb-3">
+      <ul class="messages mb-0">
+        {% for message in messages %}
+          <li {% if message.tags %}class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+        {% endfor %}
+      </ul>
+    </div>
+  {% endif %}
 
   <form method="post" enctype="multipart/form-data" class="mb-3">
     {% csrf_token %}
-    {% include "includes/form_fields.html" with form=form %}
+    {% include "includes/form_fields.html" with form=user_form %}
+    {% include "includes/form_fields.html" with form=profile_form %}
     <button type="submit" class="btn btn-primary">Сохранить</button>
   </form>
 

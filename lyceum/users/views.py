@@ -86,24 +86,30 @@ def profile(request):
         user=request.user,
     )
     if request.method == "POST":
-        form = users.forms.ProfileForm(
+        user_form = users.forms.UserProfileForm(
+            request.POST,
+            instance=request.user,
+        )
+        profile_form = users.forms.ProfileForm(
             request.POST,
             request.FILES,
             instance=profile_obj,
-            user=request.user,
         )
-        if form.is_valid():
-            form.save()
+        if user_form.is_valid() and profile_form.is_valid():
+            user_form.save()
+            profile_form.save()
             django.contrib.messages.success(request, "Профиль обновлён")
             return django.shortcuts.redirect("users:profile")
     else:
-        form = users.forms.ProfileForm(instance=profile_obj, user=request.user)
+        user_form = users.forms.UserProfileForm(instance=request.user)
+        profile_form = users.forms.ProfileForm(instance=profile_obj)
 
     return django.shortcuts.render(
         request,
         "users/profile.html",
         {
-            "form": form,
+            "user_form": user_form,
+            "profile_form": profile_form,
             "profile_obj": profile_obj,
         },
     )
