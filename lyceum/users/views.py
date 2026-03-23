@@ -94,6 +94,7 @@ def profile(request):
             request.POST,
             request.FILES,
             instance=profile_obj,
+            user=request.user,
         )
         if user_form.is_valid() and profile_form.is_valid():
             user_form.save()
@@ -102,7 +103,10 @@ def profile(request):
             return django.shortcuts.redirect("users:profile")
     else:
         user_form = users.forms.UserProfileForm(instance=request.user)
-        profile_form = users.forms.ProfileForm(instance=profile_obj)
+        profile_form = users.forms.ProfileForm(
+            instance=profile_obj,
+            user=request.user,
+        )
 
     return django.shortcuts.render(
         request,

@@ -108,7 +108,7 @@ class UserProfileForm(BootstrapFormMixin, forms.ModelForm):
         return email
 
 
-class UpdateProfileForm(forms.ModelForm):
+class ProfileForm(forms.ModelForm):
     email = forms.EmailField(required=False, label="Почта")
     first_name = forms.CharField(required=False, label="Имя")
     last_name = forms.CharField(required=False, label="Фамилия")
