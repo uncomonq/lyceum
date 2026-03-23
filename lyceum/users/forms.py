@@ -108,16 +108,14 @@ class UserProfileForm(BootstrapFormMixin, forms.ModelForm):
         return email
 
 
-class ProfileForm(BootstrapFormMixin, forms.ModelForm):
-    coffee_count = forms.IntegerField(
-        required=False,
-        disabled=True,
-        label="Coffee count",
-    )
+class UpdateProfileForm(forms.ModelForm):
+    email = forms.EmailField(required=False, label="Почта")
+    first_name = forms.CharField(required=False, label="Имя")
+    last_name = forms.CharField(required=False, label="Фамилия")
 
     class Meta:
         model = users.models.Profile
-        fields = ("birthday", "image", "coffee_count")
+        fields = ("birthday", "coffee_count", "image")
         labels = {
             "birthday": "Birthday",
             "coffee_count": "Coffee count",
@@ -127,13 +125,60 @@ class ProfileForm(BootstrapFormMixin, forms.ModelForm):
         }
 
     def __init__(self, *args, **kwargs):
+        self.user = kwargs.pop("user")
         super().__init__(*args, **kwargs)
-        self.fields["coffee_count"].initial = self.instance.coffee_count
+
+        self.fields["email"].initial = self.user.email
+        self.fields["first_name"].initial = self.user.first_name
+        self.fields["last_name"].initial = self.user.last_name
+        self.fields["coffee_count"].disabled = True
+        self.order_fields(
+            (
+                "email",
+                "first_name",
+                "last_name",
+                "birthday",
+                "coffee_count",
+                "image",
+            ),
+        )
+
+        for field in self.visible_fields():
+            css_classes = field.field.widget.attrs.get("class", "")
+            field.field.widget.attrs["class"] = (
+                f"{css_classes} form-control".strip()
+            )
+
+    def clean_email(self):
+        email = self.cleaned_data["email"]
+        if not email:
+            return email
+
+        exists = (
+            User.objects.filter(email__iexact=email)
+            .exclude(
+                pk=self.user.pk,
+            )
+            .exists()
+        )
+        if exists:
+            raise forms.ValidationError(
+                "Пользователь с такой почтой уже существует.",
+            )
+
+        return email
 
     def save(self, commit=True):
         profile = super().save(commit=False)
         profile.coffee_count = self.instance.coffee_count
+
+        self.user.email = self.cleaned_data["email"]
+        self.user.first_name = self.cleaned_data["first_name"]
+        self.user.last_name = self.cleaned_data["last_name"]
+
         if commit:
+            self.user.save(update_fields=["email", "first_name", "last_name"])
+            profile.user = self.user
             profile.save()
 
         return profile
