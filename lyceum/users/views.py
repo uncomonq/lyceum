@@ -1,138 +1,97 @@
 __all__ = ()
-import datetime
 
 import django.conf
 import django.contrib
 import django.contrib.auth
 import django.contrib.auth.decorators
 import django.core.mail
-import django.db
 import django.shortcuts
 import django.urls
-import django.utils
-import django.views.generic
 
 import users.forms
 import users.models
-from users.models import Profile
-
-User = django.contrib.auth.get_user_model()
-
-_ACTIVATION_TTL = datetime.timedelta(hours=12)
 
 
-class SignUpView(django.views.generic.CreateView):
-    form_class = users.forms.SignUpForm
-    success_url = django.urls.reverse_lazy("users:login")
-    template_name = "users/signup.html"
+def signup(request):
+    form = users.forms.UserCreationForm(request.POST or None)
+    context = {"form": form}
 
-    @django.db.transaction.atomic
-    def form_valid(self, form):
-        form.instance.is_active = django.conf.settings.DEFAULT_USER_IS_ACTIVE
-        self.object = form.save()
-        Profile.objects.get_or_create(user=self.object)
-        self._send_activation_email(self.object.username)
-        return django.shortcuts.redirect(self.get_success_url())
+    if request.method == "POST" and form.is_valid():
+        user = form.save()
+        user.is_active = django.conf.settings.DEFAULT_USER_IS_ACTIVE
+        user = form.save()
+        profile = users.models.Profile.objects.create(user=user)
+        profile.save()
 
-    def _send_activation_email(self, username):
-        activation_url = self.request.build_absolute_uri(
-            django.urls.reverse(
-                "users:activate",
-                kwargs={"username": username},
-            ),
+        activate_url = django.urls.reverse(
+            "users:activate",
+            kwards={"pk": user.id},
         )
         django.core.mail.send_mail(
-            subject="Активация аккаунта",
-            message=(
-                "Для активации аккаунта перейдите по ссылке:\n"
-                f"{activation_url}\n"
-                "Ссылка действует 12 часов."
-            ),
-            from_email=django.conf.settings.DJANGO_MAIL,
-            recipient_list=[
-                self.object.email or django.conf.settings.DJANGO_MAIL,
-            ],
-            fail_silently=True,
+            f"Здравствуй {user.username}",
+            "Перейди по ссылке для активации аккаунта " f"{activate_url}",
+            django.conf.settings.FEEDBACK_SENDER,
+            [user.email],
+            fail_silently=False,
         )
 
+        return django.shortcuts.redirect(django.urls.reverse("homepage:"))
 
-class UserListView(django.views.generic.ListView):
-    model = User
-    template_name = "users/user_list.html"
-    context_object_name = "users"
-
-    def get_queryset(self):
-        user_list = list(users.models.User.objects.active())
-        for user in user_list:
-            Profile.objects.get_or_create(user=user)
-
-        return user_list
+    return django.shortcuts.render(request, "users/signup.html", context)
 
 
-class UserDetailView(django.views.generic.DetailView):
-    model = User
-    template_name = "users/user_detail.html"
-    context_object_name = "user_obj"
+def activate(request, pk):
+    user = users.models.User.objects.get(pk=pk)
+    user.is_active = True
+    user.save()
+    return django.shortcuts.redirect(django.urls.reverse("homepage:"))
 
-    def get_object(self, queryset=None):
-        user = super().get_object(queryset)
-        Profile.objects.get_or_create(user=user)
-        return user
+
+def reactivate(request, pk):
+    user = users.models.User.objects.get(pk=pk)
+    user.is_active = True
+    user.save()
+
+
+def user_list(request):
+    context = {"users": users.models.User.objects.active()}
+
+    return django.shortcuts.render(request, "users/user_list.html", context)
+
+
+def user_detail(request, pk):
+    search_user = django.shortcuts.get_object_or_404(
+        users.models.User.objects.active(),
+        pk=pk,
+    )
+    context = {"user": search_user}
+
+    return django.shortcuts.render(request, "users/user_detail.html", context)
 
 
 @django.contrib.auth.decorators.login_required
 def profile(request):
-    profile_obj, _ = Profile.objects.get_or_create(
-        user=request.user,
+    user_form = users.forms.UserChangeForm(
+        request.POST or None,
+        instance=request.user,
     )
-    if request.method == "POST":
-        user_form = users.forms.UserProfileForm(
-            request.POST,
-            instance=request.user,
-        )
-        profile_form = users.forms.ProfileForm(
-            request.POST,
-            request.FILES,
-            instance=profile_obj,
-            user=request.user,
-        )
-        if user_form.is_valid() and profile_form.is_valid():
-            user_form.save()
-            profile_form.save()
-            django.contrib.messages.success(request, "Профиль обновлён")
-            return django.shortcuts.redirect("users:profile")
-    else:
-        user_form = users.forms.UserProfileForm(instance=request.user)
-        profile_form = users.forms.ProfileForm(
-            instance=profile_obj,
-            user=request.user,
-        )
-
-    return django.shortcuts.render(
-        request,
-        "users/profile.html",
-        {
-            "user_form": user_form,
-            "profile_form": profile_form,
-            "profile_obj": profile_obj,
-        },
+    profile_form = users.forms.UpdateProfileForm(
+        request.POST or None,
+        instance=request.user.profile,
     )
+    context = {
+        "user_form": user_form,
+        "profile_form": profile_form,
+    }
 
+    if (
+        request.method == "POST"
+        and user_form.is_valid()
+        and profile_form.is_valid()
+    ):
+        user_form.save()
+        profile_form.save()
+        django.contrib.messages.success(request, "Сохранено")
+        return django.shortcuts.redirect(django.urls.redirect("users:profile"))
 
-def activate(request, username):
-    user = django.shortcuts.get_object_or_404(User, username=username)
-    if user.is_active:
-        django.contrib.messages.info(request, "Аккаунт уже активирован")
-        return django.shortcuts.redirect("users:login")
-
-    if django.utils.timezone.now() - user.date_joined > _ACTIVATION_TTL:
-        django.contrib.messages.error(
-            request,
-            "Срок действия ссылки активации истёк",
-        )
-        return django.shortcuts.redirect("users:login")
-
-    user.is_active = True
-    user.save(update_fields=["is_active"])
-    django.contrib.messages.success(request, "Аккаунт успешно активирован")
-    return django.shortcuts.redirect("users:login")
+    return django.shortcuts.render(request, "users/profile.html", context)

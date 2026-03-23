@@ -1,16 +1,13 @@
 __all__ = ()
-from users.models import User
+import users.models
 
 
-class ProxyUserMiddleware:
+class LoadUserMiddleware:
     def __init__(self, get_response):
         self.get_response = get_response
 
     def __call__(self, request):
-        if request.user.is_authenticated and not isinstance(
-            request.user,
-            User,
-        ):
-            request.user = User.objects.get(pk=request.user.pk)
+        if request.user and request.user.id:
+            request.user = users.models.User.objects.get(pk=request.user.id)
 
         return self.get_response(request)
