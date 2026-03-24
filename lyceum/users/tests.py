@@ -83,6 +83,7 @@ class UserPagesTests(TestCase):
     def setUp(self):
         self.user = User.objects.create_user(
             username="active_user",
+            email="active_user@example.com",
             password="strong_password_123",
             is_active=True,
             first_name="",
@@ -96,6 +97,7 @@ class UserPagesTests(TestCase):
     def test_user_list_has_only_active_users(self):
         inactive_user = User.objects.create_user(
             username="inactive_user_on_list",
+            email="inactive_user_on_list@example.com",
             password="strong_password_123",
             is_active=False,
         )
@@ -172,6 +174,7 @@ class UserPagesTests(TestCase):
     def test_inactive_user_sees_activation_error_on_login(self):
         inactive_user = User.objects.create_user(
             username="inactive_user",
+            email="inactive_user@example.com",
             password="strong_password_123",
             is_active=False,
         )
