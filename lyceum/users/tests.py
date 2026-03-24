@@ -7,7 +7,7 @@ from django.core import mail
 from django.test import override_settings, TestCase
 from django.urls import reverse
 
-from users.models import Profile
+import users.models
 
 User = get_user_model()
 
@@ -32,7 +32,9 @@ class SignUpAndActivationTests(TestCase):
         user = User.objects.get(username="new_user")
         self.assertFalse(user.is_active)
         self.assertFalse(user.is_staff)
-        self.assertTrue(Profile.objects.filter(user=user).exists())
+        self.assertTrue(
+            users.models.Profile.objects.filter(user=user).exists(),
+        )
 
         self.assertEqual(len(mail.outbox), 1)
         self.assertIn("/auth/activate/new_user/", mail.outbox[0].body)
@@ -89,7 +91,7 @@ class UserPagesTests(TestCase):
             first_name="",
             last_name="",
         )
-        self.profile = Profile.objects.create(
+        self.profile = users.models.Profile.objects.create(
             user=self.user,
             birthday=datetime.date(2000, 1, 10),
         )
@@ -101,7 +103,7 @@ class UserPagesTests(TestCase):
             password="strong_password_123",
             is_active=False,
         )
-        Profile.objects.create(user=inactive_user)
+        users.models.Profile.objects.create(user=inactive_user)
 
         response = self.client.get(reverse("users:user_list"))
         self.assertEqual(response.status_code, 200)
@@ -200,7 +202,7 @@ class LoginByMailTests(TestCase):
             password="strong_password_123",
             is_active=True,
         )
-        Profile.objects.create(user=self.user)
+        users.models.Profile.objects.create(user=self.user)
 
     def test_user_can_login_by_mail(self):
         response = self.client.post(
@@ -213,6 +215,16 @@ class LoginByMailTests(TestCase):
         self.assertRedirects(response, reverse("users:profile"))
         self.assertIn("_auth_user_id", self.client.session)
 
+    def test_middleware_replaces_request_user_with_proxy_model(self):
+        self.client.login(
+            username="mail_user",
+            password="strong_password_123",
+        )
+        response = self.client.get(reverse("users:profile"))
+
+        self.assertEqual(response.status_code, 200)
+        self.assertIsInstance(response.wsgi_request.user, users.models.User)
+
     def test_duplicate_mail_is_not_allowed_on_profile_update(self):
         second_user = User.objects.create_user(
             username="second_user",
@@ -220,7 +232,7 @@ class LoginByMailTests(TestCase):
             password="strong_password_123",
             is_active=True,
         )
-        Profile.objects.create(user=second_user)
+        users.models.Profile.objects.create(user=second_user)
 
         self.client.login(
             username="mail_user",
@@ -270,7 +282,7 @@ class CoffeeCounterTests(TestCase):
             password="strong_password_123",
             is_active=True,
         )
-        Profile.objects.create(user=user)
+        users.models.Profile.objects.create(user=user)
 
         self.client.login(
             username="coffee_user",
