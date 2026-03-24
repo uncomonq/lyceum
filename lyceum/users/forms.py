@@ -6,6 +6,7 @@ import django.core.exceptions
 import django.forms
 
 import users.models
+import users.normalization
 
 
 class BootstrapFormMixin:
@@ -39,25 +40,24 @@ class UserLoginForm(
         password = self.cleaned_data.get("password")
 
         if username and password:
-            auth_username = username
-            if "@" in username:
-                try:
-                    auth_username = users.models.User.objects.by_mail(
-                        username,
-                    ).username
-                except users.models.User.DoesNotExist:
-                    auth_username = username
-
             self.user_cache = django.contrib.auth.authenticate(
                 self.request,
-                username=auth_username,
+                username=username,
                 password=password,
             )
 
             if self.user_cache is None:
                 user = users.models.User.objects.filter(
-                    username=auth_username,
+                    username=username,
                 ).first()
+                if "@" in username:
+                    normalized_email = (
+                        users.normalization.normalize_user_email(username)
+                    )
+                    user = users.models.User.objects.filter(
+                        email=normalized_email,
+                    ).first()
+
                 if (
                     user
                     and user.check_password(password)
@@ -90,7 +90,7 @@ class UserChangeForm(
 
     def clean_email(self):
         email = self.cleaned_data.get(users.models.User.email.field.name)
-        normalized_email = users.models.User.objects.normalize_email(email)
+        normalized_email = users.normalization.normalize_user_email(email)
 
         queryset = users.models.User.objects.exclude(pk=self.instance.pk)
         if queryset.filter(email=normalized_email).exists():

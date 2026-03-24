@@ -72,6 +72,11 @@ urlpatterns = [
     ),
     path("activate/<str:username>/", users.views.activate, name="activate"),
     path(
+        "reactivate/<str:username>/",
+        users.views.reactivate,
+        name="reactivate",
+    ),
+    path(
         "users/",
         users.views.UserListView.as_view(template_name="users/user_list.html"),
         name="user_list",

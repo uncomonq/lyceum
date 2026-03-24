@@ -96,6 +96,27 @@ def activate(request, username):
     return django.shortcuts.redirect(django.urls.reverse("users:login"))
 
 
+def reactivate(request, username):
+    user = django.shortcuts.get_object_or_404(
+        users.models.User,
+        username=username,
+    )
+    profile = user.profile
+    if (
+        not user.is_active
+        and profile.blocked_at is not None
+        and django.utils.timezone.now()
+        <= profile.blocked_at + datetime.timedelta(weeks=1)
+    ):
+        user.is_active = True
+        user.save(update_fields=["is_active"])
+        profile.attempts_count = 0
+        profile.blocked_at = None
+        profile.save(update_fields=["attempts_count", "blocked_at"])
+
+    return django.shortcuts.redirect(django.urls.reverse("users:login"))
+
+
 class UserListView(django.views.generic.ListView):
     context_object_name = "users"
     queryset = users.models.User.objects.active()

@@ -4,6 +4,8 @@ import sys
 from django.contrib.auth import models as auth_models
 from django.db import models
 
+import users.normalization
+
 if "makemigrations" not in sys.argv and "migrate" not in sys.argv:
     auth_models.User._meta.get_field("email")._unique = True
 
@@ -18,7 +20,7 @@ class UserManager(auth_models.UserManager):
         return self.get_queryset().filter(is_active=True)
 
     def by_mail(self, email):
-        normalized_email = self.normalize_email(email)
+        normalized_email = users.normalization.normalize_user_email(email)
         return self.active().get(email=normalized_email)
 
 
@@ -52,6 +54,15 @@ class Profile(models.Model):
     coffee_count = models.PositiveIntegerField(
         default=0,
         verbose_name="кол-во кофе",
+    )
+    attempts_count = models.PositiveIntegerField(
+        default=0,
+        verbose_name="кол-во неудачных входов",
+    )
+    blocked_at = models.DateTimeField(
+        null=True,
+        blank=True,
+        verbose_name="заблокирован с",
     )
 
     class Meta:

@@ -6,6 +6,7 @@ from django.contrib.auth import get_user_model
 from django.core import mail
 from django.test import override_settings, TestCase
 from django.urls import reverse
+from django.utils import timezone
 
 import users.models
 
@@ -292,3 +293,112 @@ class CoffeeCounterTests(TestCase):
 
         user.profile.refresh_from_db()
         self.assertEqual(user.profile.coffee_count, 1)
+
+
+@override_settings(ALLOW_REVERSE=False)
+class EmailNormalizationTests(TestCase):
+    def setUp(self):
+        self.user = User.objects.create_user(
+            username="normalize_user",
+            email="normalize_user@example.com",
+            password="strong_password_123",
+            is_active=True,
+        )
+        users.models.Profile.objects.create(user=self.user)
+
+    def test_yandex_domain_is_canonicalized(self):
+        self.client.login(
+            username="normalize_user",
+            password="strong_password_123",
+        )
+        response = self.client.post(
+            reverse("users:profile"),
+            {
+                "email": "Name.Tag+spam@Ya.Ru",
+                "first_name": "Имя",
+                "last_name": "Фамилия",
+            },
+        )
+
+        self.assertRedirects(response, reverse("users:profile"))
+        self.user.refresh_from_db()
+        self.assertEqual(self.user.email, "name-tag@yandex.ru")
+
+    def test_gmail_dots_are_ignored(self):
+        self.client.login(
+            username="normalize_user",
+            password="strong_password_123",
+        )
+        response = self.client.post(
+            reverse("users:profile"),
+            {
+                "email": "Na.Me+tag@gmail.com",
+                "first_name": "Имя",
+                "last_name": "Фамилия",
+            },
+        )
+
+        self.assertRedirects(response, reverse("users:profile"))
+        self.user.refresh_from_db()
+        self.assertEqual(self.user.email, "name@gmail.com")
+
+
+@override_settings(
+    ALLOW_REVERSE=False,
+    MAX_AUTH_ATTEMPTS=2,
+    EMAIL_BACKEND="django.core.mail.backends.locmem.EmailBackend",
+)
+class AuthAttemptsTests(TestCase):
+    def setUp(self):
+        self.user = User.objects.create_user(
+            username="attempt_user",
+            email="attempt_user@example.com",
+            password="strong_password_123",
+            is_active=True,
+        )
+        users.models.Profile.objects.create(user=self.user)
+
+    def test_user_is_deactivated_after_max_failed_attempts(self):
+        login_url = reverse("users:login")
+        self.client.post(
+            login_url,
+            {"username": "attempt_user", "password": "wrong_password"},
+        )
+        self.client.post(
+            login_url,
+            {"username": "attempt_user", "password": "wrong_password"},
+        )
+
+        self.user.refresh_from_db()
+        self.user.profile.refresh_from_db()
+        self.assertFalse(self.user.is_active)
+        self.assertEqual(self.user.profile.attempts_count, 2)
+        self.assertEqual(len(mail.outbox), 1)
+        self.assertIn("/auth/reactivate/attempt_user/", mail.outbox[0].body)
+
+    @patch("django.utils.timezone.now")
+    def test_reactivation_link_works_in_one_week(self, mocked_now):
+        blocked_at = timezone.make_aware(datetime.datetime(2026, 3, 1, 12, 0))
+        self.user.is_active = False
+        self.user.save(update_fields=["is_active"])
+        self.user.profile.blocked_at = blocked_at
+        self.user.profile.attempts_count = 2
+        self.user.profile.save(update_fields=["blocked_at", "attempts_count"])
+
+        mocked_now.return_value = blocked_at + datetime.timedelta(
+            days=6,
+            hours=23,
+        )
+        response = self.client.get(
+            reverse(
+                "users:reactivate",
+                kwargs={"username": self.user.username},
+            ),
+        )
+
+        self.assertRedirects(response, reverse("users:login"))
+        self.user.refresh_from_db()
+        self.user.profile.refresh_from_db()
+        self.assertTrue(self.user.is_active)
+        self.assertEqual(self.user.profile.attempts_count, 0)
+        self.assertIsNone(self.user.profile.blocked_at)

@@ -27,6 +27,12 @@ DEFAULT_USER_IS_ACTIVE = config(
     cast=bool,
 )
 
+MAX_AUTH_ATTEMPTS = config(
+    "DJANGO_MAX_AUTH_ATTEMPTS",
+    default=3,
+    cast=int,
+)
+
 ALLOW_REVERSE = config("DJANGO_ALLOW_REVERSE", default=True, cast=bool)
 
 INSTALLED_APPS = [
