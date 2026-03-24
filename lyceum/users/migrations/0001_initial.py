@@ -71,7 +71,7 @@ class Migration(migrations.Migration):
                 ),
             ],
             options={
-                "verbose_name": "Профиль пользователя",
+                "verbose_name": "Профиль пользователь",
                 "verbose_name_plural": "Профили пользователей",
             },
         ),
