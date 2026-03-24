@@ -1,19 +1,21 @@
 __all__ = ()
-import django.contrib.auth.models
+from django.contrib.auth import models as auth_models
 from django.db import models
 
-django.contrib.auth.models.User._meta.get_field("email")._unique = True
+
+def _set_user_email_unique():
+    email_field = auth_models.User._meta.get_field("email")
+    email_field._unique = True
 
 
-class UserManager(django.contrib.auth.models.UserManager):
+_set_user_email_unique()
+
+
+class UserManager(auth_models.UserManager):
     def get_queryset(self):
-        return (
-            super()
-            .get_queryset()
-            .select_related(
-                django.contrib.auth.models.User.profile.related.name,
-            )
-        )
+        queryset = super().get_queryset()
+        profile_related_name = auth_models.User.profile.related.name
+        return queryset.select_related(profile_related_name)
 
     def active(self):
         return self.get_queryset().filter(is_active=True)
@@ -23,7 +25,7 @@ class UserManager(django.contrib.auth.models.UserManager):
         return self.active().get(email=normalized_email)
 
 
-class User(django.contrib.auth.models.User):
+class User(auth_models.User):
     objects = UserManager()
 
     class Meta:
@@ -35,7 +37,7 @@ class Profile(models.Model):
         return f"users/{self.user.id}/{filename}"
 
     user = models.OneToOneField(
-        django.contrib.auth.models.User,
+        auth_models.User,
         on_delete=models.CASCADE,
         related_name="profile",
     )

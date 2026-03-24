@@ -107,9 +107,8 @@ class UpdateProfileForm(
 ):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields[users.models.Profile.coffee_count.field.name].disabled = (
-            True
-        )
+        coffee_count_field_name = users.models.Profile.coffee_count.field.name
+        self.fields[coffee_count_field_name].disabled = True
 
     class Meta:
         model = users.models.Profile
