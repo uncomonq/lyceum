@@ -4,7 +4,6 @@ import sys
 from django.contrib.auth import models as auth_models
 from django.db import models
 
-
 if "makemigrations" not in sys.argv and "migrate" not in sys.argv:
     auth_models.User._meta.get_field("email")._unique = True
 
