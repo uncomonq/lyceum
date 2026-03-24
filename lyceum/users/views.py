@@ -1,72 +1,111 @@
 __all__ = ()
 
+import datetime
+
 import django.conf
-import django.contrib
-import django.contrib.auth
 import django.contrib.auth.decorators
+import django.contrib.auth.mixins
+import django.contrib.auth.views
+import django.contrib.messages
 import django.core.mail
 import django.shortcuts
 import django.urls
+import django.utils.timezone
+import django.views
+import django.views.generic
 
 import users.forms
 import users.models
 
 
-def signup(request):
-    form = users.forms.UserCreationForm(request.POST or None)
-    context = {"form": form}
+class LoginView(django.contrib.auth.views.LoginView):
+    pass
 
-    if request.method == "POST" and form.is_valid():
-        user = form.save()
+
+class LogoutView(django.contrib.auth.views.LogoutView):
+    http_method_names = ["post", "options"]
+
+
+class PasswordChangeView(django.contrib.auth.views.PasswordChangeView):
+    pass
+
+
+class PasswordChangeDoneView(django.contrib.auth.views.PasswordChangeDoneView):
+    pass
+
+
+class PasswordResetView(django.contrib.auth.views.PasswordResetView):
+    pass
+
+
+class PasswordResetDoneView(django.contrib.auth.views.PasswordResetDoneView):
+    pass
+
+
+class PasswordResetConfirmView(
+    django.contrib.auth.views.PasswordResetConfirmView,
+):
+    pass
+
+
+class PasswordResetCompleteView(
+    django.contrib.auth.views.PasswordResetCompleteView,
+):
+    pass
+
+
+class SignUpView(django.views.generic.FormView):
+    form_class = users.forms.UserCreationForm
+    success_url = django.urls.reverse_lazy("users:login")
+    template_name = "users/signup.html"
+
+    def form_valid(self, form):
+        user = form.save(commit=False)
         user.is_active = django.conf.settings.DEFAULT_USER_IS_ACTIVE
-        user = form.save()
-        profile = users.models.Profile.objects.create(user=user)
-        profile.save()
+        user.is_staff = False
+        user.is_superuser = False
+        user.save()
+        users.models.Profile.objects.create(user=user)
 
         activate_url = django.urls.reverse(
             "users:activate",
-            kwards={"pk": user.id},
+            kwargs={"username": user.username},
         )
         django.core.mail.send_mail(
             f"Здравствуй {user.username}",
             "Перейди по ссылке для активации аккаунта " f"{activate_url}",
-            django.conf.settings.FEEDBACK_SENDER,
-            [user.email],
+            django.conf.settings.DJANGO_MAIL,
+            [user.email or django.conf.settings.DJANGO_MAIL],
             fail_silently=False,
         )
 
-        return django.shortcuts.redirect(django.urls.reverse("homepage:"))
-
-    return django.shortcuts.render(request, "users/signup.html", context)
+        return super().form_valid(form)
 
 
-def activate(request, pk):
-    user = users.models.User.objects.get(pk=pk)
-    user.is_active = True
-    user.save()
-    return django.shortcuts.redirect(django.urls.reverse("homepage:"))
-
-
-def reactivate(request, pk):
-    user = users.models.User.objects.get(pk=pk)
-    user.is_active = True
-    user.save()
-
-
-def user_list(request):
-    context = {"users": users.models.User.objects.active()}
-
-    return django.shortcuts.render(request, "users/user_list.html", context)
-
-
-def user_detail(request, pk):
-    search_user = django.shortcuts.get_object_or_404(
-        users.models.User.objects.active(),
-        pk=pk,
+def activate(request, username):
+    user = django.shortcuts.get_object_or_404(
+        users.models.User,
+        username=username,
     )
-    context = {"user": search_user}
+    if not user.is_active:
+        activation_expired_at = user.date_joined + datetime.timedelta(hours=12)
+        if django.utils.timezone.now() <= activation_expired_at:
+            user.is_active = True
+            user.save(update_fields=["is_active"])
 
-    return django.shortcuts.render(request, "users/user_detail.html", context)
+    return django.shortcuts.redirect(django.urls.reverse("users:login"))
+
+
+class UserListView(django.views.generic.ListView):
+    context_object_name = "users"
+    queryset = users.models.User.objects.active()
+
+
+class UserDetailView(django.views.generic.DetailView):
+    context_object_name = "user_obj"
+
+    def get_queryset(self):
+        return users.models.User.objects.active()
 
 
 @django.contrib.auth.decorators.login_required
@@ -77,9 +116,11 @@ def profile(request):
     )
     profile_form = users.forms.UpdateProfileForm(
         request.POST or None,
+        request.FILES or None,
         instance=request.user.profile,
     )
     context = {
+        "profile_obj": request.user.profile,
         "user_form": user_form,
         "profile_form": profile_form,
     }
@@ -92,6 +133,6 @@ def profile(request):
         user_form.save()
         profile_form.save()
         django.contrib.messages.success(request, "Сохранено")
-        return django.shortcuts.redirect(django.urls.redirect("users:profile"))
+        return django.shortcuts.redirect(django.urls.reverse("users:profile"))
 
     return django.shortcuts.render(request, "users/profile.html", context)

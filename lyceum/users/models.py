@@ -2,7 +2,7 @@ __all__ = ()
 import django.contrib.auth.models
 from django.db import models
 
-django.contrib.auth.models.User._meta.ger_field("email")._unique = True
+django.contrib.auth.models.User._meta.get_field("email")._unique = True
 
 
 class UserManager(django.contrib.auth.models.UserManager):
@@ -37,6 +37,7 @@ class Profile(models.Model):
     user = models.OneToOneField(
         django.contrib.auth.models.User,
         on_delete=models.CASCADE,
+        related_name="profile",
     )
     birthday = models.DateField(
         null=True,

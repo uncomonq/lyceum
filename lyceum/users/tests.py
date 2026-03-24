@@ -88,12 +88,24 @@ class UserPagesTests(TestCase):
             first_name="",
             last_name="",
         )
-        self.profile = Profile.objects.create(user=self.user)
+        self.profile = Profile.objects.create(
+            user=self.user,
+            birthday=datetime.date(2000, 1, 10),
+        )
 
-    def test_user_list_has_active_users(self):
+    def test_user_list_has_only_active_users(self):
+        inactive_user = User.objects.create_user(
+            username="inactive_user_on_list",
+            password="strong_password_123",
+            is_active=False,
+        )
+        Profile.objects.create(user=inactive_user)
+
         response = self.client.get(reverse("users:user_list"))
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, self.user.username)
+        self.assertNotContains(response, inactive_user.username)
+        self.assertContains(response, "10.01")
 
     def test_user_detail_shows_fallback_for_empty_name(self):
         response = self.client.get(
@@ -101,6 +113,7 @@ class UserPagesTests(TestCase):
         )
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "не указано")
+        self.assertContains(response, str(self.profile.coffee_count))
 
     def test_profile_requires_login(self):
         response = self.client.get(reverse("users:profile"))
@@ -109,6 +122,16 @@ class UserPagesTests(TestCase):
             response,
             f"{login_url}?next={reverse('users:profile')}",
         )
+
+    def test_profile_page_has_coffee_button(self):
+        self.client.login(
+            username="active_user",
+            password="strong_password_123",
+        )
+        response = self.client.get(reverse("users:profile"))
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, reverse("homepage:coffee"))
 
     def test_profile_update(self):
         self.client.login(
