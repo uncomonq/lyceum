@@ -1,14 +1,12 @@
 __all__ = ()
+import sys
+
 from django.contrib.auth import models as auth_models
 from django.db import models
 
 
-def _set_user_email_unique():
-    email_field = auth_models.User._meta.get_field("email")
-    email_field._unique = True
-
-
-_set_user_email_unique()
+if "makemigrations" not in sys.argv and "migrate" not in sys.argv:
+    auth_models.User._meta.get_field("email")._unique = True
 
 
 class UserManager(auth_models.UserManager):
