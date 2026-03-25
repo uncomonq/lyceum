@@ -9,7 +9,6 @@ from django.urls import reverse
 from django.utils import timezone
 
 import users.models
-import users.normalization
 
 
 class UserAuthBackend(ModelBackend):
@@ -19,8 +18,9 @@ class UserAuthBackend(ModelBackend):
         if not username or not password:
             return None
 
-        user = self._get_user_for_login(username)
-        if user is None:
+        try:
+            user = self._get_user_for_login(username)
+        except users.models.User.DoesNotExist:
             return None
 
         if user.check_password(password) and self.user_can_authenticate(user):
@@ -32,14 +32,9 @@ class UserAuthBackend(ModelBackend):
 
     def _get_user_for_login(self, username):
         if "@" in username:
-            normalized_email = users.normalization.normalize_user_email(
-                username,
-            )
-            return users.models.User.objects.filter(
-                email=normalized_email,
-            ).first()
+            return users.models.User.objects.by_mail(username)
 
-        return users.models.User.objects.filter(username=username).first()
+        return users.models.User.objects.active().get(username=username)
 
     def _register_failed_attempt(self, request, user):
         if not hasattr(user, "profile"):

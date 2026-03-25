@@ -4,8 +4,6 @@ import sys
 from django.contrib.auth import models as auth_models
 from django.db import models
 
-import users.normalization
-
 if "makemigrations" not in sys.argv and "migrate" not in sys.argv:
     auth_models.User._meta.get_field("email")._unique = True
 
@@ -19,8 +17,26 @@ class UserManager(auth_models.UserManager):
     def active(self):
         return self.get_queryset().filter(is_active=True)
 
+    def normalize_email(self, email):
+        normalized_email = super().normalize_email(email)
+        local_part, separator, domain_part = normalized_email.partition("@")
+        local_part = local_part.lower()
+        domain_part = domain_part.lower()
+        local_part = local_part.split("+", maxsplit=1)[0]
+
+        if domain_part in {"ya.ru", "yandex.ru"}:
+            domain_part = "yandex.ru"
+            local_part = local_part.replace(".", "-")
+        elif domain_part == "gmail.com":
+            local_part = local_part.replace(".", "")
+
+        if not separator:
+            return local_part
+
+        return f"{local_part}@{domain_part}"
+
     def by_mail(self, email):
-        normalized_email = users.normalization.normalize_user_email(email)
+        normalized_email = self.normalize_email(email)
         return self.active().get(email=normalized_email)
 
 

@@ -6,7 +6,6 @@ import django.core.exceptions
 import django.forms
 
 import users.models
-import users.normalization
 
 
 class BootstrapFormMixin:
@@ -52,7 +51,7 @@ class UserLoginForm(
                 ).first()
                 if "@" in username:
                     normalized_email = (
-                        users.normalization.normalize_user_email(username)
+                        users.models.User.objects.normalize_email(username)
                     )
                     user = users.models.User.objects.filter(
                         email=normalized_email,
@@ -90,7 +89,7 @@ class UserChangeForm(
 
     def clean_email(self):
         email = self.cleaned_data.get(users.models.User.email.field.name)
-        normalized_email = users.normalization.normalize_user_email(email)
+        normalized_email = users.models.User.objects.normalize_email(email)
 
         queryset = users.models.User.objects.exclude(pk=self.instance.pk)
         if queryset.filter(email=normalized_email).exists():
