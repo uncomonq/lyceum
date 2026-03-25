@@ -23,6 +23,9 @@ class UserAuthBackend(ModelBackend):
         except users.models.User.DoesNotExist:
             return None
 
+        if not user.is_active:
+            return None
+
         if user.check_password(password) and self.user_can_authenticate(user):
             self._reset_attempts(user)
             return user
@@ -34,7 +37,7 @@ class UserAuthBackend(ModelBackend):
         if "@" in username:
             return users.models.User.objects.by_mail(username)
 
-        return users.models.User.objects.active().get(username=username)
+        return users.models.User.objects.get(username=username)
 
     def _register_failed_attempt(self, request, user):
         if not hasattr(user, "profile"):
