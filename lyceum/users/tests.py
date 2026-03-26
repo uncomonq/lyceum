@@ -1,5 +1,6 @@
 __all__ = ()
 import datetime
+from http import HTTPStatus
 from unittest.mock import patch
 
 from django.contrib.auth import get_user_model
@@ -402,3 +403,87 @@ class AuthAttemptsTests(TestCase):
         self.assertTrue(self.user.is_active)
         self.assertEqual(self.user.profile.attempts_count, 0)
         self.assertIsNone(self.user.profile.blocked_at)
+
+
+@override_settings(ALLOW_REVERSE=False)
+class BirthdayUsersContextProcessorTests(TestCase):
+    @patch("users.context_processors.django.utils.timezone.localdate")
+    def test_context_processor_returns_only_active_users_with_today_birthday(
+        self,
+        mocked_localdate,
+    ):
+        mocked_localdate.return_value = datetime.date(2026, 3, 26)
+
+        birthday_user = User.objects.create_user(
+            username="birthday_user",
+            email="birthday@example.com",
+            password="strong_password_123",
+            is_active=True,
+            first_name="Именинник",
+            last_name="Первый",
+        )
+        users.models.Profile.objects.create(
+            user=birthday_user,
+            birthday=datetime.date(1995, 3, 26),
+        )
+
+        inactive_birthday_user = User.objects.create_user(
+            username="inactive_birthday",
+            email="inactive@example.com",
+            password="strong_password_123",
+            is_active=False,
+        )
+        users.models.Profile.objects.create(
+            user=inactive_birthday_user,
+            birthday=datetime.date(1994, 3, 26),
+        )
+
+        other_day_user = User.objects.create_user(
+            username="other_day",
+            email="other@example.com",
+            password="strong_password_123",
+            is_active=True,
+        )
+        users.models.Profile.objects.create(
+            user=other_day_user,
+            birthday=datetime.date(1993, 3, 25),
+        )
+
+        response = self.client.get(reverse("homepage:main"))
+
+        self.assertEqual(response.status_code, HTTPStatus.OK)
+        self.assertEqual(
+            response.context["birthday_users"],
+            [
+                {
+                    "name": "Именинник Первый",
+                    "email": "birthday@example.com",
+                },
+            ],
+        )
+
+    @patch("users.context_processors.django.utils.timezone.localdate")
+    def test_birthday_block_is_rendered_in_base_template(
+        self,
+        mocked_localdate,
+    ):
+        mocked_localdate.return_value = datetime.date(2026, 3, 26)
+
+        birthday_user = User.objects.create_user(
+            username="birthday_user_for_template",
+            email="template@example.com",
+            password="strong_password_123",
+            is_active=True,
+            first_name="Шаблон",
+            last_name="Проверка",
+        )
+        users.models.Profile.objects.create(
+            user=birthday_user,
+            birthday=datetime.date(2001, 3, 26),
+        )
+
+        response = self.client.get(reverse("homepage:main"))
+
+        self.assertContains(response, "Именниники сегодня:")
+        self.assertContains(response, "Шаблон Проверка")
+        self.assertContains(response, "template@example.com")
