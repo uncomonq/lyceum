@@ -16,6 +16,16 @@
   </header>
 
   <main class="container mt-4">
+    {% if birthday_users %}
+      <div class="alert alert-info">
+        <strong>Именниники сегодня:</strong>
+        <ul class="mb-0">
+          {% for birthday_user in birthday_users %}
+            <li>{{ birthday_user.name }} — {{ birthday_user.email }}</li>
+          {% endfor %}
+        </ul>
+      </div>
+    {% endif %}
     <div class="min-vh-100">
       {% block content %}{% endblock %}
     </div>
