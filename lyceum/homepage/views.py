@@ -2,48 +2,51 @@ __all__ = ()
 import http
 
 from django.http import HttpResponse
-import django.shortcuts
-from django.views.decorators.http import require_http_methods, require_POST
+import django.views
+import django.views.generic
 
 import catalog.models
 from homepage.forms import EchoForm
+import users.models
 
 
-def home(request):
-    templates = "homepage/main.html"
-    items = catalog.models.Item.objects.on_main()
-    return django.shortcuts.render(
-        request,
-        templates,
-        {"items": items},
-    )
+class HomeView(django.views.generic.TemplateView):
+    template_name = "homepage/main.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["items"] = catalog.models.Item.objects.on_main()
+        return context
 
 
-def coffee(request):
-    if request.user.is_authenticated:
-        request.user.profile.coffee_count += 1
-        request.user.profile.save(update_fields=["coffee_count"])
+class CoffeeView(django.views.View):
+    http_method_names = ["get", "options"]
 
-    return HttpResponse("Я чайник", status=http.HTTPStatus.IM_A_TEAPOT)
+    def get(self, request, *args, **kwargs):
+        if request.user.is_authenticated:
+            profile, _ = users.models.Profile.objects.get_or_create(
+                user=request.user,
+            )
+            profile.coffee_count += 1
+            profile.save(update_fields=["coffee_count"])
 
-
-@require_http_methods(["GET"])
-def echo(request):
-    form = EchoForm()
-    return django.shortcuts.render(
-        request,
-        "homepage/echo.html",
-        {"form": form},
-    )
+        return HttpResponse("Я чайник", status=http.HTTPStatus.IM_A_TEAPOT)
 
 
-@require_POST
-def echo_submit(request):
-    form = EchoForm(request.POST)
-    if not form.is_valid():
-        return HttpResponse("", status=http.HTTPStatus.BAD_REQUEST)
+class EchoView(django.views.generic.FormView):
+    form_class = EchoForm
+    template_name = "homepage/echo.html"
 
-    return HttpResponse(
-        form.cleaned_data["text"],
-        content_type="text/plain; charset=utf-8",
-    )
+
+class EchoSubmitView(django.views.View):
+    http_method_names = ["post", "options"]
+
+    def post(self, request, *args, **kwargs):
+        form = EchoForm(request.POST)
+        if not form.is_valid():
+            return HttpResponse("", status=http.HTTPStatus.BAD_REQUEST)
+
+        return HttpResponse(
+            form.cleaned_data["text"],
+            content_type="text/plain; charset=utf-8",
+        )

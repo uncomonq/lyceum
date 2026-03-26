@@ -70,10 +70,14 @@ urlpatterns = [
         ),
         name="signup",
     ),
-    path("activate/<str:username>/", users.views.activate, name="activate"),
+    path(
+        "activate/<str:username>/",
+        users.views.ActivateView.as_view(),
+        name="activate",
+    ),
     path(
         "reactivate/<str:username>/",
-        users.views.reactivate,
+        users.views.ReactivateView.as_view(),
         name="reactivate",
     ),
     path(
@@ -88,5 +92,5 @@ urlpatterns = [
         ),
         name="user_detail",
     ),
-    path("profile/", users.views.profile, name="profile"),
+    path("profile/", users.views.ProfileView.as_view(), name="profile"),
 ]
