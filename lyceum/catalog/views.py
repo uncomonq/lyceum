@@ -6,10 +6,10 @@ from django.db.models import Avg, Count
 import django.shortcuts
 import django.utils.timezone
 from django.views import generic
-import rating.forms
-import rating.models
 
 import catalog.models
+import rating.forms
+import rating.models
 
 ITEMS_CONTEXT_KEY = "items"
 ITEM_CONTEXT_KEY = "item"
@@ -79,8 +79,6 @@ class ItemDetailView(generic.DetailView):
             request.POST,
             instance=user_rating,
         )
-
-        rating_form = self._get_rating_form(request.POST, instance=user_rating)
         if rating_form.is_valid():
             value = rating_form.cleaned_data["value"]
             if value is None:
