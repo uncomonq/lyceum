@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     "download.apps.DownloadConfig",
     "feedback.apps.FeedbackConfig",
     "users.apps.UsersConfig",
+    "rating.apps.RatingConfig",
 ]
 
 DJANGO_MAIL = config("DJANGO_MAIL", default="noreply@example.com")

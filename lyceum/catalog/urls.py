@@ -5,9 +5,21 @@ import catalog.views
 app_name = "catalog"
 
 urlpatterns = [
-    path("", catalog.views.item_list, name="item_list"),
-    path("<int:pk>/", catalog.views.item_detail, name="item_detail"),
-    path("new/", catalog.views.item_new, name="item_new"),
-    path("friday/", catalog.views.item_friday, name="item_friday"),
-    path("unverified/", catalog.views.item_unverified, name="item_unverified"),
+    path("", catalog.views.ItemListView.as_view(), name="item_list"),
+    path(
+        "<int:pk>/",
+        catalog.views.ItemDetailView.as_view(),
+        name="item_detail",
+    ),
+    path("new/", catalog.views.ItemNewView.as_view(), name="item_new"),
+    path(
+        "friday/",
+        catalog.views.ItemFridayView.as_view(),
+        name="item_friday",
+    ),
+    path(
+        "unverified/",
+        catalog.views.ItemUnverifiedView.as_view(),
+        name="item_unverified",
+    ),
 ]

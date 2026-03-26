@@ -1,6 +1,6 @@
 __all__ = ()
-import django.shortcuts
+from django.views.generic import TemplateView
 
 
-def description(request):
-    return django.shortcuts.render(request, "about/about.html")
+class DescriptionView(TemplateView):
+    template_name = "about/about.html"
