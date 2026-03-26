@@ -81,7 +81,7 @@ class ItemDetailView(generic.DetailView):
         )
         if rating_form.is_valid():
             value = rating_form.cleaned_data["value"]
-            if value is None:
+            if value in (None, ""):
                 if user_rating is not None:
                     user_rating.delete()
             else:

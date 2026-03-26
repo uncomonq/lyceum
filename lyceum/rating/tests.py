@@ -78,6 +78,25 @@ class RatingTests(TestCase):
             Rating.Value.DISLIKE,
         )
 
+    def test_empty_value_in_post_deletes_existing_rating(self):
+        Rating.objects.create(
+            item=self.item,
+            user=self.user,
+            value=Rating.Value.ADORE,
+        )
+        self.client.login(
+            username="rating_user",
+            password="strong_password_123",
+        )
+        url = reverse("catalog:item_detail", args=[self.item.pk])
+
+        response = self.client.post(url, {"value": ""})
+
+        self.assertEqual(response.status_code, HTTPStatus.FOUND)
+        self.assertFalse(
+            Rating.objects.filter(item=self.item, user=self.user).exists(),
+        )
+
     def test_item_detail_shows_rating_stats_and_user_can_delete_rating(self):
         Rating.objects.create(
             item=self.item,
