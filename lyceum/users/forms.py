@@ -79,6 +79,11 @@ class UserChangeForm(
     BootstrapFormMixin,
     django.contrib.auth.forms.UserChangeForm,
 ):
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields.pop("password", None)
+
     class Meta(django.contrib.auth.forms.UserChangeForm.Meta):
         model = users.models.User
         fields = (
