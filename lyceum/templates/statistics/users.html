@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block title %}Статистика по пользователям{% endblock %}
+
+{% block content %}
+  <h2 class="mb-3">Статистика по пользователям</h2>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Пользователь</th>
+        <th>Лучший товар</th>
+        <th>Худший товар</th>
+        <th>Количество оценок</th>
+        <th>Средняя оценка</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for stat in user_stats %}
+        <tr>
+          <td>{{ stat.user.username }}</td>
+          <td>{% if stat.best_rating %}{{ stat.best_rating.item.name }}{% else %}—{% endif %}</td>
+          <td>{% if stat.worst_rating %}{{ stat.worst_rating.item.name }}{% else %}—{% endif %}</td>
+          <td>{{ stat.rating_count }}</td>
+          <td>{{ stat.average_rating|default_if_none:"—"|floatformat:2 }}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}

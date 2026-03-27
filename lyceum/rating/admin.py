@@ -1,3 +1,4 @@
+__all__ = ()
 from django.contrib import admin
 
 import rating.models

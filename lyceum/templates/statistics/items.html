@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block title %}Статистика по товарам{% endblock %}
+
+{% block content %}
+  <h2 class="mb-3">Статистика по товарам</h2>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Товар</th>
+        <th>Средняя оценка</th>
+        <th>Количество оценок</th>
+        <th>Последняя максимальная оценка</th>
+        <th>Последняя минимальная оценка</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for stat in item_stats %}
+        <tr>
+          <td>{{ stat.item.name }}</td>
+          <td>{{ stat.average_rating|default_if_none:"—"|floatformat:2 }}</td>
+          <td>{{ stat.rating_count }}</td>
+          <td>
+            {% if stat.last_max_rating %}
+              {{ stat.last_max_rating.user.username }} ({{ stat.last_max_rating.value }})
+            {% else %}
+              —
+            {% endif %}
+          </td>
+          <td>
+            {% if stat.last_min_rating %}
+              {{ stat.last_min_rating.user.username }} ({{ stat.last_min_rating.value }})
+            {% else %}
+              —
+            {% endif %}
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}

@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block title %}Мои оценки товаров{% endblock %}
+
+{% block content %}
+  <h2 class="mb-3">Товары, которые я оценил</h2>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Товар</th>
+        <th>Оценка</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for user_rating in user_ratings %}
+        <tr>
+          <td>{{ user_rating.item.name }}</td>
+          <td>{{ user_rating.value }}</td>
+        </tr>
+      {% empty %}
+        <tr>
+          <td colspan="2">Вы пока не оценивали товары.</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}

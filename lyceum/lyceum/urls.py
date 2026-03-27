@@ -14,6 +14,7 @@ urlpatterns = [
     path("catalog/", include("catalog.urls")),
     path("download/", include("download.urls")),
     path("feedback/", include("feedback.urls")),
+    path("statistics/", include("site_statistics.urls")),
 ]
 
 if settings.DEBUG and settings.DEBUG_TOOLBAR_AVAILABLE:

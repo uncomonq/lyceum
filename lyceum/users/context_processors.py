@@ -10,15 +10,14 @@ def birthday_users(request):
     queryset = users.models.User.objects.active().filter(
         profile__birthday__month=today.month,
         profile__birthday__day=today.day,
-    )
+    ).order_by("username")
 
-    users_data = []
-    for user in queryset:
-        users_data.append(
-            {
-                "name": user.get_full_name() or user.username,
-                "email": user.email,
-            },
-        )
+    users_data = [
+        {
+            "name": user.get_full_name() or user.username,
+            "email": user.email,
+        }
+        for user in queryset
+    ]
 
     return {"birthday_users": users_data}

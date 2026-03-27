@@ -2,7 +2,7 @@ __all__ = ()
 from django.apps import AppConfig
 
 
-class RatingConfig(AppConfig):
+class StatisticsConfig(AppConfig):
     default_auto_field = "django.db.models.BigAutoField"
-    name = "rating"
-    verbose_name = "Оценки"
+    name = "site_statistics"
+    verbose_name = "Статистика"
