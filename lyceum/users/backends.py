@@ -1,5 +1,4 @@
 __all__ = ()
-
 import datetime
 
 from django.conf import settings

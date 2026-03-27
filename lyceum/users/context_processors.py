@@ -1,5 +1,4 @@
 __all__ = ()
-
 import django.utils.timezone
 
 import users.models
