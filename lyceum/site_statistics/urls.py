@@ -1,4 +1,5 @@
 from django.urls import path
+
 import site_statistics.views
 
 app_name = "statistics"
