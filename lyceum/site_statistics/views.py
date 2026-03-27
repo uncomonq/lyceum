@@ -103,9 +103,10 @@ class ItemStatisticsView(django.views.generic.TemplateView):
             last_min_rating = None
 
             if ratings:
-                average_rating = sum(
-                    rating_obj.value for rating_obj in ratings
-                ) / rating_count
+                average_rating = (
+                    sum(rating_obj.value for rating_obj in ratings)
+                    / rating_count
+                )
                 max_value = max(rating_obj.value for rating_obj in ratings)
                 min_value = min(rating_obj.value for rating_obj in ratings)
                 last_max_rating = next(

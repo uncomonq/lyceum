@@ -6,10 +6,14 @@ import users.models
 
 def birthday_users(request):
     today = django.utils.timezone.localdate()
-    queryset = users.models.User.objects.active().filter(
-        profile__birthday__month=today.month,
-        profile__birthday__day=today.day,
-    ).order_by("username")
+    queryset = (
+        users.models.User.objects.active()
+        .filter(
+            profile__birthday__month=today.month,
+            profile__birthday__day=today.day,
+        )
+        .order_by("username")
+    )
 
     users_data = [
         {
