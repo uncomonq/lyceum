@@ -106,6 +106,8 @@ class UserChangeForm(
                 _("User with this email already exists."),
             )
 
+        return normalized_email
+
 
 class UpdateProfileForm(
     BootstrapFormMixin,

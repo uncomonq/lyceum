@@ -29,6 +29,8 @@ class UserManager(auth_models.UserManager):
         if not separator:
             return local_part
 
+        return f"{local_part}@{domain_part}"
+
 
 class User(auth_models.User):
     objects = UserManager()

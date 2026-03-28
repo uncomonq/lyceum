@@ -42,6 +42,10 @@ class UserAuthBackend(ModelBackend):
                 email=normalized_email,
             )
 
+        return users.models.User.objects.active().get(
+            username=username,
+        )
+
     def _register_failed_attempt(self, request, user):
         if not hasattr(user, "profile"):
             return

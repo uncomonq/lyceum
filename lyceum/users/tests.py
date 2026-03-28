@@ -82,7 +82,7 @@ class SignUpAndActivationTests(TestCase):
         self.assertFalse(user.is_active)
 
 
-@override_settings(ALLOW_REVERSE=False)
+@override_settings(ALLOW_REVERSE=False, LANGUAGE_CODE="en")
 class UserPagesTests(TestCase):
     def setUp(self):
         self.user = User.objects.create_user(
@@ -195,7 +195,7 @@ class UserPagesTests(TestCase):
         self.assertContains(response, "Account is not activated")
 
 
-@override_settings(ALLOW_REVERSE=False)
+@override_settings(ALLOW_REVERSE=False, LANGUAGE_CODE="en")
 class LoginByMailTests(TestCase):
     def setUp(self):
         self.user = User.objects.create_user(
@@ -428,7 +428,7 @@ class AuthAttemptsTests(TestCase):
         self.assertIsNone(self.user.profile.blocked_at)
 
 
-@override_settings(ALLOW_REVERSE=False)
+@override_settings(ALLOW_REVERSE=False, LANGUAGE_CODE="en")
 class BirthdayUsersContextProcessorTests(TestCase):
     @patch("users.context_processors.django.utils.timezone.localdate")
     def test_context_processor_returns_only_active_users_with_today_birthday(
