@@ -4,6 +4,7 @@ import django.contrib.auth
 import django.contrib.auth.forms
 import django.core.exceptions
 import django.forms
+from django.utils.translation import gettext_lazy as _
 
 import users.models
 
@@ -32,7 +33,7 @@ class UserLoginForm(
     BootstrapFormMixin,
     django.contrib.auth.forms.AuthenticationForm,
 ):
-    inactive_error_message = "Аккаунт не активирован"
+    inactive_error_message = _("Account is not activated")
 
     def clean(self):
         username = self.cleaned_data.get("username")
@@ -94,15 +95,16 @@ class UserChangeForm(
 
     def clean_email(self):
         email = self.cleaned_data.get(users.models.User.email.field.name)
+        if not email:
+            return ""
+
         normalized_email = users.models.User.objects.normalize_email(email)
 
         queryset = users.models.User.objects.exclude(pk=self.instance.pk)
         if queryset.filter(email=normalized_email).exists():
             raise django.core.exceptions.ValidationError(
-                "Пользователь с такой почтой уже существует.",
+                _("User with this email already exists."),
             )
-
-        return normalized_email
 
 
 class UpdateProfileForm(
@@ -113,6 +115,12 @@ class UpdateProfileForm(
         super().__init__(*args, **kwargs)
         coffee_count_field_name = users.models.Profile.coffee_count.field.name
         self.fields[coffee_count_field_name].disabled = True
+        birthday_field_name = users.models.Profile.birthday.field.name
+        self.fields[birthday_field_name].widget = django.forms.DateInput(
+            attrs={"type": "date"},
+            format="%Y-%m-%d",
+        )
+        self.fields[birthday_field_name].input_formats = ["%Y-%m-%d"]
 
     class Meta:
         model = users.models.Profile
@@ -122,5 +130,25 @@ class UpdateProfileForm(
             users.models.Profile.coffee_count.field.name,
         )
         help_texts = {
-            users.models.Profile.birthday.field.name: "Формат: гг.мм.дд",
+            users.models.Profile.birthday.field.name: _("Format: DD.MM.YYYY"),
         }
+
+    def clean_birthday(self):
+        birthday = self.cleaned_data.get(
+            users.models.Profile.birthday.field.name,
+        )
+        if birthday is None:
+            return birthday
+
+        today = django.utils.timezone.localdate()
+        if birthday > today:
+            raise django.core.exceptions.ValidationError(
+                _("Birthday cannot be in the future."),
+            )
+
+        if birthday.year < 1900:
+            raise django.core.exceptions.ValidationError(
+                _("Birthday is too far in the past."),
+            )
+
+        return birthday

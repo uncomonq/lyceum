@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: lyceum\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-10 20:48+0300\n"
+"POT-Creation-Date: 2026-03-28 19:14+0300\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -10,28 +10,11 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
-#: .\catalog\views.py:16
-msgid "Items catalog"
-msgstr "Каталог товаров"
-
-#: .\catalog\views.py:34 .\templates\includes\header.html:47
-#: .\templates\includes\header.html:49
-msgid "New items"
-msgstr "Новинки"
-
-#: .\catalog\views.py:40
-msgid "Friday items"
-msgstr "Пятница"
-
-#: .\catalog\views.py:46
-msgid "Unverified items"
-msgstr "Непроверенные"
-
-#: .\lyceum\settings.py:128
+#: .\lyceum\settings.py:150
 msgid "Russian"
 msgstr "Русский"
 
-#: .\lyceum\settings.py:129
+#: .\lyceum\settings.py:151
 msgid "English"
 msgstr "Английский"
 
@@ -44,24 +27,32 @@ msgstr "О проекте"
 msgid "Educational project for Yandex Lyceum Django specialization."
 msgstr "Учебный проект по специализации django Яндекс Лицея."
 
+#: .\templates\base.html:21
+msgid "Today's birthdays:"
+msgstr "Именинники сегодня:"
+
+#: .\templates\base.html:29
+msgid "Show all birthday users"
+msgstr "Показать всех именинников"
+
 #: .\templates\catalog\item.html:14
 msgid "Download main image"
 msgstr "Скачать главное изображение"
 
-#: .\templates\catalog\item.html:33
+#: .\templates\catalog\item.html:72
 msgid "Download image"
 msgstr "Скачать изображение"
 
-#: .\templates\feedback\feedback.html:3 .\templates\feedback\feedback.html:6
-#: .\templates\includes\header.html:33 .\templates\includes\header.html:35
+#: .\templates\feedback\feedback.html:6 .\templates\includes\header.html:33
+#: .\templates\includes\header.html:35
 msgid "Feedback"
 msgstr "Обратная связь"
 
-#: .\templates\feedback\feedback.html:25 .\templates\homepage\echo.html:15
+#: .\templates\feedback\feedback.html:47 .\templates\homepage\echo.html:16
 msgid "Submit"
 msgstr "Отправить"
 
-#: .\templates\homepage\echo.html:3 .\templates\homepage\echo.html:6
+#: .\templates\homepage\echo.html:7
 msgid "Echo"
 msgstr ""
 
@@ -85,6 +76,10 @@ msgstr "На главную"
 msgid "Items list"
 msgstr "Список товаров"
 
+#: .\templates\includes\header.html:47 .\templates\includes\header.html:49
+msgid "New items"
+msgstr "Новинки"
+
 #: .\templates\includes\header.html:54 .\templates\includes\header.html:56
 #, fuzzy
 #| msgid "Friday items"
@@ -95,14 +90,130 @@ msgstr "Пятница"
 msgid "Unverified"
 msgstr "Непроверенные"
 
-#: .\templates\includes\header.html:68
+#: .\templates\includes\header.html:68 .\templates\includes\header.html:70
+#: .\templates\users\user_list.html:5
+msgid "Users"
+msgstr "Пользователи"
+
+#: .\templates\includes\header.html:75
 msgid "Admin panel"
 msgstr "Админка"
 
-#: .\templates\includes\header.html:83
+#: .\templates\includes\header.html:81 .\templates\includes\header.html:83
+msgid "Profile"
+msgstr "Профиль"
+
+#: .\templates\includes\header.html:89
+msgid "Logout"
+msgstr "Выйти"
+
+#: .\templates\includes\header.html:95 .\templates\includes\header.html:97
+#: .\templates\users\login.html:5 .\templates\users\login.html:9
+msgid "Login"
+msgstr "Вход"
+
+#: .\templates\includes\header.html:102 .\templates\includes\header.html:104
+#: .\templates\users\signup.html:5 .\templates\users\signup.html:9
+msgid "Sign up"
+msgstr "Регистрация"
+
+#: .\templates\includes\header.html:120
 msgid "Cat photo"
 msgstr "Фото котика"
 
 #: .\templates\includes\item_card.html:13
 msgid "Details"
 msgstr "Подробнее"
+
+#: .\templates\users\birthday_users.html:5 .\users\views.py:159
+msgid "Today's birthdays"
+msgstr "Именинники сегодня"
+
+#: .\templates\users\birthday_users.html:13
+msgid "There are no birthdays today."
+msgstr "Сегодня именинников нет."
+
+#: .\templates\users\login.html:11
+msgid "Forgot password?"
+msgstr "Забыли пароль?"
+
+#: .\templates\users\profile.html:5
+msgid "My profile"
+msgstr "Мой профиль"
+
+#: .\templates\users\profile.html:25
+msgid "Save"
+msgstr "Сохранить"
+
+#: .\templates\users\profile.html:28
+msgid "Drink coffee"
+msgstr "Выпить кофе"
+
+#: .\templates\users\user_detail.html:5
+#, python-format
+msgid "User %(username)s"
+msgstr "Пользователь %(username)s"
+
+#: .\templates\users\user_detail.html:13
+msgid "Email"
+msgstr "Почта"
+
+#: .\templates\users\user_detail.html:17 .\templates\users\user_detail.html:25
+#: .\templates\users\user_detail.html:33 .\templates\users\user_detail.html:41
+msgid "not specified"
+msgstr "не указано"
+
+#: .\templates\users\user_detail.html:21
+msgid "First name"
+msgstr "Имя"
+
+#: .\templates\users\user_detail.html:29
+msgid "Last name"
+msgstr "Фамилия"
+
+#: .\templates\users\user_detail.html:37
+msgid "Birthday"
+msgstr "День рождения"
+
+#: .\templates\users\user_detail.html:45
+msgid "Coffee count"
+msgstr "Кол-во кофе"
+
+#: .\templates\users\user_list.html:24
+msgid "No users yet."
+msgstr "Пользователей пока нет."
+
+#: .\users\forms.py:36
+msgid "Account is not activated"
+msgstr "Аккаунт не активирован"
+
+#: .\users\forms.py:106
+msgid "User with this email already exists."
+msgstr "Пользователь с такой почтой уже существует."
+
+#: .\users\forms.py:133
+#, fuzzy
+#| msgid "Format: YYYY-MM-DD"
+msgid "Format: DD.MM.YYYY"
+msgstr "Формат: ГГГГ-ММ-ДД"
+
+#: .\users\forms.py:146
+msgid "Birthday cannot be in the future."
+msgstr "Дата рождения не может быть в будущем."
+
+#: .\users\forms.py:151
+msgid "Birthday is too far in the past."
+msgstr "Дата рождения слишком далеко в прошлом."
+
+#: .\users\views.py:202
+msgid "Saved"
+msgstr "Сохранено"
+
+#~ msgid "Items catalog"
+#~ msgstr "Каталог товаров"
+
+#~ msgid "Friday items"
+#~ msgstr "Пятница"
+
+#~ msgid "Unverified items"
+#~ msgstr "Непроверенные"

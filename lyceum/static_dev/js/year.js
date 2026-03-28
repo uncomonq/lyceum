@@ -1,4 +1,7 @@
 (function () {
+  const offsetMinutes = new Date().getTimezoneOffset();
+  document.cookie = `timezone_offset=${offsetMinutes}; path=/; samesite=lax`;
+  
   const footerYear = document.getElementById("footer-year");
   if (!footerYear) {
     return;

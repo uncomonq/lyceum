@@ -92,5 +92,10 @@ urlpatterns = [
         ),
         name="user_detail",
     ),
+    path(
+        "birthdays/",
+        users.views.BirthdayUsersListView.as_view(),
+        name="birthday_users",
+    ),
     path("profile/", users.views.ProfileView.as_view(), name="profile"),
 ]

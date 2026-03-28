@@ -35,9 +35,12 @@ class UserAuthBackend(ModelBackend):
 
     def _get_user_for_login(self, username):
         if "@" in username:
-            return users.models.User.objects.by_mail(username)
-
-        return users.models.User.objects.get(username=username)
+            normalized_email = users.models.User.objects.normalize_email(
+                username,
+            )
+            return users.models.User.objects.active().get(
+                email=normalized_email,
+            )
 
     def _register_failed_attempt(self, request, user):
         if not hasattr(user, "profile"):

@@ -7,9 +7,11 @@ import django.contrib.auth.mixins
 import django.contrib.auth.views
 import django.contrib.messages
 import django.core.mail
+from django.db.models import Q
 import django.shortcuts
 import django.urls
 import django.utils.timezone
+from django.utils.translation import gettext_lazy as _
 import django.views
 import django.views.generic
 
@@ -136,6 +138,28 @@ class UserDetailView(django.views.generic.DetailView):
         return users.models.User.objects.active()
 
 
+class BirthdayUsersListView(django.views.generic.ListView):
+    context_object_name = "users"
+    template_name = "users/birthday_users.html"
+
+    def get_queryset(self):
+        today = django.utils.timezone.localdate()
+        return (
+            users.models.User.objects.active()
+            .filter(
+                ~Q(email=""),
+                profile__birthday__month=today.month,
+                profile__birthday__day=today.day,
+            )
+            .order_by("username")
+        )
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["title"] = _("Today's birthdays")
+        return context
+
+
 class ProfileView(
     django.contrib.auth.mixins.LoginRequiredMixin,
     django.views.View,
@@ -175,7 +199,7 @@ class ProfileView(
         if user_form.is_valid() and profile_form.is_valid():
             user_form.save()
             profile_form.save()
-            django.contrib.messages.success(request, "Сохранено")
+            django.contrib.messages.success(request, _("Saved"))
             return django.shortcuts.redirect(
                 django.urls.reverse("users:profile"),
             )
