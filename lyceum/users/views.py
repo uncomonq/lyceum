@@ -1,5 +1,4 @@
 __all__ = ()
-
 import datetime
 
 import django.conf
@@ -142,50 +141,71 @@ class ProfileView(
 ):
     template_name = "users/profile.html"
 
-    def _build_forms(self, request):
+    def get_profile(self):
         profile, _ = users.models.Profile.objects.get_or_create(
-            user=request.user,
+            user=self.request.user,
         )
-        user_form = users.forms.UserChangeForm(
-            request.POST or None,
-            instance=request.user,
-        )
-        profile_form = users.forms.UpdateProfileForm(
-            request.POST or None,
-            request.FILES or None,
-            instance=profile,
+        return profile
+
+    def get_user_form(self):
+        kwargs = {"instance": self.request.user}
+        if self.request.method == "POST":
+            kwargs["data"] = self.request.POST
+
+        return users.forms.UserChangeForm(**kwargs)
+
+    def get_profile_form(self, profile):
+        kwargs = {"instance": profile}
+        if self.request.method == "POST":
+            kwargs["data"] = self.request.POST
+            kwargs["files"] = self.request.FILES
+
+        return users.forms.UpdateProfileForm(**kwargs)
+
+    def get_context_data(self, **kwargs):
+        return {
+            "profile_obj": kwargs["profile"],
+            "user_form": kwargs["user_form"],
+            "profile_form": kwargs["profile_form"],
+        }
+
+    def render_to_response(self, context):
+        return django.shortcuts.render(
+            request=self.request,
+            template_name=self.template_name,
+            context=context,
         )
 
-        return profile, user_form, profile_form
+    def forms_valid(self, user_form, profile_form):
+        user_form.save()
+        profile_form.save()
+        django.contrib.messages.success(self.request, "Сохранено")
+        return django.shortcuts.redirect(django.urls.reverse("users:profile"))
+
+    def forms_invalid(self, profile, user_form, profile_form):
+        return self.render_to_response(
+            self.get_context_data(
+                profile=profile,
+                user_form=user_form,
+                profile_form=profile_form,
+            ),
+        )
 
     def get(self, request, *args, **kwargs):
-        profile, user_form, profile_form = self._build_forms(request)
-        return django.shortcuts.render(
-            request,
-            self.template_name,
-            {
-                "profile_obj": profile,
-                "user_form": user_form,
-                "profile_form": profile_form,
-            },
+        profile = self.get_profile()
+        return self.render_to_response(
+            self.get_context_data(
+                profile=profile,
+                user_form=self.get_user_form(),
+                profile_form=self.get_profile_form(profile),
+            ),
         )
 
     def post(self, request, *args, **kwargs):
-        profile, user_form, profile_form = self._build_forms(request)
+        profile = self.get_profile()
+        user_form = self.get_user_form()
+        profile_form = self.get_profile_form(profile)
         if user_form.is_valid() and profile_form.is_valid():
-            user_form.save()
-            profile_form.save()
-            django.contrib.messages.success(request, "Сохранено")
-            return django.shortcuts.redirect(
-                django.urls.reverse("users:profile"),
-            )
+            return self.forms_valid(user_form, profile_form)
 
-        return django.shortcuts.render(
-            request,
-            self.template_name,
-            {
-                "profile_obj": profile,
-                "user_form": user_form,
-                "profile_form": profile_form,
-            },
-        )
+        return self.forms_invalid(profile, user_form, profile_form)

@@ -10,18 +10,15 @@ from homepage.forms import EchoForm
 import users.models
 
 
-class HomeView(django.views.generic.TemplateView):
+class HomeView(django.views.generic.ListView):
+    context_object_name = "items"
     template_name = "homepage/main.html"
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context["items"] = catalog.models.Item.objects.on_main()
-        return context
+    def get_queryset(self):
+        return catalog.models.Item.objects.on_main()
 
 
 class CoffeeView(django.views.View):
-    http_method_names = ["get", "options"]
-
     def get(self, request, *args, **kwargs):
         if request.user.is_authenticated:
             profile, _ = users.models.Profile.objects.get_or_create(

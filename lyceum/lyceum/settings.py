@@ -44,16 +44,15 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "tinymce",
     "sorl.thumbnail",
-    "core.apps.CoreConfig",
-    "homepage.apps.HomepageConfig",
     "about.apps.AboutConfig",
     "catalog.apps.CatalogConfig",
-    "django_cleanup.apps.CleanupConfig",
+    "core.apps.CoreConfig",
     "download.apps.DownloadConfig",
     "feedback.apps.FeedbackConfig",
-    "users.apps.UsersConfig",
+    "homepage.apps.HomepageConfig",
     "rating.apps.RatingConfig",
-    "site_statistics.apps.StatisticsConfig",
+    "users.apps.UsersConfig",
+    "django_cleanup.apps.CleanupConfig",
 ]
 
 DJANGO_MAIL = config("DJANGO_MAIL", default="noreply@example.com")
