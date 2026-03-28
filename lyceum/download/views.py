@@ -7,8 +7,6 @@ import django.views
 
 
 class DownloadMediaView(django.views.View):
-    http_method_names = ["get", "options"]
-
     def get(self, request, file_path, *args, **kwargs):
         media_root = settings.MEDIA_ROOT.resolve()
         media_path = (settings.MEDIA_ROOT / file_path).resolve()

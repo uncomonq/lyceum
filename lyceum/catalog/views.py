@@ -75,13 +75,22 @@ class ItemDetailView(generic.DetailView):
                 pk=self.object.pk,
             )
 
+        if request.POST.get("value") == "":
+            if user_rating is not None:
+                user_rating.delete()
+
+            return django.shortcuts.redirect(
+                "catalog:item_detail",
+                pk=self.object.pk,
+            )
+
         rating_form = rating.forms.RatingForm(
             request.POST,
             instance=user_rating,
         )
         if rating_form.is_valid():
             value = rating_form.cleaned_data["value"]
-            if value in (None, ""):
+            if value is None:
                 if user_rating is not None:
                     user_rating.delete()
             else:

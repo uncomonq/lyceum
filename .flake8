@@ -6,7 +6,7 @@ exclude =
     venv,
     .venv,
     */migrations/*
-application-import-names = about, catalog, core, download, feedback, homepage, lyceum, users, rating, site_statistics
+application-import-names = about, catalog, core, download, feedback, homepage, lyceum, rating, site_statistics, users
 import-order-style = google
 inline-quotes = double
 multiline-quotes = double
