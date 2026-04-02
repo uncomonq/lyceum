@@ -1,4 +1,5 @@
 __all__ = ()
+
 from django.apps import AppConfig
 
 

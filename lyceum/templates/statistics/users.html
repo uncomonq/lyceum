@@ -1,25 +1,26 @@
 {% extends "base.html" %}
+{% load i18n %}
 
-{% block title %}Статистика по пользователям{% endblock %}
+{% block title %}{% trans "User statistics" %}{% endblock %}
 
 {% block content %}
-  <h2 class="mb-3">Статистика по пользователям</h2>
+  <h2 class="mb-3">{% trans "User statistics" %}</h2>
   <table class="table table-striped">
     <thead>
       <tr>
-        <th>Пользователь</th>
-        <th>Лучший товар</th>
-        <th>Худший товар</th>
-        <th>Количество оценок</th>
-        <th>Средняя оценка</th>
+        <th>{% trans "User" %}</th>
+        <th>{% trans "Best item" %}</th>
+        <th>{% trans "Worst item" %}</th>
+        <th>{% trans "Number of ratings" %}</th>
+        <th>{% trans "Average rating" %}</th>
       </tr>
     </thead>
     <tbody>
       {% for stat in user_stats %}
         <tr>
-          <td>{{ stat.user.username }}</td>
-          <td>{% if stat.best_rating %}{{ stat.best_rating.item.name }}{% else %}—{% endif %}</td>
-          <td>{% if stat.worst_rating %}{{ stat.worst_rating.item.name }}{% else %}—{% endif %}</td>
+          <td>{{ stat.username }}</td>
+          <td>{{ stat.best_item_name|default:"—" }}</td>
+          <td>{{ stat.worst_item_name|default:"—" }}</td>
           <td>{{ stat.rating_count }}</td>
           <td>{{ stat.average_rating|default_if_none:"—"|floatformat:2 }}</td>
         </tr>

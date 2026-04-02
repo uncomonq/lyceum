@@ -1,14 +1,15 @@
 {% extends "base.html" %}
+{% load i18n %}
 
-{% block title %}Мои оценки товаров{% endblock %}
+{% block title %}{% trans "My ratings" %}{% endblock %}
 
 {% block content %}
-  <h2 class="mb-3">Товары, которые я оценил</h2>
+  <h2 class="mb-3">{% trans "Items I rated" %}</h2>
   <table class="table table-striped">
     <thead>
       <tr>
-        <th>Товар</th>
-        <th>Оценка</th>
+        <th>{% trans "Item" %}</th>
+        <th>{% trans "Rating" %}</th>
       </tr>
     </thead>
     <tbody>
@@ -19,7 +20,7 @@
         </tr>
       {% empty %}
         <tr>
-          <td colspan="2">Вы пока не оценивали товары.</td>
+          <td colspan="2">{% trans "You have not rated any items yet." %}</td>
         </tr>
       {% endfor %}
     </tbody>

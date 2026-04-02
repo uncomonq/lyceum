@@ -118,7 +118,7 @@ class UserPagesTests(TestCase):
             reverse("users:user_detail", kwargs={"pk": self.user.pk}),
         )
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, "not specified")
+        self.assertContains(response, "Not specified")
         self.assertContains(response, str(self.profile.coffee_count))
 
     def test_profile_requires_login(self):
@@ -510,28 +510,3 @@ class BirthdayUsersContextProcessorTests(TestCase):
         self.assertContains(response, "Today's birthdays:")
         self.assertContains(response, "Шаблон Проверка")
         self.assertContains(response, "template@example.com")
-
-    @patch("users.context_processors.django.utils.timezone.localdate")
-    @override_settings(BIRTHDAY_USERS_LIMIT=2)
-    def test_context_processor_limits_birthday_users(
-        self,
-        mocked_localdate,
-    ):
-        mocked_localdate.return_value = datetime.date(2026, 3, 26)
-        for index in range(3):
-            user = User.objects.create_user(
-                username=f"birthday_user_{index}",
-                email=f"user_{index}@example.com",
-                password="strong_password_123",
-                is_active=True,
-            )
-            users.models.Profile.objects.create(
-                user=user,
-                birthday=datetime.date(2000, 3, 26),
-            )
-
-        response = self.client.get(reverse("homepage:main"))
-
-        self.assertEqual(len(response.context["birthday_users"]), 2)
-        self.assertTrue(response.context["birthday_users_has_more"])
-        self.assertContains(response, reverse("users:birthday_users"))

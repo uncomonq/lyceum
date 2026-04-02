@@ -1,5 +1,6 @@
 __all__ = ()
 from django import forms
+from django.utils.translation import gettext_lazy as _
 
 from feedback.models import Feedback, FeedbackPersonData
 
@@ -40,16 +41,16 @@ class FeedbackForm(forms.ModelForm):
             "status",
         )
         labels = {
-            "text": "Текст обращения",
+            "text": _("Message"),
         }
         help_texts = {
-            "text": "Введите текст обращения.",
+            "text": _("Enter the message text."),
         }
         widgets = {
             "text": forms.Textarea(
                 attrs={
                     "rows": 4,
-                    "placeholder": "Текст обращения",
+                    "placeholder": _("Message"),
                 },
             ),
         }
@@ -71,15 +72,15 @@ class FeedbackAuthorForm(forms.ModelForm):
         model = FeedbackPersonData
         exclude = ("feedback",)
         labels = {
-            "name": "Имя",
-            "mail": "Почта",
+            "name": _("Name"),
+            "mail": _("Email"),
         }
         help_texts = {
-            "name": "Укажите ваше имя.",
-            "mail": "Укажите почту для обратной связи.",
+            "name": _("Enter your name."),
+            "mail": _("Enter your email address."),
         }
         widgets = {
-            "name": forms.TextInput(attrs={"placeholder": "Ваше имя"}),
+            "name": forms.TextInput(attrs={"placeholder": _("Your name")}),
             "mail": forms.EmailInput(
                 attrs={
                     "placeholder": "name@example.com",
@@ -90,7 +91,7 @@ class FeedbackAuthorForm(forms.ModelForm):
 
 class FeedbackFilesForm(forms.Form):
     files = MultipleFileField(
-        label="Файлы",
+        label=_("Files"),
         required=False,
         widget=MultipleFileInput(),
     )

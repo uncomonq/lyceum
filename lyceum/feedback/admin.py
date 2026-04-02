@@ -1,5 +1,6 @@
 __all__ = ()
 from django.contrib import admin
+from django.utils.translation import gettext_lazy as _
 
 import feedback.models
 
@@ -62,11 +63,11 @@ class FeedbackAdmin(admin.ModelAdmin):
     )
     inlines = (FeedbackPersonDataInline, FeedbackFileInline)
 
-    @admin.display(description="Имя")
+    @admin.display(description=_("Name"))
     def author_name(self, obj):
         return obj.person.name
 
-    @admin.display(description="Почта")
+    @admin.display(description=_("Email"))
     def author_mail(self, obj):
         return obj.person.mail
 
