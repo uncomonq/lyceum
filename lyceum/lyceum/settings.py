@@ -34,8 +34,8 @@ MAX_AUTH_ATTEMPTS = config(
 )
 
 BIRTHDAY_USERS_LIMIT = config(
-    "DJANGO_BIRTHDAY_USERS_LIMIT",
-    default=5,
+    "BIRTHDAY_USERS_LIMIT",
+    default=3,
     cast=int,
 )
 

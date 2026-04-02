@@ -428,14 +428,16 @@ class AuthAttemptsTests(TestCase):
         self.assertIsNone(self.user.profile.blocked_at)
 
 
-@override_settings(ALLOW_REVERSE=False, LANGUAGE_CODE="en")
+@override_settings(ALLOW_REVERSE=False)
 class BirthdayUsersContextProcessorTests(TestCase):
-    @patch("users.context_processors.django.utils.timezone.localdate")
+    @patch("users.utils.django.utils.timezone.now")
     def test_context_processor_returns_only_active_users_with_today_birthday(
         self,
-        mocked_localdate,
+        mocked_now,
     ):
-        mocked_localdate.return_value = datetime.date(2026, 3, 26)
+        mocked_now.return_value = timezone.make_aware(
+            datetime.datetime(2026, 3, 26, 10, 0),
+        )
 
         birthday_user = User.objects.create_user(
             username="birthday_user",
@@ -485,12 +487,14 @@ class BirthdayUsersContextProcessorTests(TestCase):
             ],
         )
 
-    @patch("users.context_processors.django.utils.timezone.localdate")
+    @patch("users.utils.django.utils.timezone.now")
     def test_birthday_block_is_rendered_in_base_template(
         self,
-        mocked_localdate,
+        mocked_now,
     ):
-        mocked_localdate.return_value = datetime.date(2026, 3, 26)
+        mocked_now.return_value = timezone.make_aware(
+            datetime.datetime(2026, 3, 26, 10, 0),
+        )
 
         birthday_user = User.objects.create_user(
             username="birthday_user_for_template",
@@ -510,3 +514,66 @@ class BirthdayUsersContextProcessorTests(TestCase):
         self.assertContains(response, "Today's birthdays:")
         self.assertContains(response, "Шаблон Проверка")
         self.assertContains(response, "template@example.com")
+
+    @patch("users.utils.django.utils.timezone.now")
+    @override_settings(BIRTHDAY_USERS_LIMIT=2)
+    def test_context_processor_applies_limit_and_timezone_offset_cookie(
+        self,
+        mocked_now,
+    ):
+        mocked_now.return_value = timezone.make_aware(
+            datetime.datetime(2026, 3, 26, 0, 30),
+        )
+
+        for index in range(3):
+            user = User.objects.create_user(
+                username=f"birthday_{index}",
+                email=f"birthday_{index}@example.com",
+                password="strong_password_123",
+                is_active=True,
+            )
+            users.models.Profile.objects.create(
+                user=user,
+                birthday=datetime.date(1990 + index, 3, 25),
+            )
+
+        self.client.cookies["timezone_offset"] = "60"
+        response = self.client.get(reverse("homepage:main"))
+
+        self.assertEqual(response.status_code, HTTPStatus.OK)
+        self.assertEqual(len(response.context["birthday_users"]), 2)
+
+    @patch("users.utils.django.utils.timezone.now")
+    def test_context_processor_keeps_users_without_email(
+        self,
+        mocked_now,
+    ):
+        mocked_now.return_value = timezone.make_aware(
+            datetime.datetime(2026, 3, 26, 10, 0),
+        )
+
+        user_without_email = User.objects.create_user(
+            username="birthday_without_email",
+            email="",
+            password="strong_password_123",
+            is_active=True,
+            first_name="Без",
+            last_name="Почты",
+        )
+        users.models.Profile.objects.create(
+            user=user_without_email,
+            birthday=datetime.date(1995, 3, 26),
+        )
+
+        response = self.client.get(reverse("homepage:main"))
+
+        self.assertEqual(response.status_code, HTTPStatus.OK)
+        self.assertEqual(
+            response.context["birthday_users"],
+            [
+                {
+                    "name": "Без Почты",
+                    "email": "Email не указан",
+                },
+            ],
+        )

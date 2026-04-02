@@ -15,24 +15,24 @@ import rating.models
 ITEMS_CONTEXT_KEY = "items"
 ITEM_CONTEXT_KEY = "item"
 MAIN_IMAGE_CONTEXT_KEY = "main_image"
-ITEM_LIST_TEMPLATE = "catalog/item_list.html"
-ITEM_DETAIL_TEMPLATE = "catalog/item.html"
 
 
 class ItemListView(generic.ListView):
+    LIST_TEMPLATE_NAME = "catalog/item_list.html"
     context_object_name = ITEMS_CONTEXT_KEY
     queryset = catalog.models.Item.objects.published()
-    template_name = ITEM_LIST_TEMPLATE
+    template_name = LIST_TEMPLATE_NAME
     extra_context = {
         "page_title": "Catalog",
     }
 
 
 class ItemDetailView(generic.DetailView):
+    DETAIL_TEMPLATE_NAME = "catalog/item.html"
     context_object_name = ITEM_CONTEXT_KEY
     pk_url_kwarg = "pk"
     queryset = catalog.models.Item.objects.published()
-    template_name = ITEM_DETAIL_TEMPLATE
+    template_name = DETAIL_TEMPLATE_NAME
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -111,10 +111,11 @@ class ItemDetailView(generic.DetailView):
 
 
 class ItemNewView(generic.ListView):
+    LIST_TEMPLATE_NAME = "catalog/item_list.html"
     context_object_name = ITEMS_CONTEXT_KEY
-    template_name = ITEM_LIST_TEMPLATE
+    template_name = LIST_TEMPLATE_NAME
     extra_context = {
-        "page_title": _("New"),
+        "page_title": _("New items"),
     }
 
     def get_queryset(self):
@@ -123,10 +124,11 @@ class ItemNewView(generic.ListView):
 
 
 class ItemFridayView(generic.ListView):
+    LIST_TEMPLATE_NAME = "catalog/item_list.html"
     context_object_name = ITEMS_CONTEXT_KEY
-    template_name = ITEM_LIST_TEMPLATE
+    template_name = LIST_TEMPLATE_NAME
     extra_context = {
-        "page_title": _("Friday"),
+        "page_title": _("Friday Items"),
     }
 
     def get_queryset(self):
@@ -134,10 +136,11 @@ class ItemFridayView(generic.ListView):
 
 
 class ItemUnverifiedView(generic.ListView):
+    LIST_TEMPLATE_NAME = "catalog/item_list.html"
     context_object_name = ITEMS_CONTEXT_KEY
-    template_name = ITEM_LIST_TEMPLATE
+    template_name = LIST_TEMPLATE_NAME
     extra_context = {
-        "page_title": _("Unverified"),
+        "page_title": _("Unverified Items"),
     }
 
     def get_queryset(self):

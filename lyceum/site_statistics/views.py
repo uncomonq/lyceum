@@ -1,7 +1,7 @@
 __all__ = ()
 
 import django.contrib.auth.mixins
-from django.db.models import Avg, Count, F, OuterRef, Subquery
+from django.db.models import Avg, Count, OuterRef, Subquery
 import django.views.generic
 
 import catalog.models
@@ -14,30 +14,52 @@ class UserStatisticsView(django.views.generic.TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-
-        best_rating_qs = rating.models.Rating.objects.filter(
-            user=OuterRef("pk"),
-        ).order_by(
-            "-value",
-            "-updated_at",
-            "-id",
+        best_rating_subquery = (
+            rating.models.Rating.objects.filter(
+                user_id=OuterRef("pk"),
+            )
+            .order_by("-value", "-updated_at", "-id")
+            .values("pk")[:1]
         )
-        worst_rating_qs = rating.models.Rating.objects.filter(
-            user=OuterRef("pk"),
-        ).order_by(
-            "value",
-            "-updated_at",
-            "-id",
+        worst_rating_subquery = (
+            rating.models.Rating.objects.filter(
+                user_id=OuterRef("pk"),
+            )
+            .order_by("value", "-updated_at", "-id")
+            .values("pk")[:1]
         )
 
         users_qs = users.models.User.objects.annotate(
-            rating_count=Count("rating", distinct=True),
+            rating_count=Count("rating"),
             average_rating=Avg("rating__value"),
-            best_item_name=Subquery(best_rating_qs.values("item__name")[:1]),
-            worst_item_name=Subquery(worst_rating_qs.values("item__name")[:1]),
-        ).order_by("username")
+            best_rating_id=Subquery(best_rating_subquery),
+            worst_rating_id=Subquery(worst_rating_subquery),
+        )
+        users_list = list(users_qs)
+        rating_ids = {
+            rating_id
+            for user in users_list
+            for rating_id in (user.best_rating_id, user.worst_rating_id)
+            if rating_id is not None
+        }
+        ratings_by_id = {
+            rating_obj.pk: rating_obj
+            for rating_obj in rating.models.Rating.objects.filter(
+                pk__in=rating_ids,
+            ).select_related("item")
+        }
 
-        context["user_stats"] = users_qs
+        context["user_stats"] = [
+            {
+                "user": user,
+                "best_rating": ratings_by_id.get(user.best_rating_id),
+                "worst_rating": ratings_by_id.get(user.worst_rating_id),
+                "rating_count": user.rating_count,
+                "average_rating": user.average_rating,
+            }
+            for user in users_list
+        ]
+
         return context
 
 
@@ -89,7 +111,7 @@ class ItemStatisticsView(django.views.generic.TemplateView):
             ),
             last_min_rating_value=Subquery(min_rating_qs.values("value")[:1]),
         ).order_by(
-            F("average_rating").desc(nulls_last=True),
+            ("average_rating").desc(nulls_last=True),
             "-rating_count",
             "name",
         )

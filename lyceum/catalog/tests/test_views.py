@@ -5,12 +5,13 @@ from http import HTTPStatus
 from django.test import override_settings, TestCase
 from django.urls import reverse
 import django.utils.timezone
-
+from freezegun import freeze_time
 
 from catalog.models import Category, Item, ItemImage, MainImage, Tag
 
 
 @override_settings(ALLOW_REVERSE=False)
+@freeze_time("2026-03-26 12:00:00")
 class CatalogViewsTests(TestCase):
     fixtures = ["fixtures/test_catalog_views.json"]
 
