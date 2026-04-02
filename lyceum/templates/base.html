@@ -18,12 +18,17 @@
   <main class="container mt-4">
     {% if birthday_users %}
       <div class="alert alert-info">
-        <strong>Именниники сегодня:</strong>
+        <strong>{% trans "Today's birthdays:" %}</strong>
         <ul class="mb-0">
           {% for birthday_user in birthday_users %}
             <li>{{ birthday_user.name }} — {{ birthday_user.email }}</li>
           {% endfor %}
         </ul>
+        {% if birthday_users_has_more %}
+          <a href="{% url 'users:birthday_users' %}" class="alert-link">
+            {% trans "Show all birthday users" %}
+          </a>
+        {% endif %}
       </div>
     {% endif %}
     <div class="min-vh-100">

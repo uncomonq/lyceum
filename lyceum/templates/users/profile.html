@@ -1,7 +1,8 @@
 {% extends "base.html" %}
+{% load i18n %}
 
 {% block content %}
-  <h2>Мой профиль</h2>
+  <h2>{% trans "My profile" %}</h2>
 
   {% if profile_obj.image %}
     <img src="{{ profile_obj.image.url }}" alt="{{ request.user.username }}" width="200" class="mb-3">
@@ -21,8 +22,8 @@
     {% csrf_token %}
     {% include "includes/form_fields.html" with form=user_form %}
     {% include "includes/form_fields.html" with form=profile_form %}
-    <button type="submit" class="btn btn-primary">Сохранить</button>
+    <button type="submit" class="btn btn-primary">{% trans "Save" %}</button>
   </form>
 
-  <a class="btn btn-outline-secondary" href="{% url 'homepage:coffee' %}">Выпить кофе</a>
+  <a class="btn btn-outline-secondary" href="{% url 'homepage:coffee' %}">{% trans "Drink coffee" %}</a>
 {% endblock %}

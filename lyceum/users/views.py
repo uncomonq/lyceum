@@ -6,9 +6,11 @@ import django.contrib.auth.mixins
 import django.contrib.auth.views
 import django.contrib.messages
 import django.core.mail
+from django.db.models import Q
 import django.shortcuts
 import django.urls
 import django.utils.timezone
+from django.utils.translation import gettext_lazy as _
 import django.views
 import django.views.generic
 
@@ -70,8 +72,8 @@ class SignUpView(django.views.generic.FormView):
             kwargs={"username": user.username},
         )
         django.core.mail.send_mail(
-            f"Здравствуй {user.username}",
-            "Перейди по ссылке для активации аккаунта " f"{activate_url}",
+            _("Hello %(username)s") % {"username": user.username},
+            _("Follow the activation link: %(url)s") % {"url": activate_url},
             django.conf.settings.DJANGO_MAIL,
             [user.email or django.conf.settings.DJANGO_MAIL],
             fail_silently=False,
@@ -135,77 +137,78 @@ class UserDetailView(django.views.generic.DetailView):
         return users.models.User.objects.active()
 
 
+class BirthdayUsersListView(django.views.generic.ListView):
+    context_object_name = "users"
+    template_name = "users/birthday_users.html"
+
+    def get_queryset(self):
+        today = django.utils.timezone.localdate()
+        return (
+            users.models.User.objects.active()
+            .filter(
+                ~Q(email=""),
+                profile__birthday__month=today.month,
+                profile__birthday__day=today.day,
+            )
+            .order_by("username")
+        )
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["title"] = _("Today's birthdays")
+        return context
+
+
 class ProfileView(
     django.contrib.auth.mixins.LoginRequiredMixin,
     django.views.View,
 ):
     template_name = "users/profile.html"
 
-    def get_profile(self):
+    def _build_forms(self, request):
         profile, _ = users.models.Profile.objects.get_or_create(
-            user=self.request.user,
+            user=request.user,
         )
-        return profile
-
-    def get_user_form(self):
-        kwargs = {"instance": self.request.user}
-        if self.request.method == "POST":
-            kwargs["data"] = self.request.POST
-
-        return users.forms.UserChangeForm(**kwargs)
-
-    def get_profile_form(self, profile):
-        kwargs = {"instance": profile}
-        if self.request.method == "POST":
-            kwargs["data"] = self.request.POST
-            kwargs["files"] = self.request.FILES
-
-        return users.forms.UpdateProfileForm(**kwargs)
-
-    def get_context_data(self, **kwargs):
-        return {
-            "profile_obj": kwargs["profile"],
-            "user_form": kwargs["user_form"],
-            "profile_form": kwargs["profile_form"],
-        }
-
-    def render_to_response(self, context):
-        return django.shortcuts.render(
-            request=self.request,
-            template_name=self.template_name,
-            context=context,
+        user_form = users.forms.UserChangeForm(
+            request.POST or None,
+            instance=request.user,
+        )
+        profile_form = users.forms.UpdateProfileForm(
+            request.POST or None,
+            request.FILES or None,
+            instance=profile,
         )
 
-    def forms_valid(self, user_form, profile_form):
-        user_form.save()
-        profile_form.save()
-        django.contrib.messages.success(self.request, "Сохранено")
-        return django.shortcuts.redirect(django.urls.reverse("users:profile"))
-
-    def forms_invalid(self, profile, user_form, profile_form):
-        return self.render_to_response(
-            self.get_context_data(
-                profile=profile,
-                user_form=user_form,
-                profile_form=profile_form,
-            ),
-        )
+        return profile, user_form, profile_form
 
     def get(self, request, *args, **kwargs):
-        profile = self.get_profile()
-        return self.render_to_response(
-            self.get_context_data(
-                profile=profile,
-                user_form=self.get_user_form(),
-                profile_form=self.get_profile_form(profile),
-            ),
+        profile, user_form, profile_form = self._build_forms(request)
+        return django.shortcuts.render(
+            request,
+            self.template_name,
+            {
+                "profile_obj": profile,
+                "user_form": user_form,
+                "profile_form": profile_form,
+            },
         )
 
     def post(self, request, *args, **kwargs):
-        profile = self.get_profile()
-        user_form = self.get_user_form()
-        profile_form = self.get_profile_form(profile)
+        profile, user_form, profile_form = self._build_forms(request)
         if user_form.is_valid() and profile_form.is_valid():
-            return self.forms_valid(user_form, profile_form)
+            user_form.save()
+            profile_form.save()
+            django.contrib.messages.success(request, _("Saved"))
+            return django.shortcuts.redirect(
+                django.urls.reverse("users:profile"),
+            )
 
-        return self.forms_invalid(profile, user_form, profile_form)
+        return django.shortcuts.render(
+            request,
+            self.template_name,
+            {
+                "profile_obj": profile,
+                "user_form": user_form,
+                "profile_form": profile_form,
+            },
+        )

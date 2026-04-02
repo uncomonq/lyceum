@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: lyceum\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-10 20:48+0300\n"
+"POT-Creation-Date: 2026-03-29 19:13+0300\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -10,28 +10,11 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
-#: .\catalog\views.py:16
-msgid "Items catalog"
-msgstr "Каталог товаров"
-
-#: .\catalog\views.py:34 .\templates\includes\header.html:47
-#: .\templates\includes\header.html:49
-msgid "New items"
-msgstr "Новинки"
-
-#: .\catalog\views.py:40
-msgid "Friday items"
-msgstr "Пятница"
-
-#: .\catalog\views.py:46
-msgid "Unverified items"
-msgstr "Непроверенные"
-
-#: .\lyceum\settings.py:128
+#: .\lyceum\settings.py:150
 msgid "Russian"
 msgstr "Русский"
 
-#: .\lyceum\settings.py:129
+#: .\lyceum\settings.py:151
 msgid "English"
 msgstr "Английский"
 
@@ -44,11 +27,49 @@ msgstr "О проекте"
 msgid "Educational project for Yandex Lyceum Django specialization."
 msgstr "Учебный проект по специализации django Яндекс Лицея."
 
+#: .\templates\base.html:21
+msgid "Today's birthdays:"
+msgstr "Именинники сегодня:"
+
+#: .\templates\base.html:29
+msgid "Show all birthday users"
+msgstr "Показать всех именинников"
+
 #: .\templates\catalog\item.html:14
 msgid "Download main image"
 msgstr "Скачать главное изображение"
 
-#: .\templates\catalog\item.html:33
+#: .\templates\catalog\item.html:27
+msgid "Rating"
+msgstr "Рейтинг"
+
+#: .\templates\catalog\item.html:28
+msgid "Average score:"
+msgstr "Средняя оценка:"
+
+#: .\templates\catalog\item.html:29
+msgid "Ratings count:"
+msgstr "Кол-во оценок:"
+
+#: .\templates\catalog\item.html:34
+msgid "Your rating"
+msgstr "Ваша оценка"
+
+#: .\templates\catalog\item.html:39
+#, fuzzy
+#| msgid "No users yet."
+msgid "Not rated yet"
+msgstr "Пользователей пока нет."
+
+#: .\templates\catalog\item.html:52
+msgid "Save rating"
+msgstr "Сохранить оценку"
+
+#: .\templates\catalog\item.html:58
+msgid "Delete rating"
+msgstr "Удалить оценку"
+
+#: .\templates\catalog\item.html:72
 msgid "Download image"
 msgstr "Скачать изображение"
 
@@ -57,11 +78,11 @@ msgstr "Скачать изображение"
 msgid "Feedback"
 msgstr "Обратная связь"
 
-#: .\templates\feedback\feedback.html:25 .\templates\homepage\echo.html:15
+#: .\templates\feedback\feedback.html:47 .\templates\homepage\echo.html:16
 msgid "Submit"
 msgstr "Отправить"
 
-#: .\templates\homepage\echo.html:3 .\templates\homepage\echo.html:6
+#: .\templates\homepage\echo.html:7
 msgid "Echo"
 msgstr ""
 
@@ -72,6 +93,10 @@ msgstr "Главная"
 #: .\templates\homepage\main.html:7
 msgid "Popular items"
 msgstr "Популярные товары"
+
+#: .\templates\includes\footer.html:6 .\templates\includes\header.html:7
+msgid "Lyceum"
+msgstr ""
 
 #: .\templates\includes\header.html:6
 msgid "Site logo"
@@ -85,6 +110,10 @@ msgstr "На главную"
 msgid "Items list"
 msgstr "Список товаров"
 
+#: .\templates\includes\header.html:47 .\templates\includes\header.html:49
+msgid "New items"
+msgstr "Новинки"
+
 #: .\templates\includes\header.html:54 .\templates\includes\header.html:56
 #, fuzzy
 #| msgid "Friday items"
@@ -95,14 +124,221 @@ msgstr "Пятница"
 msgid "Unverified"
 msgstr "Непроверенные"
 
-#: .\templates\includes\header.html:68
+#: .\templates\includes\header.html:68 .\templates\includes\header.html:70
+#: .\templates\users\user_list.html:5
+msgid "Users"
+msgstr "Пользователи"
+
+#: .\templates\includes\header.html:75
 msgid "Admin panel"
 msgstr "Админка"
 
-#: .\templates\includes\header.html:83
+#: .\templates\includes\header.html:81 .\templates\includes\header.html:83
+msgid "Profile"
+msgstr "Профиль"
+
+#: .\templates\includes\header.html:89
+msgid "Logout"
+msgstr "Выйти"
+
+#: .\templates\includes\header.html:95 .\templates\includes\header.html:97
+#: .\templates\users\login.html:5 .\templates\users\login.html:9
+msgid "Login"
+msgstr "Вход"
+
+#: .\templates\includes\header.html:102 .\templates\includes\header.html:104
+#: .\templates\users\signup.html:5 .\templates\users\signup.html:9
+msgid "Sign up"
+msgstr "Регистрация"
+
+#: .\templates\includes\header.html:112
+msgid "Language"
+msgstr "Язык"
+
+#: .\templates\includes\header.html:121
 msgid "Cat photo"
 msgstr "Фото котика"
 
 #: .\templates\includes\item_card.html:13
 msgid "Details"
 msgstr "Подробнее"
+
+#: .\templates\users\birthday_users.html:5 .\users\views.py:159
+msgid "Today's birthdays"
+msgstr "Именинники сегодня"
+
+#: .\templates\users\birthday_users.html:13
+msgid "There are no birthdays today."
+msgstr "Сегодня именинников нет."
+
+#: .\templates\users\login.html:11
+msgid "Forgot password?"
+msgstr "Забыли пароль?"
+
+#: .\templates\users\logout.html:5
+msgid "You have been logged out"
+msgstr "Вы вышли из аккаунта"
+
+#: .\templates\users\logout.html:6
+msgid "Log in again"
+msgstr "Войти заново"
+
+#: .\templates\users\password_change.html:5
+#, fuzzy
+#| msgid "Forgot password?"
+msgid "Change password"
+msgstr "Забыли пароль?"
+
+#: .\templates\users\password_change.html:9
+#, fuzzy
+#| msgid "Forgot password?"
+msgid "Update password"
+msgstr "Забыли пароль?"
+
+#: .\templates\users\password_change_done.html:5
+msgid "Password changed successfully"
+msgstr "Пароль успешно изменен"
+
+#: .\templates\users\password_reset.html:5
+#: .\templates\users\password_reset_subject.html:1
+msgid "Password reset"
+msgstr "Сброс пароля"
+
+#: .\templates\users\password_reset.html:9
+msgid "Send reset link"
+msgstr "Отправить ссылку для сброса"
+
+#: .\templates\users\password_reset_complete.html:5
+msgid "Password reset completed"
+msgstr "Сброс пароля завершен"
+
+#: .\templates\users\password_reset_complete.html:6
+msgid "Go to login"
+msgstr "Войти"
+
+#: .\templates\users\password_reset_confirm.html:5
+msgid "Set a new password"
+msgstr "Новый пароль"
+
+#: .\templates\users\password_reset_confirm.html:9
+#, fuzzy
+#| msgid "Forgot password?"
+msgid "Save password"
+msgstr "Забыли пароль?"
+
+#: .\templates\users\password_reset_done.html:5
+msgid "Password reset link sent"
+msgstr "Ссылка отправлена"
+
+#: .\templates\users\password_reset_done.html:6
+msgid "Check your email to continue."
+msgstr "Проверьте свой email"
+
+#: .\templates\users\password_reset_email.html:2
+msgid "You received this email because you requested a password reset."
+msgstr "Вы получили это письмо, потому что запросили сброс пароля."
+
+#: .\templates\users\password_reset_email.html:4
+msgid "Follow the link below:"
+msgstr "Перейдите по ссылке ниже:"
+
+#: .\templates\users\password_reset_email.html:7
+msgid "If this wasn't you, just ignore this email."
+msgstr "Если это не вы, просто проигнорируйте это письмо."
+
+#: .\templates\users\profile.html:5
+msgid "My profile"
+msgstr "Мой профиль"
+
+#: .\templates\users\profile.html:25
+msgid "Save"
+msgstr "Сохранить"
+
+#: .\templates\users\profile.html:28
+msgid "Drink coffee"
+msgstr "Выпить кофе"
+
+#: .\templates\users\user_detail.html:5
+#, python-format
+msgid "User %(username)s"
+msgstr "Пользователь %(username)s"
+
+#: .\templates\users\user_detail.html:13
+msgid "Email"
+msgstr "Почта"
+
+#: .\templates\users\user_detail.html:17 .\templates\users\user_detail.html:25
+#: .\templates\users\user_detail.html:33 .\templates\users\user_detail.html:41
+msgid "not specified"
+msgstr "не указано"
+
+#: .\templates\users\user_detail.html:21
+msgid "First name"
+msgstr "Имя"
+
+#: .\templates\users\user_detail.html:29
+msgid "Last name"
+msgstr "Фамилия"
+
+#: .\templates\users\user_detail.html:37
+msgid "Birthday"
+msgstr "День рождения"
+
+#: .\templates\users\user_detail.html:45
+msgid "Coffee count"
+msgstr "Кол-во кофе"
+
+#: .\templates\users\user_list.html:24
+msgid "No users yet."
+msgstr "Пользователей пока нет."
+
+#: .\users\backends.py:87 .\users\views.py:76
+#, fuzzy, python-format
+#| msgid "User %(username)s"
+msgid "Hello %(username)s"
+msgstr "Пользователь %(username)s"
+
+#: .\users\backends.py:88
+#, python-format
+msgid "Follow the reactivation link: %(url)s"
+msgstr "Перейдите по ссылке для повторной активации: %(url)s"
+
+#: .\users\forms.py:36
+msgid "Account is not activated"
+msgstr "Аккаунт не активирован"
+
+#: .\users\forms.py:106
+msgid "User with this email already exists."
+msgstr "Пользователь с такой почтой уже существует."
+
+#: .\users\forms.py:135
+#, fuzzy
+#| msgid "Format: YYYY-MM-DD"
+msgid "Format: DD.MM.YYYY"
+msgstr "Формат: ДД.ММ.ГГГГ"
+
+#: .\users\forms.py:148
+msgid "Birthday cannot be in the future."
+msgstr "Дата рождения не может быть в будущем."
+
+#: .\users\forms.py:153
+msgid "Birthday is too far in the past."
+msgstr "Дата рождения слишком далеко в прошлом."
+
+#: .\users\views.py:77
+#, python-format
+msgid "Follow the activation link: %(url)s"
+msgstr "Перейдите по ссылке для повторной активации: %(url)s"
+
+#: .\users\views.py:202
+msgid "Saved"
+msgstr "Сохранено"
+
+#~ msgid "Items catalog"
+#~ msgstr "Каталог товаров"
+
+#~ msgid "Friday items"
+#~ msgstr "Пятница"
+
+#~ msgid "Unverified items"
+#~ msgstr "Непроверенные"

@@ -6,6 +6,7 @@ from django.contrib.auth.backends import ModelBackend
 from django.core.mail import send_mail
 from django.urls import reverse
 from django.utils import timezone
+from django.utils.translation import gettext as _
 
 import users.models
 
@@ -34,9 +35,16 @@ class UserAuthBackend(ModelBackend):
 
     def _get_user_for_login(self, username):
         if "@" in username:
-            return users.models.User.objects.by_mail(username)
+            normalized_email = users.models.User.objects.normalize_email(
+                username,
+            )
+            return users.models.User.objects.active().get(
+                email=normalized_email,
+            )
 
-        return users.models.User.objects.get(username=username)
+        return users.models.User.objects.active().get(
+            username=username,
+        )
 
     def _register_failed_attempt(self, request, user):
         if not hasattr(user, "profile"):
@@ -75,8 +83,8 @@ class UserAuthBackend(ModelBackend):
             activate_url = request.build_absolute_uri(activate_url)
 
         send_mail(
-            f"Здравствуй {user.username}",
-            "Перейди по ссылке для активации аккаунта " f"{activate_url}",
+            _("Hello %(username)s") % {"username": user.username},
+            _("Follow the reactivation link: %(url)s") % {"url": activate_url},
             settings.DJANGO_MAIL,
             [user.email or settings.DJANGO_MAIL],
             fail_silently=False,
