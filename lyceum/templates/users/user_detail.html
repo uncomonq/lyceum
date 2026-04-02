@@ -10,19 +10,19 @@
 
   <ul class="list-group mb-3">
     <li class="list-group-item">
-      <strong>{% trans "Email" %}:</strong>
-      {% if user_obj.email %}
+    <strong>{% trans "Email" %}:</strong> 
+    {% if user_obj.email %}
         {{ user_obj.email }}
-      {% else %}
-        <em>{% trans "not specified" %}</em>
-      {% endif %}
+    {% else %}
+        {% trans "Not specified" %}
+    {% endif %}
     </li>
     <li class="list-group-item">
-      <strong>{% trans "First name" %}:</strong>
+      <strong>{% trans "Name" %}:</strong>
       {% if user_obj.first_name %}
         {{ user_obj.first_name }}
       {% else %}
-        <em>{% trans "not specified" %}</em>
+        <em>{% trans "Not specified" %}</em>
       {% endif %}
     </li>
     <li class="list-group-item">
@@ -30,7 +30,7 @@
       {% if user_obj.last_name %}
         {{ user_obj.last_name }}
       {% else %}
-        <em>{% trans "not specified" %}</em>
+        <em>{% trans "Not specified" %}</em>
       {% endif %}
     </li>
     <li class="list-group-item">
@@ -38,7 +38,7 @@
       {% if user_obj.profile.birthday %}
         {{ user_obj.profile.birthday|date:"d.m.Y" }}
       {% else %}
-        <em>{% trans "not specified" %}</em>
+        <em>{% trans "Not specified" %}</em>
       {% endif %}
     </li>
     <li class="list-group-item">

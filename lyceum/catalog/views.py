@@ -5,6 +5,7 @@ from django.contrib.auth.views import redirect_to_login
 from django.db.models import Avg, Count
 import django.shortcuts
 import django.utils.timezone
+from django.utils.translation import gettext_lazy as _
 from django.views import generic
 
 import catalog.models
@@ -113,7 +114,7 @@ class ItemNewView(generic.ListView):
     context_object_name = ITEMS_CONTEXT_KEY
     template_name = ITEM_LIST_TEMPLATE
     extra_context = {
-        "page_title": "New items",
+        "page_title": _("New"),
     }
 
     def get_queryset(self):
@@ -125,7 +126,7 @@ class ItemFridayView(generic.ListView):
     context_object_name = ITEMS_CONTEXT_KEY
     template_name = ITEM_LIST_TEMPLATE
     extra_context = {
-        "page_title": "Friday Items",
+        "page_title": _("Friday"),
     }
 
     def get_queryset(self):
@@ -136,7 +137,7 @@ class ItemUnverifiedView(generic.ListView):
     context_object_name = ITEMS_CONTEXT_KEY
     template_name = ITEM_LIST_TEMPLATE
     extra_context = {
-        "page_title": "Unverified Items",
+        "page_title": _("Unverified"),
     }
 
     def get_queryset(self):

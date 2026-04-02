@@ -1,35 +1,36 @@
 {% extends "base.html" %}
+{% load i18n %}
 
-{% block title %}Статистика по товарам{% endblock %}
+{% block title %}{% trans "Item statistics" %}{% endblock %}
 
 {% block content %}
-  <h2 class="mb-3">Статистика по товарам</h2>
+  <h2 class="mb-3">{% trans "Item statistics" %}</h2>
   <table class="table table-striped">
     <thead>
       <tr>
-        <th>Товар</th>
-        <th>Средняя оценка</th>
-        <th>Количество оценок</th>
-        <th>Последняя максимальная оценка</th>
-        <th>Последняя минимальная оценка</th>
+        <th>{% trans "Item" %}</th>
+        <th>{% trans "Average rating" %}</th>
+        <th>{% trans "Number of ratings" %}</th>
+        <th>{% trans "Latest maximum rating" %}</th>
+        <th>{% trans "Latest minimum rating" %}</th>
       </tr>
     </thead>
     <tbody>
       {% for stat in item_stats %}
         <tr>
-          <td>{{ stat.item.name }}</td>
+          <td>{{ stat.name }}</td>
           <td>{{ stat.average_rating|default_if_none:"—"|floatformat:2 }}</td>
           <td>{{ stat.rating_count }}</td>
           <td>
-            {% if stat.last_max_rating %}
-              {{ stat.last_max_rating.user.username }} ({{ stat.last_max_rating.value }})
+            {% if stat.last_max_rating_user %}
+              {{ stat.last_max_rating_user }} ({{ stat.last_max_rating_value }})
             {% else %}
               —
             {% endif %}
           </td>
           <td>
-            {% if stat.last_min_rating %}
-              {{ stat.last_min_rating.user.username }} ({{ stat.last_min_rating.value }})
+            {% if stat.last_min_rating_user %}
+              {{ stat.last_min_rating_user }} ({{ stat.last_min_rating_value }})
             {% else %}
               —
             {% endif %}

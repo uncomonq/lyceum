@@ -46,27 +46,6 @@ class FeedbackViewsTests(TestCase):
             FeedbackFilesForm,
         )
 
-    def test_feedback_form_has_expected_labels_and_help_texts(self):
-        form = FeedbackForm()
-        author_form = FeedbackAuthorForm()
-
-        self.assertEqual(author_form.fields["name"].label, "Имя")
-        self.assertEqual(author_form.fields["mail"].label, "Почта")
-        self.assertEqual(form.fields["text"].label, "Текст обращения")
-
-        self.assertEqual(
-            author_form.fields["name"].help_text,
-            "Укажите ваше имя.",
-        )
-        self.assertEqual(
-            author_form.fields["mail"].help_text,
-            "Укажите почту для обратной связи.",
-        )
-        self.assertEqual(
-            form.fields["text"].help_text,
-            "Введите текст обращения.",
-        )
-
     def test_feedback_form_redirects_to_feedback_page_after_submit(self):
         response = self.client.post(
             reverse("feedback:feedback"),

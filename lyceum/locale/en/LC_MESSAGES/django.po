@@ -1,12 +1,6 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
-#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: lyceum\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-29 19:20+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
@@ -20,20 +14,20 @@ msgstr ""
 
 #: .\lyceum\settings.py:150
 msgid "Russian"
-msgstr ""
+msgstr "Russian"
 
 #: .\lyceum\settings.py:151
 msgid "English"
-msgstr ""
+msgstr "English"
 
 #: .\templates\about\about.html:3 .\templates\about\about.html:6
 #: .\templates\includes\header.html:27
 msgid "About project"
-msgstr ""
+msgstr "About project"
 
 #: .\templates\about\about.html:7
 msgid "Educational project for Yandex Lyceum Django specialization."
-msgstr ""
+msgstr "Educational project for Yandex Lyceum Django specialization."
 
 #: .\templates\base.html:21
 msgid "Today's birthdays:"
@@ -45,7 +39,7 @@ msgstr ""
 
 #: .\templates\catalog\item.html:14
 msgid "Download main image"
-msgstr ""
+msgstr "Download main image"
 
 #: .\templates\catalog\item.html:27
 msgid "Rating"
@@ -77,28 +71,28 @@ msgstr ""
 
 #: .\templates\catalog\item.html:72
 msgid "Download image"
-msgstr ""
+msgstr "Download image"
 
-#: .\templates\feedback\feedback.html:3 .\templates\feedback\feedback.html:6
-#: .\templates\includes\header.html:33 .\templates\includes\header.html:35
+#: .\templates\feedback\feedback.html:6 .\templates\includes\header.html:33
+#: .\templates\includes\header.html:35
 msgid "Feedback"
-msgstr ""
+msgstr "Feedback"
 
 #: .\templates\feedback\feedback.html:47 .\templates\homepage\echo.html:16
 msgid "Submit"
-msgstr ""
+msgstr "Submit"
 
 #: .\templates\homepage\echo.html:7
 msgid "Echo"
-msgstr ""
+msgstr "Echo"
 
 #: .\templates\homepage\main.html:4 .\templates\includes\header.html:16
 msgid "Home"
-msgstr ""
+msgstr "Home"
 
 #: .\templates\homepage\main.html:7
 msgid "Popular items"
-msgstr ""
+msgstr "Popular items"
 
 #: .\templates\includes\footer.html:6 .\templates\includes\header.html:7
 msgid "Lyceum"
@@ -106,15 +100,15 @@ msgstr ""
 
 #: .\templates\includes\header.html:6
 msgid "Site logo"
-msgstr ""
+msgstr "Site logo"
 
 #: .\templates\includes\header.html:18
 msgid "To home"
-msgstr ""
+msgstr "To home"
 
 #: .\templates\includes\header.html:40 .\templates\includes\header.html:42
 msgid "Items list"
-msgstr ""
+msgstr "Items list"
 
 #: .\templates\includes\header.html:47 .\templates\includes\header.html:49
 msgid "New items"
@@ -124,9 +118,9 @@ msgstr ""
 msgid "Friday"
 msgstr ""
 
-#: .\templates\includes\header.html:61 .\templates\includes\header.html:63
-msgid "Unverified"
-msgstr ""
+#: .\templates\includes\header.html:67
+msgid "Users statistics"
+msgstr "Users statistics"
 
 #: .\templates\includes\header.html:68 .\templates\includes\header.html:70
 #: .\templates\users\user_list.html:5
@@ -135,7 +129,7 @@ msgstr ""
 
 #: .\templates\includes\header.html:75
 msgid "Admin panel"
-msgstr ""
+msgstr "Admin panel"
 
 #: .\templates\includes\header.html:81 .\templates\includes\header.html:83
 msgid "Profile"
@@ -161,10 +155,20 @@ msgstr ""
 
 #: .\templates\includes\header.html:121
 msgid "Cat photo"
-msgstr ""
+msgstr "Cat photo"
 
 #: .\templates\includes\item_card.html:13
 msgid "Details"
+msgstr "Details"
+
+#: .\templates\statistics\items.html:4 .\templates\statistics\items.html:7
+#, fuzzy
+#| msgid "Items statistics"
+msgid "Item statistics"
+msgstr "Items statistics"
+
+#: .\templates\statistics\items.html:11 .\templates\statistics\my_items.html:11
+msgid "Item"
 msgstr ""
 
 #: .\templates\users\birthday_users.html:5 .\users\views.py:159
