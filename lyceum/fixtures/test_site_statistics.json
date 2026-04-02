@@ -1,0 +1,126 @@
+[
+  {
+    "model": "catalog.category",
+    "pk": 201,
+    "fields": {
+      "name": "Статистика",
+      "is_published": true,
+      "slug": "stats",
+      "weight": 10,
+      "normalized_name": "статистика"
+    }
+  },
+  {
+    "model": "catalog.item",
+    "pk": 201,
+    "fields": {
+      "name": "Товар А",
+      "is_published": true,
+      "text": "<p>Это превосходно полезный товар А.</p>",
+      "category": 201
+    }
+  },
+  {
+    "model": "catalog.item",
+    "pk": 202,
+    "fields": {
+      "name": "Товар Б",
+      "is_published": true,
+      "text": "<p>Это роскошно полезный товар Б.</p>",
+      "category": 201
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 201,
+    "fields": {
+      "password": "pbkdf2_sha256$1000000$XdsYeRSCPihFuTtG6M8h86$ePeUgSi3kR8f6+Wf2hzp0fSdNGTvVxHnqn9eR+L5ufI=",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "stat_user_1",
+      "first_name": "",
+      "last_name": "",
+      "email": "stat_user_1@example.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2026-03-20T00:00:00Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 202,
+    "fields": {
+      "password": "pbkdf2_sha256$1000000$XdsYeRSCPihFuTtG6M8h86$ePeUgSi3kR8f6+Wf2hzp0fSdNGTvVxHnqn9eR+L5ufI=",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "stat_user_2",
+      "first_name": "",
+      "last_name": "",
+      "email": "stat_user_2@example.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2026-03-20T00:00:00Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "users.profile",
+    "pk": 201,
+    "fields": {
+      "user": 201,
+      "birthday": "1990-03-20",
+      "image": "",
+      "coffee_count": 0,
+      "attempts_count": 0,
+      "blocked_at": null
+    }
+  },
+  {
+    "model": "users.profile",
+    "pk": 202,
+    "fields": {
+      "user": 202,
+      "birthday": "1991-03-20",
+      "image": "",
+      "coffee_count": 0,
+      "attempts_count": 0,
+      "blocked_at": null
+    }
+  },
+  {
+    "model": "rating.rating",
+    "pk": 201,
+    "fields": {
+      "item": 201,
+      "user": 201,
+      "value": 5,
+      "created_at": "2026-03-24T10:00:00Z",
+      "updated_at": "2026-03-24T10:00:00Z"
+    }
+  },
+  {
+    "model": "rating.rating",
+    "pk": 202,
+    "fields": {
+      "item": 202,
+      "user": 201,
+      "value": 1,
+      "created_at": "2026-03-24T11:00:00Z",
+      "updated_at": "2026-03-24T11:00:00Z"
+    }
+  },
+  {
+    "model": "rating.rating",
+    "pk": 203,
+    "fields": {
+      "item": 201,
+      "user": 202,
+      "value": 3,
+      "created_at": "2026-03-24T12:00:00Z",
+      "updated_at": "2026-03-24T12:00:00Z"
+    }
+  }
+]

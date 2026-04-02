@@ -6,7 +6,6 @@ import django.contrib.auth.mixins
 import django.contrib.auth.views
 import django.contrib.messages
 import django.core.mail
-from django.db.models import Q
 import django.shortcuts
 import django.urls
 import django.utils.timezone
@@ -16,6 +15,7 @@ import django.views.generic
 
 import users.forms
 import users.models
+import users.utils
 
 
 class LoginView(django.contrib.auth.views.LoginView):
@@ -142,11 +142,10 @@ class BirthdayUsersListView(django.views.generic.ListView):
     template_name = "users/birthday_users.html"
 
     def get_queryset(self):
-        today = django.utils.timezone.localdate()
+        today = users.utils.get_request_localdate(self.request)
         return (
             users.models.User.objects.active()
             .filter(
-                ~Q(email=""),
                 profile__birthday__month=today.month,
                 profile__birthday__day=today.day,
             )
