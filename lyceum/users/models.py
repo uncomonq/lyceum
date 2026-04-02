@@ -1,11 +1,7 @@
 __all__ = ()
-import sys
 
 from django.contrib.auth import models as auth_models
 from django.db import models
-
-if "makemigrations" not in sys.argv and "migrate" not in sys.argv:
-    auth_models.User._meta.get_field("email")._unique = True
 
 
 class UserManager(auth_models.UserManager):
@@ -34,10 +30,6 @@ class UserManager(auth_models.UserManager):
             return local_part
 
         return f"{local_part}@{domain_part}"
-
-    def by_mail(self, email):
-        normalized_email = self.normalize_email(email)
-        return self.active().get(email=normalized_email)
 
 
 class User(auth_models.User):

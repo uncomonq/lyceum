@@ -1,10 +1,11 @@
 {% extends "base.html" %}
+{% load i18n %}
 
 {% block content %}
-  <h2>Регистрация</h2>
+  <h2>{% trans "Sign up" %}</h2>
   <form method="post">
     {% csrf_token %}
     {% include "includes/form_fields.html" with form=form %}
-    <button type="submit" class="btn btn-primary">Зарегистрироваться</button>
+    <button type="submit" class="btn btn-primary">{% trans "Sign up" %}</button>
   </form>
 {% endblock %}

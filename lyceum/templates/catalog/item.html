@@ -24,19 +24,19 @@
     {% endfor %}
 
     <div class="mt-3 mb-3">
-      <h4>Рейтинг</h4>
-      <p>Средняя оценка: {{ rating_average|default_if_none:"—"|floatformat:2 }}</p>
-      <p>Количество оценок: {{ rating_count }}</p>
+      <h4>{% trans "Rating" %}</h4>
+      <p>{% trans "Average score:" %} {{ rating_average|default_if_none:"—"|floatformat:2 }}</p>
+      <p>{% trans "Ratings count:" %} {{ rating_count }}</p>
     </div>
 
     {% if request.user.is_authenticated %}
       <div class="mt-3 mb-4">
-        <h5>Ваша оценка</h5>
+        <h5>{% trans "Your rating" %}</h5>
         <p>
           {% if user_rating %}
             {{ user_rating.get_value_display }} ({{ user_rating.value }})
           {% else %}
-            Пока не поставлена
+            {% trans "Not rated yet" %}
           {% endif %}
         </p>
 
@@ -49,13 +49,13 @@
               <div class="text-danger small">{{ rating_form.value.errors }}</div>
             {% endif %}
           </div>
-          <button type="submit" class="btn btn-primary">Сохранить</button>
+          <button type="submit" class="btn btn-primary">{% trans "Save rating" %}</button>
           {% if user_rating %}
             <button type="submit"
                     name="delete"
                     value="1"
                     class="btn btn-outline-danger">
-              Удалить оценку
+              {% trans "Delete rating" %}
             </button>
           {% endif %}
         </form>

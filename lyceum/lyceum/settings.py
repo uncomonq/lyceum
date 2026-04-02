@@ -33,6 +33,12 @@ MAX_AUTH_ATTEMPTS = config(
     cast=int,
 )
 
+BIRTHDAY_USERS_LIMIT = config(
+    "DJANGO_BIRTHDAY_USERS_LIMIT",
+    default=5,
+    cast=int,
+)
+
 ALLOW_REVERSE = config("DJANGO_ALLOW_REVERSE", default=True, cast=bool)
 
 INSTALLED_APPS = [
@@ -160,6 +166,7 @@ STATIC_URL = "static/"
 STATICFILES_DIRS = [
     BASE_DIR / "static_dev",
 ]
+STATIC_ROOT = BASE_DIR / "static"
 
 LOGIN_URL = "users:login"
 

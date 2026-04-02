@@ -1,40 +1,48 @@
 {% extends "base.html" %}
+{% load i18n %}
 
 {% block content %}
-  <h2>Пользователь {{ user_obj.username }}</h2>
+  <h2>{% blocktrans with username=user_obj.username %}User {{ username }}{% endblocktrans %}</h2>
 
   {% if user_obj.profile.image %}
     <img src="{{ user_obj.profile.image.url }}" alt="{{ user_obj.username }}" width="200" class="mb-3">
   {% endif %}
 
   <ul class="list-group mb-3">
-    <li class="list-group-item"><strong>Почта:</strong> {{ user_obj.email|default:"не указано" }}</li>
     <li class="list-group-item">
-      <strong>Имя:</strong>
+      <strong>{% trans "Email" %}:</strong>
+      {% if user_obj.email %}
+        {{ user_obj.email }}
+      {% else %}
+        <em>{% trans "not specified" %}</em>
+      {% endif %}
+    </li>
+    <li class="list-group-item">
+      <strong>{% trans "First name" %}:</strong>
       {% if user_obj.first_name %}
         {{ user_obj.first_name }}
       {% else %}
-        <em>не указано</em>
+        <em>{% trans "not specified" %}</em>
       {% endif %}
     </li>
     <li class="list-group-item">
-      <strong>Фамилия:</strong>
+      <strong>{% trans "Last name" %}:</strong>
       {% if user_obj.last_name %}
         {{ user_obj.last_name }}
       {% else %}
-        <em>не указано</em>
+        <em>{% trans "not specified" %}</em>
       {% endif %}
     </li>
     <li class="list-group-item">
-      <strong>Birthday</strong>
+      <strong>{% trans "Birthday" %}</strong>
       {% if user_obj.profile.birthday %}
         {{ user_obj.profile.birthday|date:"d.m.Y" }}
       {% else %}
-        <em>не указано</em>
+        <em>{% trans "not specified" %}</em>
       {% endif %}
     </li>
     <li class="list-group-item">
-      <strong>Coffee count</strong> {{ user_obj.profile.coffee_count }}
+      <strong>{% trans "Coffee count" %}</strong> {{ user_obj.profile.coffee_count }}
     </li>
   </ul>
 {% endblock %}

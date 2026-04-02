@@ -82,7 +82,7 @@ class SignUpAndActivationTests(TestCase):
         self.assertFalse(user.is_active)
 
 
-@override_settings(ALLOW_REVERSE=False)
+@override_settings(ALLOW_REVERSE=False, LANGUAGE_CODE="en")
 class UserPagesTests(TestCase):
     def setUp(self):
         self.user = User.objects.create_user(
@@ -118,7 +118,7 @@ class UserPagesTests(TestCase):
             reverse("users:user_detail", kwargs={"pk": self.user.pk}),
         )
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, "не указано")
+        self.assertContains(response, "not specified")
         self.assertContains(response, str(self.profile.coffee_count))
 
     def test_profile_requires_login(self):
@@ -192,10 +192,10 @@ class UserPagesTests(TestCase):
         )
 
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, "Аккаунт не активирован")
+        self.assertContains(response, "Account is not activated")
 
 
-@override_settings(ALLOW_REVERSE=False)
+@override_settings(ALLOW_REVERSE=False, LANGUAGE_CODE="en")
 class LoginByMailTests(TestCase):
     def setUp(self):
         self.user = User.objects.create_user(
@@ -252,7 +252,7 @@ class LoginByMailTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(
             response,
-            "Пользователь с такой почтой уже существует.",
+            "User with this email already exists.",
         )
 
     def test_profile_update_does_not_change_coffee_count(self):
@@ -275,6 +275,29 @@ class LoginByMailTests(TestCase):
         self.assertRedirects(response, reverse("users:profile"))
         self.user.profile.refresh_from_db()
         self.assertEqual(self.user.profile.coffee_count, 9)
+
+    def test_profile_update_allows_empty_email_for_multiple_users(self):
+        second_user = User.objects.create_user(
+            username="second_empty_email",
+            password="strong_password_123",
+            is_active=True,
+        )
+        users.models.Profile.objects.create(user=second_user)
+
+        self.client.login(
+            username="mail_user",
+            password="strong_password_123",
+        )
+        response = self.client.post(
+            reverse("users:profile"),
+            {
+                "email": "",
+                "first_name": "Имя",
+                "last_name": "Фамилия",
+            },
+        )
+
+        self.assertRedirects(response, reverse("users:profile"))
 
 
 class CoffeeCounterTests(TestCase):
@@ -405,7 +428,7 @@ class AuthAttemptsTests(TestCase):
         self.assertIsNone(self.user.profile.blocked_at)
 
 
-@override_settings(ALLOW_REVERSE=False)
+@override_settings(ALLOW_REVERSE=False, LANGUAGE_CODE="en")
 class BirthdayUsersContextProcessorTests(TestCase):
     @patch("users.context_processors.django.utils.timezone.localdate")
     def test_context_processor_returns_only_active_users_with_today_birthday(
@@ -484,6 +507,31 @@ class BirthdayUsersContextProcessorTests(TestCase):
 
         response = self.client.get(reverse("homepage:main"))
 
-        self.assertContains(response, "Именниники сегодня:")
+        self.assertContains(response, "Today's birthdays:")
         self.assertContains(response, "Шаблон Проверка")
         self.assertContains(response, "template@example.com")
+
+    @patch("users.context_processors.django.utils.timezone.localdate")
+    @override_settings(BIRTHDAY_USERS_LIMIT=2)
+    def test_context_processor_limits_birthday_users(
+        self,
+        mocked_localdate,
+    ):
+        mocked_localdate.return_value = datetime.date(2026, 3, 26)
+        for index in range(3):
+            user = User.objects.create_user(
+                username=f"birthday_user_{index}",
+                email=f"user_{index}@example.com",
+                password="strong_password_123",
+                is_active=True,
+            )
+            users.models.Profile.objects.create(
+                user=user,
+                birthday=datetime.date(2000, 3, 26),
+            )
+
+        response = self.client.get(reverse("homepage:main"))
+
+        self.assertEqual(len(response.context["birthday_users"]), 2)
+        self.assertTrue(response.context["birthday_users_has_more"])
+        self.assertContains(response, reverse("users:birthday_users"))
